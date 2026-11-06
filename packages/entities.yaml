@@ -698,13 +698,15 @@ text_sensor:
             text: !lambda 'return std::string("Stan: ") + x;'
             text_color: !lambda |-
               if (x == "Otwarta" || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
-              if (x == "Otwieranie" || x == "Zamykanie" || x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x == "Zamknięta" || x == "Zamknieta") return lv_color_hex(0x00DD66);
+              if (x.find("Otwieranie") != std::string::npos ||
+                  x.find("Zamykanie") != std::string::npos ||
+                  x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00DD66);
               return lv_color_hex(0x888888);
         - globals.set:
             id: brama_closed_since_ms
             value: !lambda |-
-              const bool closed = (x == "Zamknięta" || x == "Zamknieta");
+              const bool closed = (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0);
               if (!closed) {
                 if (x != "unknown" && x != "unavailable" && !x.empty()) id(brama_waiting_for_motion) = false;
                 return 0;
