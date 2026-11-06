@@ -8,6 +8,7 @@ sensor:
     entity_id: number.salon_atlascube_radio_glosnosc
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - if:
             condition:
               lambda: 'return !std::isnan(x);'
@@ -32,6 +33,7 @@ sensor:
     attribute: brightness
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - if:
             condition:
               lambda: 'return !std::isnan(x);'
@@ -56,6 +58,7 @@ sensor:
     attribute: color_temp_kelvin
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - if:
             condition:
               lambda: 'return !std::isnan(x);'
@@ -80,6 +83,7 @@ sensor:
     attribute: current_temperature
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_piec_temp
             text: !lambda |-
@@ -93,6 +97,7 @@ sensor:
     attribute: temperature
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - globals.set:
             id: cache_piec_target
             value: !lambda 'return x;'
@@ -108,6 +113,7 @@ sensor:
     entity_id: sensor.dom_domestic_hot_water_0_tank_temperature
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_cwu_temp
             text: !lambda |-
@@ -120,6 +126,7 @@ sensor:
     entity_id: sensor.kuchnia_piec_ogrzewanie_current_temperature
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - globals.set:
             id: cache_indoor_temp
             value: !lambda 'return x;'
@@ -130,6 +137,7 @@ sensor:
     entity_id: sensor.dom_zone_ogrzewanie_circuit_0_humidity
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - globals.set:
             id: cache_humidity
             value: !lambda 'return x;'
@@ -140,6 +148,7 @@ sensor:
     entity_id: sensor.dom_outdoor_temperature
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - globals.set:
             id: cache_outdoor_temp
             value: !lambda 'return x;'
@@ -151,6 +160,7 @@ sensor:
     attribute: brightness
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - if:
             condition:
               lambda: 'return !std::isnan(x);'
@@ -175,6 +185,7 @@ sensor:
     attribute: color_temp_kelvin
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - if:
             condition:
               lambda: 'return !std::isnan(x);'
@@ -255,6 +266,7 @@ binary_sensor:
     entity_id: light.salon_lampka
     on_state:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_salon_lampka_status
             text: !lambda |-
@@ -264,13 +276,7 @@ binary_sensor:
             text: !lambda |-
               return x ? std::string("\U000F0335") : std::string("\U000F0E50");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
   - platform: gpio
     # GPIO0 jest pinem BOOT ESP32. Przycisk działa jako zwykłe wejście po starcie,
@@ -318,6 +324,7 @@ binary_sensor:
     entity_id: light.sypialnia
     on_state:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_erni_lampa
             text: !lambda |-
@@ -328,19 +335,14 @@ binary_sensor:
             text: !lambda |-
               return x ? std::string("\U000F0335") : std::string("\U000F0E50");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
   - platform: homeassistant
     id: state_sypialnia_lampa
     entity_id: light.studio
     on_state:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_sypialnia_lampa
             text: !lambda |-
@@ -351,26 +353,15 @@ binary_sensor:
             text: !lambda |-
               return x ? std::string("\U000F0335") : std::string("\U000F0E50");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
   - platform: homeassistant
     id: state_drzwi
     entity_id: binary_sensor.intelignty_czujnik_otwarcia_melink_drzwi
     on_state:
       then:
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+        - script.execute: ha_rx_flash
+
         - if:
             condition:
               lambda: 'return x;'
@@ -390,6 +381,7 @@ text_sensor:
     entity_id: sensor.atlascube_radio_stacja_radiowa
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_radio_stacja
             text: !lambda 'return std::string("Stacja: ") + x;'
@@ -399,6 +391,7 @@ text_sensor:
     entity_id: sensor.atlascube_radio_tytul_utworu
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_radio_tytul
             text: !lambda 'return std::string("Utwor: ") + x;'
@@ -408,6 +401,7 @@ text_sensor:
     entity_id: sensor.atlascube_9140_playback
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_radio_stan
             text: !lambda |-
@@ -428,6 +422,7 @@ text_sensor:
     entity_id: media_player.tv_samsung_7_series_49_2
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_tv_status
             text: !lambda 'return std::string("Stan: ") + x;'
@@ -437,6 +432,7 @@ text_sensor:
     entity_id: sensor.dom_circuit_0_state
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_piec_mode
             text: !lambda |-
@@ -455,6 +451,7 @@ text_sensor:
     entity_id: water_heater.dom_domestic_hot_water_0
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_cwu_status
             text: !lambda 'return std::string("Status: ") + x;'
@@ -476,6 +473,7 @@ text_sensor:
     entity_id: input_select.animacja_swiatla_studio
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.button.update:
             id: btn_scene_auto
             bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
@@ -494,35 +492,25 @@ text_sensor:
         - lvgl.button.update:
             id: btn_scene_ognisko
             bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
   - platform: homeassistant
     id: state_scena_opis
     entity_id: input_text.aktualna_scena_studio
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_scena_studio
             text: !lambda 'return x;'
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
   - platform: homeassistant
     id: state_piec
     entity_id: sensor.dom_circuit_0_state
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_pulpit_piec
             text: !lambda |-
@@ -533,19 +521,14 @@ text_sensor:
             id: lbl_piec_icon
             text_color: !lambda |-
               return (x == "Heating") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x666666);
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
   - platform: homeassistant
     id: state_brama
     entity_id: sensor.brama_wjazdowa_dokladny_stan_bramy
     on_value:
       then:
+        - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_pulpit_brama
             text: !lambda 'return std::string("Brama: ") + x;'
@@ -576,13 +559,7 @@ text_sensor:
             id: brama_blinking
             value: !lambda |-
               return (x == "Otwieranie" || x == "Zamykanie");
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: false
-        - delay: 400ms
-        - lvgl.obj.update:
-            id: lbl_arrow_down
-            hidden: true
+
 
 button:
   - platform: template

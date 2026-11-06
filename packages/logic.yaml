@@ -101,7 +101,10 @@ script:
             snprintf(buf, sizeof(buf), "%sC  %s%%  Zewn %sC", t_in, hum, t_out);
             return std::string(buf);
 
+  # Wskaźnik wysyłania: potwierdza akcję wywołaną z interfejsu.
+  # Tryb restart utrzymuje sygnał przez pełne 400 ms od ostatniej akcji.
   - id: confirm_click
+    mode: restart
     then:
       - light.turn_on:
           id: status_led
