@@ -41,6 +41,10 @@ globals:
     type: uint32_t
     restore_value: false
     initial_value: "0"
+  - id: brama_position_start
+    type: float
+    restore_value: false
+    initial_value: "0.0"
   - id: brama_position_target
     type: float
     restore_value: false
@@ -49,6 +53,10 @@ globals:
     type: float
     restore_value: false
     initial_value: "0.0"
+  - id: brama_position_started_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
   - id: identify_active
     type: bool
     restore_value: false

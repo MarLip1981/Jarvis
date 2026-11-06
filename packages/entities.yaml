@@ -312,12 +312,18 @@ sensor:
               lambda: 'return std::isfinite(x);'
             then:
               - globals.set:
+                  id: brama_position_start
+                  value: !lambda 'return id(brama_position_visual);'
+              - globals.set:
                   id: brama_position_target
                   value: !lambda |-
                     float position = x;
                     if (position < 0.0f) position = 0.0f;
                     if (position > 100.0f) position = 100.0f;
                     return position;
+              - globals.set:
+                  id: brama_position_started_ms
+                  value: !lambda 'return (esphome::millis)();'
               - lvgl.label.update:
                   id: lbl_brama_position
                   text: !lambda |-

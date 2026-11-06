@@ -7,9 +7,11 @@ interval:
   - interval: 20ms
     then:
       - lambda: |-
-          const float diff = id(brama_position_target) - id(brama_position_visual);
-          id(brama_position_visual) += diff * 0.12f;
-          if (diff > -0.08f && diff < 0.08f) id(brama_position_visual) = id(brama_position_target);
+          const uint32_t elapsed = (esphome::millis)() - id(brama_position_started_ms);
+          float progress = (float)elapsed / 1000.0f;
+          if (progress > 1.0f) progress = 1.0f;
+          id(brama_position_visual) = id(brama_position_start) +
+            (id(brama_position_target) - id(brama_position_start)) * progress;
       - lvgl.obj.update:
           id: gate_leaf
           x: !lambda |-
