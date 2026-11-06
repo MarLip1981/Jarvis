@@ -111,7 +111,7 @@ lvgl:
             text: "Brama: ..."
             x: 42
             y: 214
-            text_font: montserrat_14
+            text_font: font_gate_14
             text_color: 0xFFFFFF
             recolor: true
 
