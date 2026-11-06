@@ -48,8 +48,7 @@ lvgl:
             border_width: 0
             radius: 0
         # Jednowierszowy pasek radia pod separatorem.
-        # Tekst jest transliterowany w entities.yaml do ASCII, aby uniknac
-        # brakujacych polskich glifow w malej czcionce.
+        # Tekst zachowuje oryginalne polskie znaki; font_radio_12 zawiera pelny zestaw glifow.
         - label:
             id: lbl_pulpit_radio
             text: "RADIO > --  * --"
@@ -57,7 +56,7 @@ lvgl:
             y: 112
             width: 210
             height: 18
-            text_font: montserrat_12
+            text_font: font_radio_12
             text_color: 0xAAAAAA
             long_mode: SCROLL_CIRCULAR
         - label:
