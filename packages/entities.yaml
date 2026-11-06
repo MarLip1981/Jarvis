@@ -580,8 +580,6 @@ text_sensor:
             id: lbl_arrow_down
             hidden: true
 
-display:
-
 button:
   - platform: template
     name: "Znajdz JARVIS"
