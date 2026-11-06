@@ -461,8 +461,8 @@ text_sensor:
                 for (const auto &item : repl) {
                   size_t pos = 0;
                   while ((pos = value.find(item.first, pos)) != std::string::npos) {
-                    value.replace(pos, strlen(item.first), item.second);
-                    pos += strlen(item.second);
+                    value.replace(pos, std::string(item.first).size(), item.second);
+                    pos += std::string(item.second).size();
                   }
                 }
                 return value;
@@ -496,8 +496,8 @@ text_sensor:
                 for (const auto &item : repl) {
                   size_t pos = 0;
                   while ((pos = value.find(item.first, pos)) != std::string::npos) {
-                    value.replace(pos, strlen(item.first), item.second);
-                    pos += strlen(item.second);
+                    value.replace(pos, std::string(item.first).size(), item.second);
+                    pos += std::string(item.second).size();
                   }
                 }
                 return value;
