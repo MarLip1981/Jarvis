@@ -72,7 +72,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: climate.set_temperature
@@ -103,7 +103,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: climate.set_temperature
@@ -140,7 +140,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: climate.set_hvac_mode
@@ -163,7 +163,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: climate.set_hvac_mode
@@ -219,7 +219,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: water_heater.set_operation_mode
@@ -242,7 +242,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: water_heater.set_operation_mode
@@ -265,7 +265,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: water_heater.set_operation_mode
@@ -288,7 +288,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: water_heater.set_operation_mode

@@ -130,44 +130,48 @@ lvgl:
                     text_font: icon_font_ha
                     text_color: 0xFF0000
               on_click:
-                - lambda: |-
-                    uint32_t now = (esphome::millis)();
-                    if (now - id(easter_tap_last_ms) > 3000) {
-                      id(easter_tap_count) = 0;
-                    }
-                    id(easter_tap_last_ms) = now;
-                    id(easter_tap_count) = id(easter_tap_count) + 1;
-                - lvgl.obj.update:
-                    id: lbl_ha_tap_btn
-                    bg_opa: COVER
-                    bg_color: 0x2196F3
-                - delay: 150ms
-                - lvgl.obj.update:
-                    id: lbl_ha_tap_btn
-                    bg_opa: TRANSP
                 - if:
                     condition:
-                      lambda: 'return id(easter_tap_count) < 5;'
+                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                     then:
-                      - lvgl.label.update:
-                          id: lbl_easter_countdown
-                          text: !lambda |-
-                            return std::to_string(5 - id(easter_tap_count));
-                      - lvgl.obj.update:
-                          id: lbl_easter_countdown
-                          hidden: false
-                - if:
-                    condition:
-                      lambda: 'return id(easter_tap_count) >= 5;'
-                    then:
-                      - globals.set:
-                          id: easter_tap_count
-                          value: "0"
-                      - lvgl.obj.update:
-                          id: lbl_easter_countdown
-                          hidden: true
-                      - script.execute: easter_egg_ironman
-
+                  - lambda: |-
+                      uint32_t now = (esphome::millis)();
+                      if (now - id(easter_tap_last_ms) > 3000) {
+                        id(easter_tap_count) = 0;
+                      }
+                      id(easter_tap_last_ms) = now;
+                      id(easter_tap_count) = id(easter_tap_count) + 1;
+                  - lvgl.obj.update:
+                      id: lbl_ha_tap_btn
+                      bg_opa: COVER
+                      bg_color: 0x2196F3
+                  - delay: 150ms
+                  - lvgl.obj.update:
+                      id: lbl_ha_tap_btn
+                      bg_opa: TRANSP
+                  - if:
+                      condition:
+                        lambda: 'return id(easter_tap_count) < 5;'
+                      then:
+                        - lvgl.label.update:
+                            id: lbl_easter_countdown
+                            text: !lambda |-
+                              return std::to_string(5 - id(easter_tap_count));
+                        - lvgl.obj.update:
+                            id: lbl_easter_countdown
+                            hidden: false
+                  - if:
+                      condition:
+                        lambda: 'return id(easter_tap_count) >= 5;'
+                      then:
+                        - globals.set:
+                            id: easter_tap_count
+                            value: "0"
+                        - lvgl.obj.update:
+                            id: lbl_easter_countdown
+                            hidden: true
+                        - script.execute: easter_egg_ironman
+  
           # --- Ikonka baterii: obrys + wypelnienie proporcjonalne do % +
           # "nub" po prawej, tak jak wyglada prawdziwa ikona baterii.
           # Na razie PLACEHOLDER (niewidoczne wypelnienie, TRANSP) - do

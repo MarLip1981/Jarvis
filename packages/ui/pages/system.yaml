@@ -556,10 +556,14 @@ lvgl:
                   text_font: montserrat_18
                   text_color: 0xFFFFFF
             on_click:
-              - globals.set:
-                  id: identify_active
-                  value: "false"
-
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                - globals.set:
+                    id: identify_active
+                    value: "false"
+  
     # ------------------------------------------------------
     # Pulpit - docelowo ekran glowny karuzeli
     # ------------------------------------------------------

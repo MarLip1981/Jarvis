@@ -51,7 +51,7 @@ lvgl:
             on_click:
               - if:
                   condition:
-                    lambda: 'return !id(screen_was_asleep);'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
                     - if:
                         condition:
@@ -118,7 +118,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                         - switch.toggle: sypialnia_lampa
                         - script.execute: confirm_click
@@ -150,7 +150,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: input_select.select_option
@@ -173,7 +173,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: input_select.select_option
@@ -196,7 +196,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: input_select.select_option
@@ -219,7 +219,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: input_select.select_option
@@ -242,7 +242,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: input_select.select_option
@@ -265,7 +265,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                           - homeassistant.action:
                               action: input_select.select_option
@@ -324,7 +324,7 @@ lvgl:
             on_click:
               - if:
                   condition:
-                    lambda: 'return !id(screen_was_asleep);'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
                     - if:
                         condition:
@@ -391,7 +391,7 @@ lvgl:
                   on_click:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep);'
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
                         - switch.toggle: erni_lampa
                         - script.execute: confirm_click
@@ -415,7 +415,7 @@ lvgl:
                     then:
                       - if:
                           condition:
-                            lambda: 'return !id(screen_was_asleep);'
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                           then:
                             - homeassistant.action:
                                 action: light.turn_on
@@ -445,7 +445,7 @@ lvgl:
                     then:
                       - if:
                           condition:
-                            lambda: 'return !id(screen_was_asleep);'
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                           then:
                             - homeassistant.action:
                                 action: light.turn_on

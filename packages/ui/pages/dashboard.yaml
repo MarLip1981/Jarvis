@@ -122,7 +122,7 @@ lvgl:
             on_click:
               - if:
                   condition:
-                    lambda: 'return !id(screen_was_asleep) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
                   then:
                   - homeassistant.action:
                       action: button.press
@@ -154,7 +154,7 @@ lvgl:
             on_click:
               - if:
                   condition:
-                    lambda: 'return !id(screen_was_asleep) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
                   then:
                   - homeassistant.action:
                       action: button.press

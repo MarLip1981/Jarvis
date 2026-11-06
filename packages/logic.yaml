@@ -19,6 +19,12 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  # Blokada akcji dla przeciągnięć i pierwszego dotyku wybudzającego.
+  # Resetowana wyłącznie na początku kolejnego fizycznego gestu.
+  - id: touch_gesture_blocked
+    type: bool
+    restore_value: false
+    initial_value: "false"
   - id: door_open_since_ms
     type: uint32_t
     restore_value: false

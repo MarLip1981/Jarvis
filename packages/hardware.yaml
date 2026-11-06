@@ -185,3 +185,21 @@ touchscreen:
             - globals.set:
                 id: screen_was_asleep
                 value: "false"
+  # Śledzenie ruchu palca: on_touch startuje gest, on_update wykrywa
+  # przeciągnięcie. Blokada pozostaje aktywna do następnego on_touch,
+  # aby kolejność on_release/LVGL on_click nie mogła jej przedwcześnie skasować.
+  on_update:
+    then:
+      - lambda: |-
+          for (auto touch : touches) {
+            if (touch.state == 2) {
+              int dx = touch.x - touch.x_org;
+              int dy = touch.y - touch.y_org;
+              if (dx < 0) dx = -dx;
+              if (dy < 0) dy = -dy;
+              // 12 px tolerancji eliminuje drgania rezystancyjnego panelu.
+              if (dx >= 12 || dy >= 12) {
+                id(touch_gesture_blocked) = true;
+              }
+            }
+          }
