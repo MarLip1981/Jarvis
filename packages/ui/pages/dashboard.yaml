@@ -98,13 +98,30 @@ lvgl:
             text_color: 0xFFFFFF
             recolor: true
 
+        # Status bramy widoczny bez otwierania jej karty.
+        - label:
+            id: lbl_pulpit_brama_icon
+            text: "\\U000F06D9"
+            x: 15
+            y: 210
+            text_font: icon_font_btn
+            text_color: 0x888888
+        - label:
+            id: lbl_pulpit_brama
+            text: "Brama: ..."
+            x: 42
+            y: 214
+            text_font: montserrat_14
+            text_color: 0xFFFFFF
+            recolor: true
+
         # Dwa niezalezne przyciski pilota. Sterowanie dopiero po przytrzymaniu.
         - button:
             id: btn_pulpit_brama
             x: 10
-            y: 214
+            y: 237
             width: 105
-            height: 42
+            height: 36
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
@@ -148,9 +165,9 @@ lvgl:
         - button:
             id: btn_pulpit_furtka
             x: 125
-            y: 214
+            y: 237
             width: 105
-            height: 42
+            height: 36
             bg_color: 0x18232B
             border_width: 1
             border_color: 0xB88632
