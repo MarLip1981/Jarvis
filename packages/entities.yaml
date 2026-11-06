@@ -232,8 +232,8 @@ sensor:
                   transition_length: 500ms
 
   # Pomiar baterii 1S (jedno ogniwo lub dwa ogniwa 18650 rownolegle).
-  # Dzielnik: BAT+ -- 100k -- GPIO35 -- 100k -- GND.
-  # Przy 4.2 V na baterii ADC widzi ok. 2.1 V. GPIO35 nalezy do ADC1.
+  # Dzielnik: BAT+ -- 100k -- GPIO35 -- 33k -- GND.
+  # Przy 4.2 V na baterii ADC widzi ok. 1.04 V. GPIO35 nalezy do ADC1.
   - platform: adc
     pin: GPIO35
     id: battery_voltage
@@ -245,7 +245,7 @@ sensor:
     update_interval: 10s
     attenuation: 12db
     filters:
-      - multiply: 2.0
+      - multiply: 4.0303
   # Procent jest orientacyjnym oszacowaniem dla ogniwa Li-Ion 1S.
   # Napiecie mocno zalezy od obciazenia i temperatury; nie zastapi BMS.
   - platform: template
@@ -319,14 +319,7 @@ sensor:
             id: wifi_bar4
             bg_color: !lambda 'return x >= -55 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
 
-  # --------------------------------------------------------------
-  # Bateria - USTALONE: ta plytka NIE MA wbudowanego analogowego
-  # pomiaru napiecia baterii (potwierdzone kodem producenta - jedyny
-  # analogowy wejscie to czujnik swiatla). Ikonka zostaje wizualnym
-  # placeholderem "n/a" dopoki nie dolaczysz wlasnego dzielnika
-  # napiecia na jeden z wolnych pinow (np. IO21/IO22/IO27) i nie
-  # wrocimy tu zeby to podpiac.
-  # --------------------------------------------------------------
+  # Pomiar baterii 1S jest realizowany przez dzielnik na GPIO35.
 
 # Status polaczenia z HA (API) - do ikonki HA w gornym pasku
 binary_sensor:
