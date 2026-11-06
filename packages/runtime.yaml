@@ -80,22 +80,6 @@ interval:
                       id: lbl_drzwi_icon
                       text: "\U000F081B"
                       text_color: 0x00FF00
-      # --- Miganie napisu bramy w stanach przejsciowych
-      # (Otwieranie/Zamykanie) - przelacza widocznosc co sekunde ---
-      - if:
-          condition:
-            lambda: 'return id(brama_blinking);'
-          then:
-            - globals.set:
-                id: brama_blink_on
-                value: !lambda 'return !id(brama_blink_on);'
-            - lvgl.obj.update:
-                id: lbl_pulpit_brama
-                hidden: !lambda 'return !id(brama_blink_on);'
-          else:
-            - lvgl.obj.update:
-                id: lbl_pulpit_brama
-                hidden: false
       - lvgl.label.update:
           id: lbl_clock
           text: !lambda |-

@@ -447,6 +447,31 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_radio_stacja
             text: !lambda 'return std::string("Stacja: ") + x;'
+        - lvgl.label.update:
+            id: lbl_pulpit_radio
+            text: !lambda |-
+              auto ascii = [](std::string value) {
+                const std::pair<const char*, const char*> repl[] = {
+                  {"\xC4\x85","a"},{"\xC4\x84","A"},{"\xC4\x87","c"},{"\xC4\x86","C"},
+                  {"\xC4\x99","e"},{"\xC4\x98","E"},{"\xC5\x82","l"},{"\xC5\x81","L"},
+                  {"\xC5\x84","n"},{"\xC5\x83","N"},{"\xC3\xB3","o"},{"\xC3\x93","O"},
+                  {"\xC5\x9B","s"},{"\xC5\x9A","S"},{"\xC5\xBA","z"},{"\xC5\xB9","Z"},
+                  {"\xC5\xBC","z"},{"\xC5\xBB","Z"}
+                };
+                for (const auto &item : repl) {
+                  size_t pos = 0;
+                  while ((pos = value.find(item.first, pos)) != std::string::npos) {
+                    value.replace(pos, strlen(item.first), item.second);
+                    pos += strlen(item.second);
+                  }
+                }
+                return value;
+              };
+              std::string station = ascii(x);
+              std::string track = ascii(id(radio_tytul).state);
+              if (station.empty()) station = "--";
+              if (track.empty()) track = "--";
+              return std::string("RADIO > ") + station + "  * " + track;
 
   - platform: homeassistant
     id: radio_tytul
@@ -457,6 +482,31 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_radio_tytul
             text: !lambda 'return std::string("Utwor: ") + x;'
+        - lvgl.label.update:
+            id: lbl_pulpit_radio
+            text: !lambda |-
+              auto ascii = [](std::string value) {
+                const std::pair<const char*, const char*> repl[] = {
+                  {"\xC4\x85","a"},{"\xC4\x84","A"},{"\xC4\x87","c"},{"\xC4\x86","C"},
+                  {"\xC4\x99","e"},{"\xC4\x98","E"},{"\xC5\x82","l"},{"\xC5\x81","L"},
+                  {"\xC5\x84","n"},{"\xC5\x83","N"},{"\xC3\xB3","o"},{"\xC3\x93","O"},
+                  {"\xC5\x9B","s"},{"\xC5\x9A","S"},{"\xC5\xBA","z"},{"\xC5\xB9","Z"},
+                  {"\xC5\xBC","z"},{"\xC5\xBB","Z"}
+                };
+                for (const auto &item : repl) {
+                  size_t pos = 0;
+                  while ((pos = value.find(item.first, pos)) != std::string::npos) {
+                    value.replace(pos, strlen(item.first), item.second);
+                    pos += strlen(item.second);
+                  }
+                }
+                return value;
+              };
+              std::string station = ascii(id(radio_stacja).state);
+              std::string track = ascii(x);
+              if (station.empty()) station = "--";
+              if (track.empty()) track = "--";
+              return std::string("RADIO > ") + station + "  * " + track;
 
   - platform: homeassistant
     id: radio_stan

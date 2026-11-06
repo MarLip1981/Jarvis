@@ -47,25 +47,38 @@ lvgl:
             bg_opa: COVER
             border_width: 0
             radius: 0
+        # Jednowierszowy pasek radia pod separatorem.
+        # Tekst jest transliterowany w entities.yaml do ASCII, aby uniknac
+        # brakujacych polskich glifow w malej czcionce.
+        - label:
+            id: lbl_pulpit_radio
+            text: "RADIO > --  * --"
+            x: 15
+            y: 112
+            width: 210
+            height: 18
+            text_font: montserrat_12
+            text_color: 0xAAAAAA
+            long_mode: SCROLL_CIRCULAR
         - label:
             id: lbl_pulpit_lamps
             text: "Ilosc wlaczonych lamp: ..."
             x: 15
-            y: 118
+            y: 136
             text_font: montserrat_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_piec_icon
             text: "\U000F0238"
             x: 15
-            y: 141
+            y: 159
             text_font: icon_font_btn
             text_color: 0x666666
         - label:
             id: lbl_pulpit_piec
             text: "Piec: ..."
             x: 42
-            y: 145
+            y: 163
             text_font: montserrat_14
             text_color: 0xFFFFFF
             recolor: true
@@ -73,94 +86,38 @@ lvgl:
             id: lbl_drzwi_icon
             text: "\U000F081B"
             x: 15
-            y: 166
+            y: 184
             text_font: icon_font_btn
             text_color: 0x00FF00
         - label:
             id: lbl_pulpit_drzwi
             text: "Drzwi: ..."
             x: 42
-            y: 170
+            y: 188
             text_font: montserrat_14
             text_color: 0xFFFFFF
             recolor: true
 
-        # --- Karta brama: stan tekstowy + 2 przyciski (otworz/zamknij,
-        # furtka) wywolujace button.press w HA ---
-        - label:
-            id: lbl_brama_icon
-            text: "\U000F0299"
+        # Karta BRAMA — na razie tylko placeholder z tytulem.
+        # Sterowanie i wskazania dodamy w kolejnym etapie.
+        - obj:
             x: 15
-            y: 188
-            text_font: icon_font_btn
-            text_color: 0x555555
-        - label:
-            id: lbl_pulpit_brama
-            text: "Brama: n/a"
-            x: 42
-            y: 190
-            text_font: montserrat_14
-            text_color: 0x555555
-        - button:
-            x: 15
-            y: 217
-            width: 105
-            height: 40
-            bg_color: 0x2196F3
-            pressed:
-              bg_color: 0x00FF00
+            y: 218
+            width: 210
+            height: 52
+            bg_color: 0x101820
+            bg_opa: COVER
+            border_width: 1
+            border_color: 0x45515C
+            radius: 6
+            pad_all: 0
+            scrollable: false
             widgets:
               - label:
+                  text: "BRAMA"
                   align: CENTER
-                  id: lbl_brama_btn_text
-                  text: "Otworz/Zamknij"
-                  text_font: montserrat_12
-            on_press:
-              - globals.set:
-                  id: btn_press_ms
-                  value: !lambda 'return (esphome::millis)();'
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
-                  then:
-                  - homeassistant.action:
-                      action: button.press
-                      data:
-                        entity_id: button.brama_wjazdowa_otworz_zamknij_brame
-                  - script.execute: confirm_click
-        - button:
-            x: 125
-            y: 217
-            width: 105
-            height: 40
-            bg_color: 0x2196F3
-            pressed:
-              bg_color: 0x00FF00
-            widgets:
-              - label:
-                  text: "\U000F0A48"
-                  x: 6
-                  y: 8
-                  text_font: icon_font_btn
-              - label:
-                  text: "Furtka"
-                  align: CENTER
-                  text_font: montserrat_12
-            on_press:
-              - globals.set:
-                  id: btn_press_ms
-                  value: !lambda 'return (esphome::millis)();'
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
-                  then:
-                  - homeassistant.action:
-                      action: button.press
-                      data:
-                        entity_id: button.brama_wjazdowa_otworz_jako_furtke
-                  - script.execute: confirm_click
+                  text_font: montserrat_14
+                  text_color: 0x888888
 
     # ------------------------------------------------------
     # Salon
