@@ -37,33 +37,26 @@ image:
     resize: 240x360
 
 font:
-  # Montserrat z pełnym zestawem polskich znaków dla opisów stanu bramy.
+  # Czcionki Montserrat z kompletnym zestawem polskich znakow.
   - file: "gfonts://Montserrat"
     id: font_gate_14
     size: 14
     glyphs:
-      - " !\"#$%&'()*+,-./:;<=>?@[\\]^_`{|}~"
+      - " .,;:!?'-+*/()[]&"
       - "0-9"
       - "A-Z"
       - "a-z"
-      - "\\U00000105" # ą
-      - "\\U00000107" # ć
-      - "\\U00000119" # ę
-      - "\\U00000142" # ł
-      - "\\U00000144" # ń
-      - "\\U000000F3" # ó
-      - "\\U0000015B" # ś
-      - "\\U0000017A" # ź
-      - "\\U0000017C" # ż
-      - "\\U00000104" # Ą
-      - "\\U00000106" # Ć
-      - "\\U00000118" # Ę
-      - "\\U00000141" # Ł
-      - "\\U00000143" # Ń
-      - "\\U000000D3" # Ó
-      - "\\U0000015A" # Ś
-      - "\\U00000179" # Ź
-      - "\\U0000017B" # Ż
+      - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
+
+  - file: "gfonts://Montserrat"
+    id: font_radio_12
+    size: 12
+    glyphs:
+      - " .,;:!?'-+*/()[]&"
+      - "0-9"
+      - "A-Z"
+      - "a-z"
+      - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_ha
