@@ -313,7 +313,11 @@ sensor:
             then:
               - globals.set:
                   id: brama_position_target
-                  value: !lambda 'return std::max(0.0f, std::min(100.0f, x));'
+                  value: !lambda |-
+                    float position = x;
+                    if (position < 0.0f) position = 0.0f;
+                    if (position > 100.0f) position = 100.0f;
+                    return position;
               - lvgl.label.update:
                   id: lbl_brama_position
                   text: !lambda |-

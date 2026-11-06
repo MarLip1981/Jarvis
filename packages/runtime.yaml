@@ -9,7 +9,7 @@ interval:
       - lambda: |-
           const float diff = id(brama_position_target) - id(brama_position_visual);
           id(brama_position_visual) += diff * 0.12f;
-          if (fabsf(diff) < 0.08f) id(brama_position_visual) = id(brama_position_target);
+          if (diff > -0.08f && diff < 0.08f) id(brama_position_visual) = id(brama_position_target);
       - lvgl.obj.update:
           id: gate_leaf
           x: !lambda |-
