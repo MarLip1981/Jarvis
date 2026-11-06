@@ -85,7 +85,11 @@ font:
 spi:
   clk_pin: GPIO14
   mosi_pin: GPIO13
-  miso_pin: GPIO12
+  # GPIO12 jest pinem startowym ESP32. W tym urządzeniu jest wymagany jako MISO
+  # wspólnej magistrali SPI; ostrzeżenie wyciszamy świadomie, bez zmiany połączenia.
+  miso_pin:
+    number: GPIO12
+    ignore_strapping_warning: true
 
 # Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
 output:
@@ -127,8 +131,14 @@ display:
   - platform: ili9xxx
     model: ST7796
     id: my_display
-    cs_pin: GPIO15
-    dc_pin: GPIO2
+    # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik TFT.
+    # Zachowujemy oryginalne przypisanie; wyciszamy wyłącznie ostrzeżenia ESPHome.
+    cs_pin:
+      number: GPIO15
+      ignore_strapping_warning: true
+    dc_pin:
+      number: GPIO2
+      ignore_strapping_warning: true
     dimensions: 240x320
     invert_colors: false
     color_order: RGB
