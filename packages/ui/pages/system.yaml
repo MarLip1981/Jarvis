@@ -560,9 +560,9 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
-                - globals.set:
-                    id: identify_active
-                    value: "false"
+                  - globals.set:
+                      id: identify_active
+                      value: "false"
   
     # ------------------------------------------------------
     # Pulpit - docelowo ekran glowny karuzeli
