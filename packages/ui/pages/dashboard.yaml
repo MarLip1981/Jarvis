@@ -136,8 +136,10 @@ lvgl:
                         value: "0"
                     - homeassistant.action:
                         action: button.press
-                        data:
-                          entity_id: !lambda 'return id(brama_main_button_entity).state;'
+                        data_template:
+                          entity_id: "{{ target_button }}"
+                        variables:
+                          target_button: !lambda 'return id(brama_main_button_entity).state;'
                     - lvgl.page.show:
                         id: page_brama
                         animation: MOVE_LEFT
@@ -180,8 +182,10 @@ lvgl:
                         value: "0"
                     - homeassistant.action:
                         action: button.press
-                        data:
-                          entity_id: !lambda 'return id(brama_pedestrian_button_entity).state;'
+                        data_template:
+                          entity_id: "{{ target_button }}"
+                        variables:
+                          target_button: !lambda 'return id(brama_pedestrian_button_entity).state;'
                     - lvgl.page.show:
                         id: page_brama
                         animation: MOVE_LEFT
