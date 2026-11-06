@@ -1,0 +1,3545 @@
+esphome:
+  name: room-switcher
+  friendly_name: "Przelacznik pomieszczen"
+  on_boot:
+    priority: -100
+    then:
+      - light.turn_on:
+          id: tft_backlight
+          brightness: 100%
+      # Ekran tytulowy sam sie pokazuje (jest pierwsza strona),
+      # po chwili przechodzimy do pelnoekranowego testu R/G/B
+      - delay: 2000ms
+      - lvgl.page.show:
+          id: page_flash
+          animation: NONE
+
+esp32:
+  board: esp32dev
+  framework:
+    type: arduino
+
+
+wifi:
+  id: wifi_comp
+  output_power: 20dB
+  networks:
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+    - ssid: !secret wifi_backup_ssid
+      password: !secret wifi_backup_pass
+  ap:
+    ssid: "RoomSwitcher"
+
+captive_portal:
+
+logger:
+api:
+  encryption:
+    key: !secret room_switcher__encryption_key
+ota:
+  platform: esphome
+
+time:
+  - platform: sntp
+    id: sntp_time
+    timezone: Europe/Warsaw
+    on_time_sync:
+      - lvgl.obj.update:
+          id: lbl_arrow_down
+          hidden: false
+      - delay: 400ms
+      - lvgl.obj.update:
+          id: lbl_arrow_down
+          hidden: true
+
+# Obrazek Iron Man do easter egga - ESPHome pobiera go z GitHuba
+# PRZY KOMPILACJI (nie trzeba trzymac zadnych danych lokalnie w YAML)
+image:
+  - platform: file
+    file: "https://raw.githubusercontent.com/MarLip1981/Jarvis/main/Iron%20man%20Phone%20Wallpapers.jpeg"
+    id: img_ironman
+    type: RGB565
+    resize: 240x360
+
+font:
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: icon_font_ha
+    size: 22
+    glyphs:
+      - "\U000F07D0" # home-assistant
+
+  # Male ikonki strzalek gora/dol w gornym pasku (zamiast ASCII ^/v)
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: icon_font_bar
+    size: 26
+    glyphs:
+      - "\U000F0360" # strzalka w gore
+      - "\U000F035D" # strzalka w dol
+
+  # Ikonki na przyciskach: zarowka on/off, drzwi zamkniete/otwarte, piec
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: icon_font_btn
+    size: 20
+    glyphs:
+      - "\U000F0335" # zarowka on
+      - "\U000F0E50" # zarowka off
+      - "\U000F081B" # drzwi zamkniete
+      - "\U000F081C" # drzwi otwarte
+      - "\U000F0238" # piec ogien
+      - "\U000F040C" # play
+      - "\U000F0666" # stop
+      - "\U000F0663" # poprzednia stacja
+      - "\U000F0661" # nastepna stacja
+      - "\U000F057E" # glosnosc
+      - "\U000F0425" # zasilanie wlacz/wylacz
+      - "\U000F0020" # minutnik
+      - "\U000F0299" # brama zamknieta
+      - "\U000F116A" # brama otwarta
+      - "\U000F0A48" # furtka
+
+  # Duzy alien na ekran tytulowy JARVIS
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: icon_font_title
+    size: 64
+    glyphs:
+      - "\U000F10CB" # alien
+
+# ---------------------------------------------------------
+# SPI: dzielony przez ekran (ST7796) i dotyk (XPT2046)
+# ---------------------------------------------------------
+spi:
+  clk_pin: GPIO14
+  mosi_pin: GPIO13
+  miso_pin: GPIO12
+
+# Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
+output:
+  - platform: ledc
+    pin: GPIO27
+    id: backlight_pwm
+  - platform: ledc
+    pin:
+      number: GPIO4
+      inverted: true
+    id: led_red
+  - platform: ledc
+    pin:
+      number: GPIO17
+      inverted: true
+    id: led_green
+  - platform: ledc
+    pin:
+      number: GPIO16
+      inverted: true
+    id: led_blue
+
+light:
+  - platform: monochromatic
+    output: backlight_pwm
+    id: tft_backlight
+    name: "Podswietlenie ekranu"
+    restore_mode: ALWAYS_ON
+  - platform: rgb
+    id: status_led
+    name: "Dioda statusu"
+    red: led_red
+    green: led_green
+    blue: led_blue
+
+# Czujnik swiatla LDR -> auto-jasnosc podswietlenia
+sensor:
+  - platform: homeassistant
+    id: radio_glosnosc_attr
+    entity_id: number.salon_atlascube_radio_glosnosc
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_radio_glosnosc
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_radio_glosnosc
+                  text: !lambda |-
+                    char buf[24];
+                    snprintf(buf, sizeof(buf), "Glosnosc: %d", (int) x);
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_radio_glosnosc
+                  text: "Glosnosc: --"
+
+  - platform: homeassistant
+    id: salon_brightness_attr
+    entity_id: light.salon_lampka
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_salon_brightness
+                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+              - lvgl.label.update:
+                  id: lbl_salon_brightness_val
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_salon_brightness_val
+                  text: "--"
+
+  - platform: homeassistant
+    id: salon_colortemp_attr
+    entity_id: light.salon_lampka
+    attribute: color_temp_kelvin
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_salon_colortemp
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_salon_colortemp_val
+                  text: !lambda |-
+                    char buf[10];
+                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_salon_colortemp_val
+                  text: "--"
+
+  - platform: homeassistant
+    id: piec_current_temp
+    entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+    attribute: current_temperature
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_piec_temp
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "Temp: %.1f C", x);
+              return std::string(buf);
+
+  - platform: homeassistant
+    id: piec_target_temp
+    entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+    attribute: temperature
+    on_value:
+      then:
+        - globals.set:
+            id: cache_piec_target
+            value: !lambda 'return x;'
+        - lvgl.label.update:
+            id: lbl_piec_target
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "Zadana: %.1f C", x);
+              return std::string(buf);
+
+  - platform: homeassistant
+    id: cwu_tank_temp
+    entity_id: sensor.dom_domestic_hot_water_0_tank_temperature
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_cwu_temp
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "Zbiornik: %.1f C", x);
+              return std::string(buf);
+
+  - platform: homeassistant
+    id: pulpit_indoor_temp
+    entity_id: sensor.kuchnia_piec_ogrzewanie_current_temperature
+    on_value:
+      then:
+        - globals.set:
+            id: cache_indoor_temp
+            value: !lambda 'return x;'
+        - script.execute: update_pulpit_climate_line
+
+  - platform: homeassistant
+    id: pulpit_humidity
+    entity_id: sensor.dom_zone_ogrzewanie_circuit_0_humidity
+    on_value:
+      then:
+        - globals.set:
+            id: cache_humidity
+            value: !lambda 'return x;'
+        - script.execute: update_pulpit_climate_line
+
+  - platform: homeassistant
+    id: pulpit_outdoor_temp
+    entity_id: sensor.dom_outdoor_temperature
+    on_value:
+      then:
+        - globals.set:
+            id: cache_outdoor_temp
+            value: !lambda 'return x;'
+        - script.execute: update_pulpit_climate_line
+
+  - platform: homeassistant
+    id: erni_brightness_attr
+    entity_id: light.sypialnia
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_erni_brightness
+                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+              - lvgl.label.update:
+                  id: lbl_erni_brightness_val
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_erni_brightness_val
+                  text: "--"
+
+  - platform: homeassistant
+    id: erni_colortemp_attr
+    entity_id: light.sypialnia
+    attribute: color_temp_kelvin
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_erni_colortemp
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_erni_colortemp_val
+                  text: !lambda |-
+                    char buf[10];
+                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_erni_colortemp_val
+                  text: "--"
+
+  - platform: internal_temperature
+    id: cpu_temp_sensor
+    name: "Temperatura CPU"
+  - platform: adc
+    pin: GPIO34
+    id: ambient_light_raw
+    name: "Czujnik swiatla (raw)"
+    update_interval: 5s
+    attenuation: 12db
+    filters:
+      - lambda: |-
+          // odwracamy i skalujemy orientacyjnie do 0.1 - 1.0
+          float v = 1.0 - x;
+          if (v < 0.1) v = 0.1;
+          if (v > 1.0) v = 1.0;
+          return v;
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !id(screen_dimmed) && !id(screen_off);'
+            then:
+              - light.turn_on:
+                  id: tft_backlight
+                  brightness: !lambda "return x;"
+                  transition_length: 500ms
+
+  - platform: wifi_signal
+    id: wifi_db
+    name: "WiFi sygnal"
+    update_interval: 15s
+    on_value:
+      then:
+        - lvgl.obj.update:
+            id: wifi_bar1
+            bg_color: !lambda 'return x >= -85 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+        - lvgl.obj.update:
+            id: wifi_bar2
+            bg_color: !lambda 'return x >= -75 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+        - lvgl.obj.update:
+            id: wifi_bar3
+            bg_color: !lambda 'return x >= -65 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+        - lvgl.obj.update:
+            id: wifi_bar4
+            bg_color: !lambda 'return x >= -55 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+
+  # --------------------------------------------------------------
+  # Bateria - USTALONE: ta plytka NIE MA wbudowanego analogowego
+  # pomiaru napiecia baterii (potwierdzone kodem producenta - jedyny
+  # analogowy wejscie to czujnik swiatla). Ikonka zostaje wizualnym
+  # placeholderem "n/a" dopoki nie dolaczysz wlasnego dzielnika
+  # napiecia na jeden z wolnych pinow (np. IO21/IO22/IO27) i nie
+  # wrocimy tu zeby to podpiac.
+  # --------------------------------------------------------------
+
+# Status polaczenia z HA (API) - do ikonki HA w gornym pasku
+binary_sensor:
+  - platform: homeassistant
+    id: state_salon_lampka
+    entity_id: light.salon_lampka
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_salon_lampka_status
+            text: !lambda |-
+              return x ? std::string("Stan: #00FF00 WLACZONA#") : std::string("Stan: #FF0000 wylaczona#");
+        - lvgl.label.update:
+            id: lbl_salon_glowna_icon
+            text: !lambda |-
+              return x ? std::string("\U000F0335") : std::string("\U000F0E50");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    id: sw1_button
+    name: "Przycisk SW1"
+    internal: true
+    filters:
+      - delayed_on: 20ms
+    on_press:
+      - globals.set:
+          id: last_activity_ms
+          value: !lambda 'return (esphome::millis)();'
+      - if:
+          condition:
+            lambda: 'return id(screen_dimmed) || id(screen_off);'
+          then:
+            - globals.set:
+                id: screen_dimmed
+                value: "false"
+            - globals.set:
+                id: screen_off
+                value: "false"
+            - component.update: ambient_light_raw
+
+  - platform: status
+    id: node_status
+    name: "Status polaczenia"
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_ha
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+
+  - platform: homeassistant
+    id: state_erni_lampa
+    entity_id: light.sypialnia
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_erni_lampa
+            text: !lambda |-
+              return x ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.label.update:
+            id: lbl_erni_lampa_icon
+            text: !lambda |-
+              return x ? std::string("\U000F0335") : std::string("\U000F0E50");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_sypialnia_lampa
+    entity_id: light.studio
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_sypialnia_lampa
+            text: !lambda |-
+              return x ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.label.update:
+            id: lbl_sypialnia_lampa_icon
+            text: !lambda |-
+              return x ? std::string("\U000F0335") : std::string("\U000F0E50");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_drzwi
+    entity_id: binary_sensor.intelignty_czujnik_otwarcia_melink_drzwi
+    on_state:
+      then:
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+        - if:
+            condition:
+              lambda: 'return x;'
+            then:
+              # Drzwi wlasnie sie otworzyly - zapamietujemy moment
+              - globals.set:
+                  id: door_open_since_ms
+                  value: !lambda 'return (esphome::millis)();'
+        # Sam tekst na ekranie NIE jest ustawiany tutaj - w interval
+        # 1s nizej jest jedno miejsce, ktore co sekunde odswieza tekst
+        # na podstawie AKTUALNEGO stanu (dokladnie tak jak licznik lamp),
+        # zamiast polegac wylacznie na zlapaniu tego zdarzenia.
+
+text_sensor:
+  - platform: homeassistant
+    id: radio_stacja
+    entity_id: sensor.atlascube_radio_stacja_radiowa
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_radio_stacja
+            text: !lambda 'return std::string("Stacja: ") + x;'
+
+  - platform: homeassistant
+    id: radio_tytul
+    entity_id: sensor.atlascube_radio_tytul_utworu
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_radio_tytul
+            text: !lambda 'return std::string("Utwor: ") + x;'
+
+  - platform: homeassistant
+    id: radio_stan
+    entity_id: sensor.atlascube_9140_playback
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_radio_stan
+            text: !lambda |-
+              return std::string("Stan: #00FF00 ") + x + std::string("#");
+        # UWAGA: "playing" to zalozenie do zweryfikowania - podmien na
+        # rzeczywista wartosc jaka realnie przyjmuje ten sensor w HA,
+        # jesli ikonka play/stop nie przelacza sie poprawnie.
+        - globals.set:
+            id: radio_is_playing
+            value: !lambda 'return (x == "playing");'
+        - lvgl.label.update:
+            id: lbl_radio_playstop_icon
+            text: !lambda |-
+              return (x == "playing") ? std::string("\U000F0666") : std::string("\U000F040C");
+
+  - platform: homeassistant
+    id: tv_state
+    entity_id: media_player.tv_samsung_7_series_49_2
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_tv_status
+            text: !lambda 'return std::string("Stan: ") + x;'
+
+  - platform: homeassistant
+    id: piec_mode_state
+    entity_id: sensor.dom_circuit_0_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_piec_mode
+            text: !lambda |-
+              return (x == "Heating")
+                ? std::string("Tryb: #FFAA00 HEATING#")
+                : std::string("Tryb: #00FF00 STANDBY#");
+        - lvgl.button.update:
+            id: btn_piec_auto
+            bg_color: !lambda 'return (x == "Heating") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_piec_off
+            bg_color: !lambda 'return (x == "Standby") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+
+  - platform: homeassistant
+    id: cwu_mode
+    entity_id: water_heater.dom_domestic_hot_water_0
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_cwu_status
+            text: !lambda 'return std::string("Status: ") + x;'
+        - lvgl.button.update:
+            id: btn_cwu_auto
+            bg_color: !lambda 'return (x == "Auto") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_cwu_off
+            bg_color: !lambda 'return (x == "Off") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_cwu_day
+            bg_color: !lambda 'return (x == "Day") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_cwu_boost
+            bg_color: !lambda 'return (x == "Cylinder Boost") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+
+  - platform: homeassistant
+    id: state_scena_studio
+    entity_id: input_select.animacja_swiatla_studio
+    on_value:
+      then:
+        - lvgl.button.update:
+            id: btn_scene_auto
+            bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_bialy
+            bg_color: !lambda 'return (x == "Bialy") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_wschod
+            bg_color: !lambda 'return (x == "Wschod") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_zachod
+            bg_color: !lambda 'return (x == "Zachod") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_tecza
+            bg_color: !lambda 'return (x == "Tecza") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_ognisko
+            bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_scena_opis
+    entity_id: input_text.aktualna_scena_studio
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_scena_studio
+            text: !lambda 'return x;'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_piec
+    entity_id: sensor.dom_circuit_0_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_pulpit_piec
+            text: !lambda |-
+              return (x == "Heating")
+                ? std::string("Piec: #FFAA00 grzeje#")
+                : std::string("Piec: #00FF00 nie pracuje#");
+        - lvgl.label.update:
+            id: lbl_piec_icon
+            text_color: !lambda |-
+              return (x == "Heating") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x666666);
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_brama
+    entity_id: sensor.brama_wjazdowa_dokladny_stan_bramy
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_pulpit_brama
+            text: !lambda 'return std::string("Brama: ") + x;'
+            text_color: !lambda |-
+              if (x == "Otwarta") return lv_color_hex(0xFF0000);
+              if (x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF0000);
+              if (x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
+              if (x == "Otwieranie" || x == "Zamykanie") return lv_color_hex(0xFFAA00);
+              return lv_color_hex(0x888888);   // Zamknieta / inne
+        - lvgl.label.update:
+            id: lbl_brama_icon
+            text: !lambda |-
+              if (x.find("Furtka") != std::string::npos) return std::string("\U000F0A48");
+              return (x == "Otwarta") ? std::string("\U000F116A") : std::string("\U000F0299");
+            text_color: !lambda |-
+              if (x == "Otwarta") return lv_color_hex(0xFF0000);
+              if (x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF0000);
+              if (x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
+              if (x == "Otwieranie" || x == "Zamykanie") return lv_color_hex(0xFFAA00);
+              return lv_color_hex(0x888888);
+        - lvgl.label.update:
+            id: lbl_brama_btn_text
+            text: !lambda |-
+              if (x == "Zamknieta" || x == "Zamknięta") return std::string("Otworz");
+              if (x == "Otwarta") return std::string("Zamknij");
+              return std::string("Stop");
+        - globals.set:
+            id: brama_blinking
+            value: !lambda |-
+              return (x == "Otwieranie" || x == "Zamykanie");
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+display:
+  - platform: ili9xxx
+    model: ST7796
+    id: my_display
+    cs_pin: GPIO15
+    dc_pin: GPIO2
+    dimensions: 240x320
+    invert_colors: false
+    color_order: RGB
+    transform:
+      mirror_x: false
+      mirror_y: false
+    update_interval: never   # LVGL rysuje samo, gdy trzeba
+
+touchscreen:
+  platform: xpt2046
+  id: my_touch
+  cs_pin: GPIO33
+  interrupt_pin: GPIO36
+  update_interval: 50ms
+  calibration:
+    x_min: 230
+    x_max: 3860
+    y_min: 220
+    y_max: 3860
+  transform:
+    mirror_x: true
+    mirror_y: false
+    swap_xy: true
+  on_touch:
+    then:
+      - globals.set:
+          id: last_activity_ms
+          value: !lambda 'return (esphome::millis)();'
+      - if:
+          condition:
+            lambda: 'return id(screen_dimmed) || id(screen_off);'
+          then:
+            - globals.set:
+                id: screen_was_asleep
+                value: "true"
+            - globals.set:
+                id: screen_dimmed
+                value: "false"
+            - globals.set:
+                id: screen_off
+                value: "false"
+            - component.update: ambient_light_raw
+          else:
+            - globals.set:
+                id: screen_was_asleep
+                value: "false"
+
+globals:
+  - id: last_activity_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: screen_dimmed
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: screen_off
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: screen_was_asleep
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: door_open_since_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: brama_blinking
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: brama_blink_on
+    type: bool
+    restore_value: false
+    initial_value: "true"
+  - id: identify_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: cache_indoor_temp
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: cache_humidity
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: cache_outdoor_temp
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: cache_piec_target
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: btn_press_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: easter_tap_count
+    type: int
+    restore_value: false
+    initial_value: "0"
+  - id: easter_tap_last_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: easter_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: radio_is_playing
+    type: bool
+    restore_value: false
+    initial_value: "false"
+
+# ---------------------------------------------------------
+# Wspolny skrypt potwierdzenia kliknięcia - LED na zielono +
+# blysk strzalki w gore. Wolany z KAZDEGO przycisku jedna
+# linijka (script.execute: confirm_click), zamiast kopiowania
+# tej samej sekwencji za kazdym razem.
+# ---------------------------------------------------------
+script:
+  - id: update_pulpit_climate_line
+    then:
+      - lvgl.label.update:
+          id: lbl_pulpit_climate
+          text: !lambda |-
+            char buf[64];
+            char t_in[8], hum[8], t_out[8];
+            if (!std::isnan(id(cache_indoor_temp))) snprintf(t_in, sizeof(t_in), "%.1f", id(cache_indoor_temp));
+            else snprintf(t_in, sizeof(t_in), "--.-");
+            if (!std::isnan(id(cache_humidity))) snprintf(hum, sizeof(hum), "%.0f", id(cache_humidity));
+            else snprintf(hum, sizeof(hum), "--");
+            if (!std::isnan(id(cache_outdoor_temp))) snprintf(t_out, sizeof(t_out), "%.1f", id(cache_outdoor_temp));
+            else snprintf(t_out, sizeof(t_out), "--.-");
+            snprintf(buf, sizeof(buf), "%sC  %s%%  Zewn %sC", t_in, hum, t_out);
+            return std::string(buf);
+
+  - id: confirm_click
+    then:
+      - light.turn_on:
+          id: status_led
+          red: 0.0
+          green: 1.0
+          blue: 0.0
+          brightness: 100%
+      - lvgl.obj.update:
+          id: lbl_arrow_up
+          hidden: false
+      - delay: 400ms
+      - light.turn_off: status_led
+      - lvgl.obj.update:
+          id: lbl_arrow_up
+          hidden: true
+
+  # --- Easter egg: 5x szybkie dotkniecie ikonki HA. Ekran mruga
+  # czerwono-zlotem w rytm LED, potem pokazuje "reaktor" i napis. ---
+  - id: easter_egg_ironman
+    then:
+      - globals.set:
+          id: easter_active
+          value: "true"
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: true
+      - lvgl.page.show:
+          id: page_ironman
+          animation: NONE
+      - repeat:
+          count: 4
+          then:
+            - lvgl.page.update:
+                id: page_ironman
+                bg_color: 0xB22222
+            - light.turn_on:
+                id: status_led
+                red: 1.0
+                green: 0.15
+                blue: 0.0
+                transition_length: 0s
+            - delay: 200ms
+            - lvgl.page.update:
+                id: page_ironman
+                bg_color: 0x000000
+            - light.turn_on:
+                id: status_led
+                red: 1.0
+                green: 0.7
+                blue: 0.0
+                transition_length: 0s
+            - delay: 200ms
+      - lvgl.page.update:
+          id: page_ironman
+          bg_color: 0x000000
+      - lvgl.obj.update:
+          id: ironman_img
+          hidden: false
+      - lvgl.obj.update:
+          id: lbl_ironman_text
+          hidden: false
+      - light.turn_off: status_led
+
+  - id: exit_ironman
+    then:
+      - globals.set:
+          id: easter_active
+          value: "false"
+      - lvgl.obj.update:
+          id: ironman_img
+          hidden: true
+      - lvgl.obj.update:
+          id: lbl_ironman_text
+          hidden: true
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: false
+      - component.update: ambient_light_raw
+      - lvgl.page.show:
+          id: page_pulpit
+          animation: FADE_IN
+          time: 400ms
+
+  # --- "Znajdz JARVIS" - wywolywane przyciskiem z Home Assistant.
+  # Miga LED na losowe kolory i pokazuje bialy ekran, dopoki ktos nie
+  # dotknie "ZNALEZIONE" na urzadzeniu. UWAGA: ta plytka nie ma
+  # fizycznego buzzera, wiec dzwiek celowo pominiety. ---
+  - id: identify_device
+    then:
+      - globals.set:
+          id: identify_active
+          value: "true"
+      - light.turn_on:
+          id: tft_backlight
+          brightness: 100%
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: true
+      - lvgl.page.show:
+          id: page_identify
+          animation: NONE
+      - while:
+          condition:
+            lambda: 'return id(identify_active);'
+          then:
+            - light.turn_on:
+                id: status_led
+                red: !lambda 'return (random_uint32() % 256) / 255.0;'
+                green: !lambda 'return (random_uint32() % 256) / 255.0;'
+                blue: !lambda 'return (random_uint32() % 256) / 255.0;'
+                brightness: 100%
+                transition_length: 0s
+            - delay: 200ms
+      - light.turn_off:
+          id: status_led
+          transition_length: 0s
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: false
+      - component.update: ambient_light_raw
+      - lvgl.page.show:
+          id: page_pulpit
+          animation: NONE
+
+# ---------------------------------------------------------
+# Encje z Home Assistanta, ktorymi sterujemy
+# ---------------------------------------------------------
+# Przycisk widoczny w Home Assistant - "Znajdz to urzadzenie"
+button:
+  - platform: template
+    name: "Znajdz JARVIS"
+    id: find_device_button
+    on_press:
+      - script.execute: identify_device
+
+switch:
+  - platform: homeassistant
+    id: sypialnia_lampa
+    entity_id: light.studio
+
+  - platform: homeassistant
+    id: erni_lampa
+    entity_id: light.sypialnia
+
+# ---------------------------------------------------------
+# LVGL
+# ---------------------------------------------------------
+lvgl:
+  displays:
+    - my_display
+  touchscreens:
+    - my_touch
+
+  # Gorny pasek - top_layer rysuje sie NA WIERZCHU wszystkich stron,
+  # wiec definiujemy go raz i mamy na kazdym ekranie za darmo
+  top_layer:
+    widgets:
+      - obj:
+          id: top_bar
+          x: 0
+          y: 0
+          width: 240
+          height: 30
+          bg_opa: TRANSP
+          border_width: 0
+          radius: 0
+          pad_all: 0
+          scrollable: false
+          hidden: true
+          widgets:
+          - obj:
+              x: 0
+              y: 0
+              width: 240
+              height: 30
+              bg_color: 0x111111
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+
+          # --- Paski WiFi: 4 slupki o rosnacej, stalej wysokosci (jak w
+          # czujniku gazu), dolne krawedzie wyrownane, kolor zielony/szary
+          # przelaczany wg progu RSSI (patrz sensor wifi_signal) ---
+          - obj:
+              id: wifi_bar1
+              x: 3
+              y: 16
+              width: 3
+              height: 4
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - obj:
+              id: wifi_bar2
+              x: 8
+              y: 12
+              width: 3
+              height: 8
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - obj:
+              id: wifi_bar3
+              x: 13
+              y: 8
+              width: 3
+              height: 12
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - obj:
+              id: wifi_bar4
+              x: 18
+              y: 4
+              width: 3
+              height: 16
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+
+          # --- Strzalki wysylania (gora, blyska przy kliknieciu = wysylka
+          # komendy do HA) / odbierania (dol, blyska przy odebraniu nowego
+          # stanu z HA). ---
+          - label:
+              id: lbl_arrow_up
+              text: "\U000F0360"
+              x: 26
+              y: -1
+              text_font: icon_font_bar
+              text_color: 0x00FFFF
+              hidden: true
+          - label:
+              id: lbl_arrow_down
+              text: "\U000F035D"
+              x: 50
+              y: -1
+              text_font: icon_font_bar
+              text_color: 0x00FFFF
+              hidden: true
+
+          - label:
+              id: lbl_clock
+              text: "--:--:--"
+              align: TOP_MID
+              y: 6
+              text_font: montserrat_18
+              text_color: 0xFFFFFF
+
+          # --- Ikona HA - prawdziwy glif z Material Design Icons,
+          # taki sam jak na czujniku gazu. Dodatkowo: 5x szybkie
+          # dotkniecie w ciagu 3s odpala ukryty easter egg. Zwykla
+          # etykieta NIE jest klikalna w LVGL - stad niewidoczny
+          # przycisk "opakowujacy" ja, zeby on_click w ogole zadzialal. ---
+          - button:
+              id: lbl_ha_tap_btn
+              x: 155
+              y: 0
+              width: 44
+              height: 30
+              bg_opa: TRANSP
+              border_width: 0
+              shadow_width: 0
+              pad_all: 0
+              widgets:
+                - label:
+                    align: CENTER
+                    id: lbl_ha
+                    text: "\U000F07D0"
+                    text_font: icon_font_ha
+                    text_color: 0xFF0000
+              on_click:
+                - lambda: |-
+                    uint32_t now = (esphome::millis)();
+                    if (now - id(easter_tap_last_ms) > 3000) {
+                      id(easter_tap_count) = 0;
+                    }
+                    id(easter_tap_last_ms) = now;
+                    id(easter_tap_count) = id(easter_tap_count) + 1;
+                - lvgl.obj.update:
+                    id: lbl_ha_tap_btn
+                    bg_opa: COVER
+                    bg_color: 0x2196F3
+                - delay: 150ms
+                - lvgl.obj.update:
+                    id: lbl_ha_tap_btn
+                    bg_opa: TRANSP
+                - if:
+                    condition:
+                      lambda: 'return id(easter_tap_count) < 5;'
+                    then:
+                      - lvgl.label.update:
+                          id: lbl_easter_countdown
+                          text: !lambda |-
+                            return std::to_string(5 - id(easter_tap_count));
+                      - lvgl.obj.update:
+                          id: lbl_easter_countdown
+                          hidden: false
+                - if:
+                    condition:
+                      lambda: 'return id(easter_tap_count) >= 5;'
+                    then:
+                      - globals.set:
+                          id: easter_tap_count
+                          value: "0"
+                      - lvgl.obj.update:
+                          id: lbl_easter_countdown
+                          hidden: true
+                      - script.execute: easter_egg_ironman
+
+          # --- Ikonka baterii: obrys + wypelnienie proporcjonalne do % +
+          # "nub" po prawej, tak jak wyglada prawdziwa ikona baterii.
+          # Na razie PLACEHOLDER (niewidoczne wypelnienie, TRANSP) - do
+          # podlaczenia realnego ADC gdy dolaczysz ogniwo 18650. ---
+          - obj:
+              id: battery_outline
+              x: 200
+              y: 5
+              width: 26
+              height: 13
+              bg_opa: TRANSP
+              border_width: 1
+              border_color: 0x888888
+              radius: 2
+          - obj:
+              id: battery_nub
+              x: 226
+              y: 8
+              width: 2
+              height: 7
+              bg_color: 0x888888
+              bg_opa: COVER
+              radius: 0
+          - obj:
+              id: battery_fill
+              x: 202
+              y: 7
+              width: 0
+              height: 9
+              bg_color: 0x00FF00
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - label:
+              id: lbl_battery_pct
+              text: "n/a"
+              x: 205
+              y: 19
+              text_font: montserrat_12
+              text_color: 0x666666
+      - label:
+          id: lbl_easter_countdown
+          text: ""
+          align: BOTTOM_MID
+          y: -4
+          text_font: montserrat_14
+          text_color: 0x2196F3
+          hidden: true
+
+  pages:
+    # ------------------------------------------------------
+    # Ekran tytulowy - sam tytul, bez testow
+    # ------------------------------------------------------
+    - id: page_boot
+      bg_color: 0x000000
+      widgets:
+        - label:
+            text: "\U000F10CB"
+            align: CENTER
+            y: -90
+            text_font: icon_font_title
+            text_color: 0x00AEEF
+        - label:
+            text: "JARVIS"
+            align: CENTER
+            y: -10
+            text_font: montserrat_40
+            text_color: 0x00AEEF
+        - label:
+            text: "v0.01 alfa"
+            align: CENTER
+            y: 35
+            text_font: montserrat_14
+            text_color: 0x888888
+
+    # ------------------------------------------------------
+    # Pelnoekranowy test R/G/B - CALKOWICIE pusty ekran, zero
+    # tekstu, tylko wypelnienie kolorem, zsynchronizowane z LED
+    # ------------------------------------------------------
+    - id: page_flash
+      bg_color: 0x000000
+      on_load:
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0xFF0000
+        - light.turn_on:
+            id: status_led
+            red: 1.0
+            green: 0.0
+            blue: 0.0
+        - delay: 800ms
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0x00FF00
+        - light.turn_on:
+            id: status_led
+            red: 0.0
+            green: 1.0
+            blue: 0.0
+        - delay: 800ms
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0x0000FF
+        - light.turn_on:
+            id: status_led
+            red: 0.0
+            green: 0.0
+            blue: 1.0
+        - delay: 800ms
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0x000000
+        - light.turn_off: status_led
+        - lvgl.page.show:
+            id: page_diag
+            animation: NONE
+      widgets: []
+
+    # ------------------------------------------------------
+    # Diagnostyka - lista testow w stylu linuksowego boot-loga
+    # ------------------------------------------------------
+    - id: page_diag
+      bg_color: 0x000000
+      on_load:
+        # --- Sekcja natychmiastowa: CPU/RAM/self-test sprzetu, znane
+        # od razu bez czekania na siec ---
+        - lvgl.label.update:
+            id: lbl_diag_cpu_status
+            text: !lambda |-
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%u MHz", (unsigned) ESP.getCpuFreqMHz());
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_cputemp_status
+            text: !lambda |-
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%.1f C", id(cpu_temp_sensor).state);
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_ram_status
+            text: !lambda |-
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%u KB", (unsigned) (ESP.getFreeHeap() / 1024));
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_ekran_status
+            text: "OK"
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_led_status
+            text: "OK"
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_buzzer_status
+            text: "BRAK"
+            text_color: 0x666666
+        - delay: 250ms
+        # --- Sekcja sieciowa: wymaga czasu na polaczenie ---
+        - lvgl.label.update:
+            id: lbl_diag_wifi_status
+            text: "LACZENIE"
+            text_color: 0xFFAA00
+        - delay: 2500ms
+        - lvgl.label.update:
+            id: lbl_diag_wifi_status
+            text: !lambda |-
+              return id(wifi_comp).is_connected()
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return id(wifi_comp).is_connected() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+        - delay: 200ms
+        - lvgl.label.update:
+            id: lbl_diag_signal_status
+            text: !lambda |-
+              if (!id(wifi_comp).is_connected()) return std::string("n/a");
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%d dBm", (int) id(wifi_db).state);
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 200ms
+        - lvgl.label.update:
+            id: lbl_diag_ip_status
+            text: !lambda |-
+              if (!id(wifi_comp).is_connected()) return std::string("n/a");
+              char ip_buf[46];
+              id(wifi_comp).wifi_sta_ip_addresses()[0].str_to(ip_buf);
+              return std::string(ip_buf);
+            text_color: 0x00FF00
+        - delay: 300ms
+        - lvgl.label.update:
+            id: lbl_diag_time_status
+            text: "SYNCHRONIZACJA"
+            text_color: 0xFFAA00
+        - delay: 900ms
+        - lvgl.label.update:
+            id: lbl_diag_time_status
+            text: !lambda |-
+              return id(sntp_time).now().is_valid()
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return id(sntp_time).now().is_valid() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+        - delay: 300ms
+        - lvgl.label.update:
+            id: lbl_diag_ha_status
+            text: "LACZENIE"
+            text_color: 0xFFAA00
+        - delay: 900ms
+        - lvgl.label.update:
+            id: lbl_diag_ha_status
+            text: !lambda |-
+              return (id(node_status).has_state() && id(node_status).state)
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return (id(node_status).has_state() && id(node_status).state)
+                ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+        - delay: 900ms
+        - lvgl.obj.update:
+            id: top_bar
+            hidden: false
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: FADE_IN
+            time: 600ms
+      widgets:
+        - label:
+            text: "DIAGNOSTYKA"
+            align: TOP_MID
+            y: 10
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+
+        # --- CPU ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 45
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "CPU"
+            x: 15
+            y: 45
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_cpu_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 45
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- CPU temp ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 67
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "CPU temp"
+            x: 15
+            y: 67
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_cputemp_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 67
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- RAM ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 89
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "RAM"
+            x: 15
+            y: 89
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ram_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 89
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Ekran ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 111
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Ekran"
+            x: 15
+            y: 111
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ekran_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 111
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- LED RGB ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 133
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "LED RGB"
+            x: 15
+            y: 133
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_led_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 133
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Buzzer ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 155
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Buzzer"
+            x: 15
+            y: 155
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_buzzer_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 155
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- WiFi laczenie ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 177
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "WiFi laczenie"
+            x: 15
+            y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_wifi_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- WiFi sygnal ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 199
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "WiFi sygnal"
+            x: 15
+            y: 199
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_signal_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 199
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- WiFi IP ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 221
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "WiFi IP"
+            x: 15
+            y: 221
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ip_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 221
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Czas sync ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 243
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Czas sync"
+            x: 15
+            y: 243
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_time_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 243
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Homeassistant ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 265
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Homeassistant"
+            x: 15
+            y: 265
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ha_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 265
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+    # ------------------------------------------------------
+    # Easter egg: Iron Man. Odslaniana dopiero po animacji migania
+    # z easter_egg_ironman. Wyjscie: swipe w KAZDA strone wraca
+    # na Pulpit i chowa reaktor/napis z powrotem.
+    # ------------------------------------------------------
+    - id: page_ironman
+      bg_color: 0x000000
+      on_swipe_left:
+        - script.execute: exit_ironman
+      on_swipe_right:
+        - script.execute: exit_ironman
+      widgets:
+        - image:
+            id: ironman_img
+            x: 0
+            y: -20
+            src: img_ironman
+            hidden: true
+        - label:
+            id: lbl_ironman_text
+            text: "I AM IRON MAN"
+            align: CENTER
+            y: 130
+            text_font: montserrat_24
+            text_color: 0xFFD700
+            bg_color: 0x000000
+            bg_opa: 60%
+            hidden: true
+
+    # ------------------------------------------------------
+    # Identyfikacja urzadzenia - wywolywana przyciskiem z HA.
+    # Bialy ekran, dopoki ktos nie dotknie ZNALEZIONE.
+    # ------------------------------------------------------
+    - id: page_identify
+      bg_color: 0xFFFFFF
+      widgets:
+        - label:
+            text: "\U000F10CB"
+            align: CENTER
+            y: -70
+            text_font: icon_font_title
+            text_color: 0x000000
+        - label:
+            text: "JARVIS"
+            align: CENTER
+            y: 5
+            text_font: montserrat_24
+            text_color: 0x000000
+        - label:
+            text: "Tu jestem!"
+            align: CENTER
+            y: 40
+            text_font: montserrat_14
+            text_color: 0x333333
+        - button:
+            x: 20
+            y: 240
+            width: 200
+            height: 55
+            bg_color: 0x00AA00
+            pressed:
+              bg_color: 0x006600
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "ZNALEZIONE"
+                  text_font: montserrat_18
+                  text_color: 0xFFFFFF
+            on_click:
+              - globals.set:
+                  id: identify_active
+                  value: "false"
+
+    # ------------------------------------------------------
+    # Pulpit - docelowo ekran glowny karuzeli
+    # ------------------------------------------------------
+    - id: page_pulpit
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_salon
+            animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_piec
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            id: lbl_pulpit_day
+            text: "---"
+            align: TOP_MID
+            y: 36
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - label:
+            id: lbl_pulpit_date
+            text: "--.--.----"
+            align: TOP_MID
+            y: 64
+            text_font: montserrat_14
+            text_color: 0x888888
+        - label:
+            id: lbl_pulpit_climate
+            text: "--.-C  --%  Zewn --.-C"
+            align: TOP_MID
+            y: 84
+            text_font: montserrat_12
+            text_color: 0x00AEEF
+        - obj:
+            x: 10
+            y: 108
+            width: 220
+            height: 1
+            bg_color: 0x333333
+            bg_opa: COVER
+            border_width: 0
+            radius: 0
+        - label:
+            id: lbl_pulpit_lamps
+            text: "Ilosc wlaczonych lamp: ..."
+            x: 15
+            y: 118
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_piec_icon
+            text: "\U000F0238"
+            x: 15
+            y: 141
+            text_font: icon_font_btn
+            text_color: 0x666666
+        - label:
+            id: lbl_pulpit_piec
+            text: "Piec: ..."
+            x: 42
+            y: 145
+            text_font: montserrat_14
+            text_color: 0xFFFFFF
+            recolor: true
+        - label:
+            id: lbl_drzwi_icon
+            text: "\U000F081B"
+            x: 15
+            y: 166
+            text_font: icon_font_btn
+            text_color: 0x00FF00
+        - label:
+            id: lbl_pulpit_drzwi
+            text: "Drzwi: ..."
+            x: 42
+            y: 170
+            text_font: montserrat_14
+            text_color: 0xFFFFFF
+            recolor: true
+
+        # --- Karta brama: stan tekstowy + 2 przyciski (otworz/zamknij,
+        # furtka) wywolujace button.press w HA ---
+        - label:
+            id: lbl_brama_icon
+            text: "\U000F0299"
+            x: 15
+            y: 188
+            text_font: icon_font_btn
+            text_color: 0x555555
+        - label:
+            id: lbl_pulpit_brama
+            text: "Brama: n/a"
+            x: 42
+            y: 190
+            text_font: montserrat_14
+            text_color: 0x555555
+        - button:
+            x: 15
+            y: 217
+            width: 105
+            height: 40
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  align: CENTER
+                  id: lbl_brama_btn_text
+                  text: "Otworz/Zamknij"
+                  text_font: montserrat_12
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                  then:
+                  - homeassistant.action:
+                      action: button.press
+                      data:
+                        entity_id: button.brama_wjazdowa_otworz_zamknij_brame
+                  - script.execute: confirm_click
+        - button:
+            x: 125
+            y: 217
+            width: 105
+            height: 40
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  text: "\U000F0A48"
+                  x: 6
+                  y: 8
+                  text_font: icon_font_btn
+              - label:
+                  text: "Furtka"
+                  align: CENTER
+                  text_font: montserrat_12
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                  then:
+                  - homeassistant.action:
+                      action: button.press
+                      data:
+                        entity_id: button.brama_wjazdowa_otworz_jako_furtke
+                  - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Salon
+    # ------------------------------------------------------
+    - id: page_salon
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_sypialnia
+            animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "SALON"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - button:
+            x: 10
+            y: 70
+            width: 220
+            height: 50
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  id: lbl_salon_glowna_icon
+                  text: "\U000F0E50"
+                  x: 8
+                  y: 13
+                  text_font: icon_font_btn
+                  text_color: 0xFF0000
+              - label:
+                  text: "Lampa"
+                  x: 36
+                  y: 17
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                    - if:
+                        condition:
+                          lambda: 'return ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                        then:
+                          - lvgl.page.show:
+                              id: page_salon_lampa
+                              animation: FADE_IN
+                              time: 200ms
+                          - script.execute: confirm_click
+                        else:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.salon_lampka
+                          - script.execute: confirm_click
+        - button:
+            x: 10
+            y: 130
+            width: 220
+            height: 50
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "Telewizor"
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                  - lvgl.page.show:
+                      id: page_tv
+                      animation: FADE_IN
+                      time: 200ms
+                  - script.execute: confirm_click
+        - button:
+            x: 10
+            y: 190
+            width: 220
+            height: 50
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "Radio"
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                  - lvgl.page.show:
+                      id: page_radio
+                      animation: FADE_IN
+                      time: 200ms
+                  - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Salon > Lampa - ekran sterowania (wlacz/wylacz + jasnosc).
+    # PLACEHOLDER: aktualna zarowka Salonu jest zepsuta, encje
+    # dopiszemy jak kupisz nowa. Wyjscie: swipe w KAZDA strone
+    # wraca na Salon.
+    # ------------------------------------------------------
+    - id: page_salon_lampa
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_salon
+            animation: FADE_IN
+            time: 200ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_salon
+            animation: FADE_IN
+            time: 200ms
+      widgets:
+        - label:
+            text: "SALON - LAMPA"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+        - obj:
+            x: 2
+            y: 62
+            width: 236
+            height: 248
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - button:
+                  x: 0
+                  y: 0
+                  width: 232
+                  height: 28
+                  bg_color: 0x2196F3
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Wlacz / Wylacz"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                        - homeassistant.action:
+                            action: light.toggle
+                            data:
+                              entity_id: light.salon_lampka
+                        - script.execute: confirm_click
+              - label:
+                  id: lbl_salon_lampka_status
+                  text: "Stan: ..."
+                  x: 0
+                  y: 34
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+                  recolor: true
+
+              - label:
+                  id: lbl_salon_brightness
+                  text: "Jasnosc"
+                  x: 5
+                  y: 58
+                  text_font: montserrat_14
+                  text_color: 0xCCCCCC
+              - slider:
+                  id: slider_salon_brightness
+                  x: 20
+                  y: 80
+                  width: 30
+                  height: 100
+                  min_value: 1
+                  max_value: 100
+                  value: 50
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.salon_lampka
+                                data_template:
+                                  brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_salon_brightness)));'
+                            - script.execute: confirm_click
+              - label:
+                  id: lbl_salon_brightness_val
+                  text: "--"
+                  x: 15
+                  y: 184
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+
+              - label:
+                  id: lbl_salon_colortemp
+                  text: "Barwa"
+                  x: 125
+                  y: 58
+                  text_font: montserrat_14
+                  text_color: 0xCCCCCC
+              - slider:
+                  id: slider_salon_colortemp
+                  x: 160
+                  y: 80
+                  width: 30
+                  height: 100
+                  min_value: 2000
+                  max_value: 6500
+                  value: 4000
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.salon_lampka
+                                data_template:
+                                  color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_salon_colortemp)));'
+                            - script.execute: confirm_click
+              - label:
+                  id: lbl_salon_colortemp_val
+                  text: "--"
+                  x: 148
+                  y: 184
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+
+              # --- Gotowe kolory (zamiast dotykowej palety - prostsze
+              # i pewniejsze w LVGL) ---
+              - label:
+                  text: "Kolor"
+                  x: 5
+                  y: 208
+                  text_font: montserrat_14
+                  text_color: 0xCCCCCC
+              - button:
+                  x: 0
+                  y: 226
+                  width: 55
+                  height: 28
+                  bg_color: 0xFF0000
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[255, 0, 0]"
+                          - script.execute: confirm_click
+              - button:
+                  x: 59
+                  y: 226
+                  width: 55
+                  height: 28
+                  bg_color: 0x00FF00
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[0, 255, 0]"
+                          - script.execute: confirm_click
+              - button:
+                  x: 118
+                  y: 226
+                  width: 55
+                  height: 28
+                  bg_color: 0x0000FF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[0, 0, 255]"
+                          - script.execute: confirm_click
+              - button:
+                  x: 177
+                  y: 226
+                  width: 55
+                  height: 28
+                  bg_color: 0xFFFFFF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[255, 255, 255]"
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Salon > Telewizor - PLACEHOLDER
+    # ------------------------------------------------------
+    - id: page_tv
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_salon
+            animation: FADE_IN
+            time: 200ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_salon
+            animation: FADE_IN
+            time: 200ms
+      widgets:
+        - label:
+            text: "TELEWIZOR"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+        - label:
+            id: lbl_tv_status
+            text: "Stan: ..."
+            align: TOP_MID
+            y: 62
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - button:
+            x: 60
+            y: 100
+            width: 120
+            height: 50
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  text: "\U000F0425"
+                  x: 10
+                  y: 15
+                  text_font: icon_font_btn
+              - label:
+                  text: "Zasilanie"
+                  align: CENTER
+                  text_font: montserrat_14
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                  - homeassistant.action:
+                      action: media_player.toggle
+                      data:
+                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - script.execute: confirm_click
+        - button:
+            x: 20
+            y: 170
+            width: 95
+            height: 50
+            bg_color: 0x333333
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "Vol -"
+                  text_font: montserrat_18
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                  - homeassistant.action:
+                      action: media_player.volume_down
+                      data:
+                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - script.execute: confirm_click
+        - button:
+            x: 125
+            y: 170
+            width: 95
+            height: 50
+            bg_color: 0x333333
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "Vol +"
+                  text_font: montserrat_18
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                  - homeassistant.action:
+                      action: media_player.volume_up
+                      data:
+                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Salon > Radio - PLACEHOLDER
+    # ------------------------------------------------------
+    - id: page_radio
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_salon
+            animation: FADE_IN
+            time: 200ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_salon
+            animation: FADE_IN
+            time: 200ms
+      widgets:
+        - label:
+            text: "RADIO"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+        - obj:
+            x: 2
+            y: 62
+            width: 236
+            height: 200
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  id: lbl_radio_stacja
+                  text: "Stacja: ..."
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_radio_tytul
+                  text: "Utwor: ..."
+                  x: 0
+                  y: 20
+                  text_font: montserrat_12
+                  text_color: 0xAAAAAA
+              - label:
+                  id: lbl_radio_stan
+                  text: "Stan: ..."
+                  x: 0
+                  y: 38
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+                  recolor: true
+
+              - label:
+                  text: "\U000F057E"
+                  x: 0
+                  y: 60
+                  text_font: icon_font_btn
+                  text_color: 0xCCCCCC
+              - label:
+                  id: lbl_radio_glosnosc
+                  text: "Glosnosc: ..."
+                  x: 26
+                  y: 65
+                  text_font: montserrat_14
+                  text_color: 0xCCCCCC
+              - slider:
+                  id: slider_radio_glosnosc
+                  x: 0
+                  y: 84
+                  width: 232
+                  height: 16
+                  min_value: 0
+                  max_value: 100
+                  value: 50
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep);'
+                          then:
+                            - homeassistant.action:
+                                action: number.set_value
+                                data:
+                                  entity_id: number.salon_atlascube_radio_glosnosc
+                                data_template:
+                                  value: !lambda 'return std::to_string(lv_slider_get_value(id(slider_radio_glosnosc)));'
+                            - script.execute: confirm_click
+
+              - button:
+                  x: 10
+                  y: 120
+                  width: 64
+                  height: 40
+                  bg_color: 0x333333
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "\U000F0663"
+                        text_font: icon_font_btn
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: button.press
+                              data:
+                                entity_id: button.atlascube_9140_previous
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_radio_playstop
+                  x: 84
+                  y: 120
+                  width: 64
+                  height: 40
+                  bg_color: 0x2196F3
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        id: lbl_radio_playstop_icon
+                        text: "\U000F040C"
+                        text_font: icon_font_btn
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - if:
+                              condition:
+                                lambda: 'return id(radio_is_playing);'
+                              then:
+                                - homeassistant.action:
+                                    action: button.press
+                                    data:
+                                      entity_id: button.atlascube_9140_stop
+                              else:
+                                - homeassistant.action:
+                                    action: button.press
+                                    data:
+                                      entity_id: button.atlascube_9140_play
+                          - script.execute: confirm_click
+              - button:
+                  x: 158
+                  y: 120
+                  width: 64
+                  height: 40
+                  bg_color: 0x333333
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "\U000F0661"
+                        text_font: icon_font_btn
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: button.press
+                              data:
+                                entity_id: button.atlascube_9140_next
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Sypialnia
+    # ------------------------------------------------------
+    - id: page_sypialnia
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_erni
+            animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_salon
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "SYPIALNIA"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - button:
+            x: 12
+            y: 90
+            width: 216
+            height: 50
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  id: lbl_sypialnia_lampa_icon
+                  text: "\U000F0E50"
+                  x: 6
+                  y: 15
+                  text_font: icon_font_btn
+                  text_color: 0xFF0000
+              - label:
+                  id: lbl_sypialnia_lampa
+                  text: "Lampa: ..."
+                  align: CENTER
+                  text_color: 0xFF0000
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                    - if:
+                        condition:
+                          lambda: 'return ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                        then:
+                          - lvgl.page.show:
+                              id: page_sypialnia_lampa
+                              animation: FADE_IN
+                              time: 200ms
+                          - script.execute: confirm_click
+                        else:
+                          - switch.toggle: sypialnia_lampa
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Sypialnia > Lampa - sceny (przytrzymanie przycisku na
+    # glownej stronie Sypialni). Wyjscie: swipe w KAZDA strone
+    # wraca na Sypialnia.
+    # ------------------------------------------------------
+    - id: page_sypialnia_lampa
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_sypialnia
+            animation: FADE_IN
+            time: 200ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_sypialnia
+            animation: FADE_IN
+            time: 200ms
+      widgets:
+        - label:
+            text: "SYPIALNIA - SCENY"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+        - obj:
+            x: 2
+            y: 68
+            width: 236
+            height: 184
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - button:
+                  x: 0
+                  y: 0
+                  width: 232
+                  height: 28
+                  bg_color: 0x2196F3
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Wlacz / Wylacz"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                        - switch.toggle: sypialnia_lampa
+                        - script.execute: confirm_click
+              - label:
+                  id: lbl_scena_studio
+                  text: "..."
+                  x: 0
+                  y: 34
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+
+              # --- Siatka 6 przyciskow scen 2x3. Podswietlenie
+              # aktualnie wybranej sceny bierze sie WYLACZNIE ze stanu
+              # w HA (state_scena_wybor -> patrz text_sensor nizej) -
+              # dzieki temu zawsze jest zgodne z prawda, tak jak na
+              # dashboardzie, niezaleznie od tego skad przyszla zmiana ---
+              - button:
+                  id: btn_scene_auto
+                  x: 0
+                  y: 52
+                  width: 112
+                  height: 32
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "AUTO"
+                        text_font: montserrat_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: input_select.select_option
+                              data:
+                                entity_id: input_select.animacja_swiatla_studio
+                                option: "AUTO"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_scene_bialy
+                  x: 116
+                  y: 52
+                  width: 112
+                  height: 32
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Bialy"
+                        text_font: montserrat_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: input_select.select_option
+                              data:
+                                entity_id: input_select.animacja_swiatla_studio
+                                option: "Bialy"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_scene_wschod
+                  x: 0
+                  y: 88
+                  width: 112
+                  height: 32
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Wschod"
+                        text_font: montserrat_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: input_select.select_option
+                              data:
+                                entity_id: input_select.animacja_swiatla_studio
+                                option: "Wschod"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_scene_zachod
+                  x: 116
+                  y: 88
+                  width: 112
+                  height: 32
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Zachod"
+                        text_font: montserrat_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: input_select.select_option
+                              data:
+                                entity_id: input_select.animacja_swiatla_studio
+                                option: "Zachod"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_scene_tecza
+                  x: 0
+                  y: 124
+                  width: 112
+                  height: 32
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Tecza"
+                        text_font: montserrat_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: input_select.select_option
+                              data:
+                                entity_id: input_select.animacja_swiatla_studio
+                                option: "Tecza"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_scene_ognisko
+                  x: 116
+                  y: 124
+                  width: 112
+                  height: 32
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Ognisko"
+                        text_font: montserrat_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: input_select.select_option
+                              data:
+                                entity_id: input_select.animacja_swiatla_studio
+                                option: "Ognisko"
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Erni
+    # ------------------------------------------------------
+    - id: page_erni
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_sypialnia
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "ERNI"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - button:
+            x: 12
+            y: 90
+            width: 216
+            height: 50
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  id: lbl_erni_lampa_icon
+                  text: "\U000F0E50"
+                  x: 6
+                  y: 15
+                  text_font: icon_font_btn
+                  text_color: 0xFF0000
+              - label:
+                  id: lbl_erni_lampa
+                  text: "Lampa: ..."
+                  align: CENTER
+                  text_color: 0xFF0000
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep);'
+                  then:
+                    - if:
+                        condition:
+                          lambda: 'return ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                        then:
+                          - lvgl.page.show:
+                              id: page_erni_lampa
+                              animation: FADE_IN
+                              time: 200ms
+                          - script.execute: confirm_click
+                        else:
+                          - switch.toggle: erni_lampa
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Erni > Lampa - jasnosc i barwa (przytrzymanie przycisku na
+    # glownej stronie Erni). Wyjscie: swipe w KAZDA strone
+    # wraca na Erni.
+    # ------------------------------------------------------
+    - id: page_erni_lampa
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_erni
+            animation: FADE_IN
+            time: 200ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_erni
+            animation: FADE_IN
+            time: 200ms
+      widgets:
+        - label:
+            text: "ERNI - LAMPA"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+        - obj:
+            x: 2
+            y: 68
+            width: 236
+            height: 214
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - button:
+                  x: 0
+                  y: 0
+                  width: 232
+                  height: 28
+                  bg_color: 0x2196F3
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Wlacz / Wylacz"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                        - switch.toggle: erni_lampa
+                        - script.execute: confirm_click
+              - label:
+                  id: lbl_erni_brightness
+                  text: "Jasnosc"
+                  x: 5
+                  y: 34
+                  text_font: montserrat_14
+                  text_color: 0xCCCCCC
+              - slider:
+                  id: slider_erni_brightness
+                  x: 20
+                  y: 56
+                  width: 30
+                  height: 130
+                  min_value: 1
+                  max_value: 100
+                  value: 50
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.sypialnia
+                                data_template:
+                                  brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_erni_brightness)));'
+                            - script.execute: confirm_click
+
+              - label:
+                  id: lbl_erni_colortemp
+                  text: "Barwa"
+                  x: 125
+                  y: 34
+                  text_font: montserrat_14
+                  text_color: 0xCCCCCC
+              - slider:
+                  id: slider_erni_colortemp
+                  x: 160
+                  y: 56
+                  width: 30
+                  height: 130
+                  min_value: 2000
+                  max_value: 6500
+                  value: 4000
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.sypialnia
+                                data_template:
+                                  color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_erni_colortemp)));'
+                            - script.execute: confirm_click
+
+              - label:
+                  id: lbl_erni_brightness_val
+                  text: "--"
+                  align: TOP_LEFT
+                  x: 15
+                  y: 188
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_erni_colortemp_val
+                  text: "--"
+                  align: TOP_LEFT
+                  x: 148
+                  y: 188
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+
+    # ------------------------------------------------------
+    # Piec - PLACEHOLDER, szukamy jeszcze wlasciwych encji w HA
+    # ------------------------------------------------------
+    - id: page_piec
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_zewnetrzne
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "PIEC"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - obj:
+            x: 2
+            y: 56
+            width: 236
+            height: 124
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "OGRZEWANIE"
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0x888888
+              - label:
+                  id: lbl_piec_temp
+                  text: "Temp: --.- C"
+                  x: 0
+                  y: 18
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_piec_target
+                  text: "Zadana: --.- C"
+                  x: 0
+                  y: 40
+                  text_font: montserrat_12
+                  text_color: 0xAAAAAA
+              - button:
+                  id: btn_piec_minus
+                  x: 150
+                  y: 34
+                  width: 32
+                  height: 26
+                  bg_color: 0x333333
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "-"
+                        text_font: montserrat_18
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_temperature
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                              data_template:
+                                temperature: !lambda |-
+                                  float t = id(cache_piec_target) - 0.5f;
+                                  if (t < 5.0f) t = 5.0f;
+                                  char buf[8];
+                                  snprintf(buf, sizeof(buf), "%.1f", t);
+                                  return std::string(buf);
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_piec_plus
+                  x: 186
+                  y: 34
+                  width: 32
+                  height: 26
+                  bg_color: 0x333333
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "+"
+                        text_font: montserrat_18
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_temperature
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                              data_template:
+                                temperature: !lambda |-
+                                  float t = id(cache_piec_target) + 0.5f;
+                                  if (t > 30.0f) t = 30.0f;
+                                  char buf[8];
+                                  snprintf(buf, sizeof(buf), "%.1f", t);
+                                  return std::string(buf);
+                          - script.execute: confirm_click
+              - label:
+                  id: lbl_piec_mode
+                  text: "Tryb: ..."
+                  x: 0
+                  y: 66
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+                  recolor: true
+              - button:
+                  id: btn_piec_auto
+                  x: 0
+                  y: 86
+                  width: 112
+                  height: 24
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "AUTO"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_hvac_mode
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                                hvac_mode: "auto"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_piec_off
+                  x: 116
+                  y: 86
+                  width: 112
+                  height: 24
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "OFF"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_hvac_mode
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                                hvac_mode: "off"
+                          - script.execute: confirm_click
+
+        - obj:
+            x: 2
+            y: 184
+            width: 236
+            height: 134
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "CIEPLA WODA"
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0x888888
+              - label:
+                  id: lbl_cwu_status
+                  text: "Status: ..."
+                  x: 0
+                  y: 18
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_cwu_temp
+                  text: "Zbiornik: n/a"
+                  x: 0
+                  y: 36
+                  text_font: montserrat_12
+                  text_color: 0x666666
+              - button:
+                  id: btn_cwu_auto
+                  x: 0
+                  y: 58
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Auto"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Auto"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_cwu_off
+                  x: 116
+                  y: 58
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Off"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Off"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_cwu_day
+                  x: 0
+                  y: 92
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Day"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Day"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_cwu_boost
+                  x: 116
+                  y: 92
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Boost"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Cylinder Boost"
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Oswietlenie zewnetrzne - PLACEHOLDER
+    # ------------------------------------------------------
+    - id: page_zewnetrzne
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_piec
+            animation: MOVE_LEFT
+            time: 300ms
+      widgets:
+        - label:
+            text: "OSWIETLENIE"
+            align: TOP_MID
+            y: 25
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - label:
+            text: "ZEWNETRZNE"
+            align: TOP_MID
+            y: 55
+            text_font: montserrat_18
+            text_color: 0xAAAAAA
+        - obj:
+            x: 2
+            y: 100
+            width: 236
+            height: 100
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "Wkrotce..."
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0x666666
+
+# ---------------------------------------------------------
+# Zegar w gornym pasku - aktualizacja co sekunde
+# ---------------------------------------------------------
+interval:
+  - interval: 1s
+    then:
+      # --- Chowanie licznika pozostalych kliknie easter egga, jesli
+      # minelo okno 3s bez kolejnego dotkniecia ikonki HA ---
+      - if:
+          condition:
+            lambda: 'return id(easter_tap_count) > 0 && ((esphome::millis)() - id(easter_tap_last_ms)) > 3000;'
+          then:
+            - globals.set:
+                id: easter_tap_count
+                value: "0"
+            - lvgl.obj.update:
+                id: lbl_easter_countdown
+                hidden: true
+      # --- Oszczedzanie baterii: 60s bezczynnosci = przygaszenie do 50%,
+      # 120s = calkowite wygaszenie. Wybudzenie dotykiem (patrz on_touch
+      # w touchscreen:) przywraca normalna jasnosc. ---
+      - lambda: |-
+          uint32_t idle_ms = (esphome::millis)() - id(last_activity_ms);
+          if (idle_ms > 120000 && !id(screen_off)) {
+            id(screen_off) = true;
+            id(screen_dimmed) = true;
+            id(tft_backlight).turn_off().perform();
+          } else if (idle_ms > 60000 && idle_ms <= 120000 && !id(screen_dimmed)) {
+            id(screen_dimmed) = true;
+            auto call = id(tft_backlight).turn_on();
+            call.set_brightness(0.5);
+            call.perform();
+          }
+      # --- Status drzwi (aktualizowany co sekunde z aktualnego stanu,
+      # niezaleznie od zlapania konkretnego zdarzenia zmiany).
+      # 3 stany: brak danych z HA (--), otwarte (z liczeniem czasu
+      # od sekund), zamkniete. ---
+      - if:
+          condition:
+            lambda: 'return !id(state_drzwi).has_state();'
+          then:
+            - lvgl.label.update:
+                id: lbl_pulpit_drzwi
+                text: "Drzwi: #888888 --#"
+            - lvgl.label.update:
+                id: lbl_drzwi_icon
+                text: "\U000F081B"
+                text_color: 0x888888
+          else:
+            - if:
+                condition:
+                  lambda: 'return id(state_drzwi).state;'
+                then:
+                  - lvgl.label.update:
+                      id: lbl_pulpit_drzwi
+                      text: !lambda |-
+                        uint32_t sec = ((esphome::millis)() - id(door_open_since_ms)) / 1000;
+                        uint32_t h = sec / 3600;
+                        uint32_t m = (sec % 3600) / 60;
+                        uint32_t s = sec % 60;
+                        char buf[48];
+                        if (h > 0) {
+                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
+                        } else if (m > 0) {
+                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
+                        } else {
+                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %us#", (unsigned) s);
+                        }
+                        return std::string(buf);
+                  - lvgl.label.update:
+                      id: lbl_drzwi_icon
+                      text: "\U000F081C"
+                      text_color: 0xFF0000
+                else:
+                  - lvgl.label.update:
+                      id: lbl_pulpit_drzwi
+                      text: "Drzwi: #00FF00 zamkniete#"
+                  - lvgl.label.update:
+                      id: lbl_drzwi_icon
+                      text: "\U000F081B"
+                      text_color: 0x00FF00
+      # --- Miganie napisu bramy w stanach przejsciowych
+      # (Otwieranie/Zamykanie) - przelacza widocznosc co sekunde ---
+      - if:
+          condition:
+            lambda: 'return id(brama_blinking);'
+          then:
+            - globals.set:
+                id: brama_blink_on
+                value: !lambda 'return !id(brama_blink_on);'
+            - lvgl.obj.update:
+                id: lbl_pulpit_brama
+                hidden: !lambda 'return !id(brama_blink_on);'
+          else:
+            - lvgl.obj.update:
+                id: lbl_pulpit_brama
+                hidden: false
+      - lvgl.label.update:
+          id: lbl_clock
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            char buf[9];
+            if (t.is_valid()) {
+              snprintf(buf, sizeof(buf), "%02d:%02d:%02d", t.hour, t.minute, t.second);
+            } else {
+              snprintf(buf, sizeof(buf), "--:--:--");
+            }
+            return std::string(buf);
+      - lvgl.label.update:
+          id: lbl_pulpit_day
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            if (!t.is_valid()) return std::string("---");
+            static const char* dni[] = {"Niedziela","Poniedzialek","Wtorek","Sroda",
+                                         "Czwartek","Piatek","Sobota"};
+            return std::string(dni[t.day_of_week - 1]);
+      - lvgl.label.update:
+          id: lbl_pulpit_date
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            if (!t.is_valid()) return std::string("--.--.----");
+            static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
+                                              "czerwca","lipca","sierpnia","wrzesnia",
+                                              "pazdziernika","listopada","grudnia"};
+            char buf[32];
+            snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
+            return std::string(buf);
+      - lvgl.label.update:
+          id: lbl_pulpit_lamps
+          text: !lambda |-
+            int on_count = 0;
+            if (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) on_count++;
+            if (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) on_count++;
+            if (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) on_count++;
+            return std::string("Ilosc wlaczonych lamp: ") + std::to_string(on_count);
+      # --- Ciagle odswiezanie przyciskow lamp z aktualnego stanu (nie
+      # tylko przy zlapaniu zdarzenia zmiany) - dzieki temu po starcie
+      # urzadzenia przycisk pokazuje prawdziwy stan od razu, bez
+      # koniecznosci najpierw go klikniecia ---
+      - lvgl.label.update:
+          id: lbl_sypialnia_lampa
+          text: !lambda |-
+            if (!id(state_sypialnia_lampa).has_state()) return std::string("Lampa: ...");
+            return id(state_sypialnia_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+          text_color: !lambda |-
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+      - lvgl.label.update:
+          id: lbl_sypialnia_lampa_icon
+          text: !lambda |-
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
+          text_color: !lambda |-
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+      - lvgl.label.update:
+          id: lbl_erni_lampa
+          text: !lambda |-
+            if (!id(state_erni_lampa).has_state()) return std::string("Lampa: ...");
+            return id(state_erni_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+          text_color: !lambda |-
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+      - lvgl.label.update:
+          id: lbl_erni_lampa_icon
+          text: !lambda |-
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
+          text_color: !lambda |-
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
