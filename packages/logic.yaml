@@ -37,6 +37,26 @@ globals:
     type: bool
     restore_value: false
     initial_value: "true"
+  - id: brama_page_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: brama_waiting_for_motion
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: brama_closed_since_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: brama_position_target
+    type: float
+    restore_value: false
+    initial_value: "0.0"
+  - id: brama_position_visual
+    type: float
+    restore_value: false
+    initial_value: "0.0"
   - id: identify_active
     type: bool
     restore_value: false

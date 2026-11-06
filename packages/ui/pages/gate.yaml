@@ -1,12 +1,15 @@
-# JARVIS 2.0 — STRONA BRAMA
-# Podglad dokladnego stanu i sterowanie przeniesione z pulpitu.
-# Pulpit zawiera tylko kafelek nawigacyjny; ta strona jest osobnym widokiem.
+# JARVIS 2.0 — PODGLAD BRAMY
+# Stan i konfiguracja pochodza z integracji BFT w Home Assistant.
+# Skrzydlo jest rysowane i animowane lokalnie przez ESP32.
 
 lvgl:
   pages:
     - id: page_brama
       bg_color: 0x000000
       on_swipe_right:
+        - globals.set:
+            id: brama_page_active
+            value: "false"
         - lvgl.page.show:
             id: page_pulpit
             animation: MOVE_RIGHT
@@ -15,100 +18,162 @@ lvgl:
         - label:
             text: "BRAMA"
             align: TOP_MID
-            y: 36
+            y: 30
             text_font: montserrat_24
             text_color: 0xFFFFFF
+
+        # Scena: podjazd, prowadnica, slupki i ruchome skrzydlo.
         - obj:
-            x: 10
-            y: 76
-            width: 220
-            height: 126
-            bg_color: 0x101820
-            bg_opa: COVER
+            x: 12
+            y: 70
+            width: 216
+            height: 132
+            bg_color: 0x080D11
             border_width: 1
-            border_color: 0x45515C
-            radius: 6
+            border_color: 0x26343D
+            radius: 5
             pad_all: 0
             scrollable: false
             widgets:
-              - label:
-                  id: lbl_brama_icon
-                  text: "\U000F0299"
-                  align: TOP_MID
-                  y: 12
-                  text_font: icon_font_btn
-                  text_color: 0x888888
-              - label:
-                  id: lbl_pulpit_brama
-                  text: "Stan: oczekiwanie na dane"
-                  align: TOP_MID
-                  y: 86
-                  text_font: montserrat_14
-                  text_color: 0x888888
-                  recolor: true
-        - button:
-            x: 10
-            y: 220
-            width: 105
-            height: 48
-            bg_color: 0x2196F3
-            pressed:
-              bg_color: 0x00FF00
-            widgets:
-              - label:
-                  align: CENTER
-                  id: lbl_brama_btn_text
-                  text: "Otworz/Zamknij"
-                  text_font: montserrat_12
-            on_press:
-              - globals.set:
-                  id: btn_press_ms
-                  value: !lambda 'return (esphome::millis)();'
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
-                  then:
-                    - homeassistant.action:
-                        action: button.press
-                        data:
-                          entity_id: button.brama_wjazdowa_otworz_zamknij_brame
-                    - script.execute: confirm_click
-        - button:
-            x: 125
-            y: 220
-            width: 105
-            height: 48
-            bg_color: 0x2196F3
-            pressed:
-              bg_color: 0x00FF00
-            widgets:
-              - label:
-                  text: "\U000F0A48"
-                  x: 8
-                  y: 10
-                  text_font: icon_font_btn
-              - label:
-                  text: "Furtka"
-                  align: CENTER
-                  text_font: montserrat_12
-            on_press:
-              - globals.set:
-                  id: btn_press_ms
-                  value: !lambda 'return (esphome::millis)();'
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
-                  then:
-                    - homeassistant.action:
-                        action: button.press
-                        data:
-                          entity_id: button.brama_wjazdowa_otworz_jako_furtke
-                    - script.execute: confirm_click
+              - obj:
+                  x: 0
+                  y: 108
+                  width: 216
+                  height: 3
+                  bg_color: 0x78838A
+                  border_width: 0
+                  radius: 0
+              - obj:
+                  x: 26
+                  y: 18
+                  width: 13
+                  height: 91
+                  bg_color: 0x59636A
+                  border_width: 1
+                  border_color: 0xAAB2B7
+                  radius: 1
+              - obj:
+                  x: 178
+                  y: 18
+                  width: 13
+                  height: 91
+                  bg_color: 0x59636A
+                  border_width: 1
+                  border_color: 0xAAB2B7
+                  radius: 1
+              - obj:
+                  x: 43
+                  y: 102
+                  width: 15
+                  height: 7
+                  bg_color: 0x9AA3A8
+                  border_width: 0
+                  radius: 1
+              - obj:
+                  x: 165
+                  y: 102
+                  width: 15
+                  height: 7
+                  bg_color: 0x9AA3A8
+                  border_width: 0
+                  radius: 1
+              - obj:
+                  id: gate_leaf
+                  x: 44
+                  y: 28
+                  width: 136
+                  height: 78
+                  bg_color: 0x202A30
+                  border_width: 2
+                  border_color: 0x9AA5AB
+                  radius: 1
+                  pad_all: 0
+                  scrollable: false
+                  widgets:
+                    - obj:
+                        x: 5
+                        y: 7
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 17
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 27
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 37
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 47
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 57
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 67
+                        width: 122
+                        height: 5
+                        bg_color: 0x8C989F
+                        border_width: 0
+                        radius: 0
+
         - label:
-            text: "SWIPE W PRAWO - POWROT"
-            align: BOTTOM_MID
-            y: -10
+            id: lbl_brama_status
+            text: "Stan: oczekiwanie na HA"
+            align: TOP_MID
+            y: 214
+            text_font: montserrat_14
+            text_color: 0x888888
+            recolor: true
+        - label:
+            id: lbl_brama_position
+            text: "Pozycja: --%"
+            align: TOP_MID
+            y: 238
             text_font: montserrat_12
-            text_color: 0x666666
+            text_color: 0x00AEEF
+        - label:
+            id: lbl_brama_direction
+            text: "Kierunek: --"
+            align: TOP_MID
+            y: 258
+            text_font: montserrat_12
+            text_color: 0x777777
+        - label:
+            id: lbl_brama_warning
+            text: "UWAGA: FOTOKOMORKA"
+            align: BOTTOM_MID
+            y: -8
+            text_font: montserrat_12
+            text_color: 0xFFCC00
+            hidden: true

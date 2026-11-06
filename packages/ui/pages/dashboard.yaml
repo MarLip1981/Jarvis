@@ -98,30 +98,90 @@ lvgl:
             text_color: 0xFFFFFF
             recolor: true
 
-        # BRAMA — tylko kafelek nawigacyjny pulpitu.
-        # Sterowanie i dokladny podglad stanu znajduja sie na osobnej stronie.
+        # Dwa niezalezne przyciski pilota. Sterowanie dopiero po przytrzymaniu.
         - button:
             id: btn_pulpit_brama
             x: 10
             y: 214
-            width: 220
-            height: 36
-            bg_color: 0x151515
+            width: 105
+            height: 42
+            bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
             radius: 5
             shadow_width: 0
             widgets:
               - label:
-                  text: "BRAMA  >"
+                  text: "BRAMA"
                   align: CENTER
                   text_font: montserrat_14
-                  text_color: 0xCCCCCC
+                  text_color: 0xFFFFFF
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
             on_click:
               - if:
                   condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && id(brama_main_button_entity).has_state() && !id(brama_main_button_entity).state.empty();'
                   then:
+                    - globals.set:
+                        id: brama_page_active
+                        value: "true"
+                    - globals.set:
+                        id: brama_waiting_for_motion
+                        value: "true"
+                    - globals.set:
+                        id: brama_closed_since_ms
+                        value: "0"
+                    - homeassistant.action:
+                        action: button.press
+                        data:
+                          entity_id: !lambda 'return id(brama_main_button_entity).state;'
+                    - lvgl.page.show:
+                        id: page_brama
+                        animation: MOVE_LEFT
+                        time: 300ms
+                    - script.execute: confirm_click
+        - button:
+            id: btn_pulpit_furtka
+            x: 125
+            y: 214
+            width: 105
+            height: 42
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0xB88632
+            radius: 5
+            shadow_width: 0
+            widgets:
+              - label:
+                  text: "FURTKA"
+                  align: CENTER
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && id(brama_pedestrian_enabled).state && id(brama_pedestrian_button_entity).has_state() && !id(brama_pedestrian_button_entity).state.empty();'
+                  then:
+                    - globals.set:
+                        id: brama_page_active
+                        value: "true"
+                    - globals.set:
+                        id: brama_waiting_for_motion
+                        value: "true"
+                    - globals.set:
+                        id: brama_closed_since_ms
+                        value: "0"
+                    - homeassistant.action:
+                        action: button.press
+                        data:
+                          entity_id: !lambda 'return id(brama_pedestrian_button_entity).state;'
                     - lvgl.page.show:
                         id: page_brama
                         animation: MOVE_LEFT

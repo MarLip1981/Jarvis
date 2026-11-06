@@ -300,6 +300,27 @@ sensor:
                   width: 0
                   bg_color: 0x666666
 
+  - platform: homeassistant
+    id: brama_ha_position
+    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    attribute: gate_position
+    internal: true
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return std::isfinite(x);'
+            then:
+              - globals.set:
+                  id: brama_position_target
+                  value: !lambda 'return std::max(0.0f, std::min(100.0f, x));'
+              - lvgl.label.update:
+                  id: lbl_brama_position
+                  text: !lambda |-
+                    char buf[24];
+                    snprintf(buf, sizeof(buf), "Pozycja: %.0f%%", x);
+                    return std::string(buf);
+
   - platform: wifi_signal
     id: wifi_db
     name: "WiFi sygnal"
@@ -323,6 +344,22 @@ sensor:
 
 # Status polaczenia z HA (API) - do ikonki HA w gornym pasku
 binary_sensor:
+  - platform: homeassistant
+    id: brama_pedestrian_enabled
+    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    on_state:
+      then:
+        - lvgl.obj.update:
+            id: btn_pulpit_furtka
+            hidden: !lambda 'return !x;'
+  - platform: homeassistant
+    id: brama_photocell
+    entity_id: binary_sensor.wjazd_brama_wjazdowa_fotokomorka_przeszkoda
+    on_state:
+      then:
+        - lvgl.obj.update:
+            id: lbl_brama_warning
+            hidden: !lambda 'return !x;'
   - platform: homeassistant
     id: state_salon_lampka
     entity_id: light.salon_lampka
@@ -640,41 +677,50 @@ text_sensor:
 
 
   - platform: homeassistant
-    id: state_brama
-    entity_id: sensor.brama_wjazdowa_dokladny_stan_bramy
+    id: brama_ha_status
+    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    attribute: gate_status
     on_value:
       then:
         - script.execute: ha_rx_flash
         - lvgl.label.update:
-            id: lbl_pulpit_brama
-            text: !lambda 'return std::string("Brama: ") + x;'
+            id: lbl_brama_status
+            text: !lambda 'return std::string("Stan: ") + x;'
             text_color: !lambda |-
-              if (x == "Otwarta") return lv_color_hex(0xFF0000);
-              if (x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF0000);
-              if (x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x == "Otwieranie" || x == "Zamykanie") return lv_color_hex(0xFFAA00);
+              if (x == "Otwarta" || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
+              if (x == "Otwieranie" || x == "Zamykanie" || x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
+              if (x == "Zamknięta" || x == "Zamknieta") return lv_color_hex(0x00DD66);
               return lv_color_hex(0x888888);
-        - lvgl.label.update:
-            id: lbl_brama_icon
-            text: !lambda |-
-              if (x.find("Furtka") != std::string::npos) return std::string("\U000F0A48");
-              return (x == "Otwarta") ? std::string("\U000F116A") : std::string("\U000F0299");
-            text_color: !lambda |-
-              if (x == "Otwarta") return lv_color_hex(0xFF0000);
-              if (x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF0000);
-              if (x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x == "Otwieranie" || x == "Zamykanie") return lv_color_hex(0xFFAA00);
-              return lv_color_hex(0x888888);
-        - lvgl.label.update:
-            id: lbl_brama_btn_text
-            text: !lambda |-
-              if (x == "Zamknieta" || x == "Zamknięta") return std::string("Otworz");
-              if (x == "Otwarta") return std::string("Zamknij");
-              return std::string("Stop");
         - globals.set:
-            id: brama_blinking
+            id: brama_closed_since_ms
             value: !lambda |-
-              return (x == "Otwieranie" || x == "Zamykanie");
+              const bool closed = (x == "Zamknięta" || x == "Zamknieta");
+              if (!closed) {
+                if (x != "unknown" && x != "unavailable" && !x.empty()) id(brama_waiting_for_motion) = false;
+                return 0;
+              }
+              if (id(brama_page_active) && !id(brama_waiting_for_motion) && id(brama_closed_since_ms) == 0)
+                return (esphome::millis)();
+              return id(brama_closed_since_ms);
+  - platform: homeassistant
+    id: brama_ha_direction
+    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    attribute: opening_direction
+    on_value:
+      then:
+        - script.execute: ha_rx_flash
+        - lvgl.label.update:
+            id: lbl_brama_direction
+            text: !lambda |-
+              return (x == "left") ? std::string("Kierunek: w lewo") : std::string("Kierunek: w prawo");
+  - platform: homeassistant
+    id: brama_main_button_entity
+    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    attribute: main_button_entity
+  - platform: homeassistant
+    id: brama_pedestrian_button_entity
+    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    attribute: pedestrian_button_entity
 
 button:
   - platform: template
