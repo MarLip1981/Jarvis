@@ -33,13 +33,20 @@ api:
 
 # Moduły pobierane z repozytorium podczas kompilacji.
 packages:
-  hardware: github://MarLip1981/Jarvis/packages/hardware.yaml@main
-  entities: github://MarLip1981/Jarvis/packages/entities.yaml@main
-  logic: github://MarLip1981/Jarvis/packages/logic.yaml@main
-  lvgl_base: github://MarLip1981/Jarvis/packages/ui/base.yaml@main
-  pages_system: github://MarLip1981/Jarvis/packages/ui/pages/system.yaml@main
-  pages_dashboard: github://MarLip1981/Jarvis/packages/ui/pages/dashboard.yaml@main
-  pages_living_room: github://MarLip1981/Jarvis/packages/ui/pages/living-room.yaml@main
-  pages_bedrooms: github://MarLip1981/Jarvis/packages/ui/pages/bedrooms.yaml@main
-  pages_heating: github://MarLip1981/Jarvis/packages/ui/pages/heating.yaml@main
-  runtime: github://MarLip1981/Jarvis/packages/runtime.yaml@main
+  jarvis_remote:
+    url: https://github.com/MarLip1981/Jarvis
+    ref: main
+    # Krótki interwał odświeżania zapobiega kompilacji ze starej kopii
+    # z cache ESPHome po zmianach w repozytorium.
+    refresh: 1min
+    files:
+      - packages/hardware.yaml
+      - packages/entities.yaml
+      - packages/logic.yaml
+      - packages/ui/base.yaml
+      - packages/ui/pages/system.yaml
+      - packages/ui/pages/dashboard.yaml
+      - packages/ui/pages/living-room.yaml
+      - packages/ui/pages/bedrooms.yaml
+      - packages/ui/pages/heating.yaml
+      - packages/runtime.yaml
