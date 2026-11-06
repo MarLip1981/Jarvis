@@ -273,12 +273,16 @@ binary_sensor:
             hidden: true
 
   - platform: gpio
+    # GPIO0 jest pinem BOOT ESP32. Przycisk działa jako zwykłe wejście po starcie,
+    # ale jego przytrzymanie podczas resetu może uruchomić tryb bootloadera.
+    # Wyciszamy ostrzeżenie, nie zmieniając działania przycisku.
     pin:
       number: GPIO0
       mode:
         input: true
         pullup: true
       inverted: true
+      ignore_strapping_warning: true
     id: sw1_button
     name: "Przycisk SW1"
     internal: true
