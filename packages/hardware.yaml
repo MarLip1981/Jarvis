@@ -155,7 +155,7 @@ touchscreen:
   update_interval: 50ms
   # IRQ wykrywa pierwszy kontakt, a touch_timeout wymusza kolejne odczyty
   # podczas trzymania palca. Dzięki temu on_update widzi przeciągnięcia.
-  touch_timeout: 50ms
+  touch_timeout: 25ms
   calibration:
     x_min: 230
     x_max: 3860
@@ -208,8 +208,9 @@ touchscreen:
               int dy = touch.y - touch.y_org;
               if (dx < 0) dx = -dx;
               if (dy < 0) dy = -dy;
-              // 12 px tolerancji eliminuje drgania rezystancyjnego panelu.
-              if (dx >= 12 || dy >= 12) {
+              // 8 px wystarcza, by rozpoznać także wolniejsze przeciągnięcie,
+              // a nadal zostawia niewielki margines na naturalne drgania panelu.
+              if (dx >= 8 || dy >= 8) {
                 id(touch_gesture_blocked) = true;
               }
             }
