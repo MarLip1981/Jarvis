@@ -302,7 +302,7 @@ sensor:
 
   - platform: homeassistant
     id: brama_ha_position
-    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: gate_position
     internal: true
     on_value:
@@ -688,7 +688,7 @@ text_sensor:
 
   - platform: homeassistant
     id: brama_ha_status
-    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: gate_status
     on_value:
       then:
@@ -716,7 +716,7 @@ text_sensor:
               return id(brama_closed_since_ms);
   - platform: homeassistant
     id: brama_ha_direction
-    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: opening_direction
     on_value:
       then:
@@ -727,11 +727,11 @@ text_sensor:
               return (x == "left") ? std::string("Kierunek: w lewo") : std::string("Kierunek: w prawo");
   - platform: homeassistant
     id: brama_main_button_entity
-    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: main_button_entity
   - platform: homeassistant
     id: brama_pedestrian_button_entity
-    entity_id: binary_sensor.brama_przesuwna_bft_tryb_furtki
+    entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: pedestrian_button_entity
 
 button:
