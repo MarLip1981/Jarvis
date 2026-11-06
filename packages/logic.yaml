@@ -1,0 +1,226 @@
+# JARVIS 2.0 — STAN WEWNĘTRZNY I SKRYPTY
+# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
+# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+
+globals:
+  - id: last_activity_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: screen_dimmed
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: screen_off
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: screen_was_asleep
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: door_open_since_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: brama_blinking
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: brama_blink_on
+    type: bool
+    restore_value: false
+    initial_value: "true"
+  - id: identify_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: cache_indoor_temp
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: cache_humidity
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: cache_outdoor_temp
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: cache_piec_target
+    type: float
+    restore_value: false
+    initial_value: "NAN"
+  - id: btn_press_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: easter_tap_count
+    type: int
+    restore_value: false
+    initial_value: "0"
+  - id: easter_tap_last_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: easter_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: radio_is_playing
+    type: bool
+    restore_value: false
+    initial_value: "false"
+
+# ---------------------------------------------------------
+# Wspolny skrypt potwierdzenia kliknięcia - LED na zielono +
+# blysk strzalki w gore. Wolany z KAZDEGO przycisku jedna
+# linijka (script.execute: confirm_click), zamiast kopiowania
+# tej samej sekwencji za kazdym razem.
+# ---------------------------------------------------------
+script:
+  - id: update_pulpit_climate_line
+    then:
+      - lvgl.label.update:
+          id: lbl_pulpit_climate
+          text: !lambda |-
+            char buf[64];
+            char t_in[8], hum[8], t_out[8];
+            if (!std::isnan(id(cache_indoor_temp))) snprintf(t_in, sizeof(t_in), "%.1f", id(cache_indoor_temp));
+            else snprintf(t_in, sizeof(t_in), "--.-");
+            if (!std::isnan(id(cache_humidity))) snprintf(hum, sizeof(hum), "%.0f", id(cache_humidity));
+            else snprintf(hum, sizeof(hum), "--");
+            if (!std::isnan(id(cache_outdoor_temp))) snprintf(t_out, sizeof(t_out), "%.1f", id(cache_outdoor_temp));
+            else snprintf(t_out, sizeof(t_out), "--.-");
+            snprintf(buf, sizeof(buf), "%sC  %s%%  Zewn %sC", t_in, hum, t_out);
+            return std::string(buf);
+
+  - id: confirm_click
+    then:
+      - light.turn_on:
+          id: status_led
+          red: 0.0
+          green: 1.0
+          blue: 0.0
+          brightness: 100%
+      - lvgl.obj.update:
+          id: lbl_arrow_up
+          hidden: false
+      - delay: 400ms
+      - light.turn_off: status_led
+      - lvgl.obj.update:
+          id: lbl_arrow_up
+          hidden: true
+
+  # --- Easter egg: 5x szybkie dotkniecie ikonki HA. Ekran mruga
+  # czerwono-zlotem w rytm LED, potem pokazuje "reaktor" i napis. ---
+  - id: easter_egg_ironman
+    then:
+      - globals.set:
+          id: easter_active
+          value: "true"
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: true
+      - lvgl.page.show:
+          id: page_ironman
+          animation: NONE
+      - repeat:
+          count: 4
+          then:
+            - lvgl.page.update:
+                id: page_ironman
+                bg_color: 0xB22222
+            - light.turn_on:
+                id: status_led
+                red: 1.0
+                green: 0.15
+                blue: 0.0
+                transition_length: 0s
+            - delay: 200ms
+            - lvgl.page.update:
+                id: page_ironman
+                bg_color: 0x000000
+            - light.turn_on:
+                id: status_led
+                red: 1.0
+                green: 0.7
+                blue: 0.0
+                transition_length: 0s
+            - delay: 200ms
+      - lvgl.page.update:
+          id: page_ironman
+          bg_color: 0x000000
+      - lvgl.obj.update:
+          id: ironman_img
+          hidden: false
+      - lvgl.obj.update:
+          id: lbl_ironman_text
+          hidden: false
+      - light.turn_off: status_led
+
+  - id: exit_ironman
+    then:
+      - globals.set:
+          id: easter_active
+          value: "false"
+      - lvgl.obj.update:
+          id: ironman_img
+          hidden: true
+      - lvgl.obj.update:
+          id: lbl_ironman_text
+          hidden: true
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: false
+      - component.update: ambient_light_raw
+      - lvgl.page.show:
+          id: page_pulpit
+          animation: FADE_IN
+          time: 400ms
+
+  # --- "Znajdz JARVIS" - wywolywane przyciskiem z Home Assistant.
+  # Miga LED na losowe kolory i pokazuje bialy ekran, dopoki ktos nie
+  # dotknie "ZNALEZIONE" na urzadzeniu. UWAGA: ta plytka nie ma
+  # fizycznego buzzera, wiec dzwiek celowo pominiety. ---
+  - id: identify_device
+    then:
+      - globals.set:
+          id: identify_active
+          value: "true"
+      - light.turn_on:
+          id: tft_backlight
+          brightness: 100%
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: true
+      - lvgl.page.show:
+          id: page_identify
+          animation: NONE
+      - while:
+          condition:
+            lambda: 'return id(identify_active);'
+          then:
+            - light.turn_on:
+                id: status_led
+                red: !lambda 'return (random_uint32() % 256) / 255.0;'
+                green: !lambda 'return (random_uint32() % 256) / 255.0;'
+                blue: !lambda 'return (random_uint32() % 256) / 255.0;'
+                brightness: 100%
+                transition_length: 0s
+            - delay: 200ms
+      - light.turn_off:
+          id: status_led
+          transition_length: 0s
+      - lvgl.obj.update:
+          id: top_bar
+          hidden: false
+      - component.update: ambient_light_raw
+      - lvgl.page.show:
+          id: page_pulpit
+          animation: NONE
+
+# ---------------------------------------------------------
+# Encje z Home Assistanta, ktorymi sterujemy
+# ---------------------------------------------------------
+# Przycisk widoczny w Home Assistant - "Znajdz to urzadzenie"

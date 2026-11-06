@@ -1,0 +1,45 @@
+# JARVIS 2.0 — lokalny plik główny ESPHome
+# Sekrety pozostają lokalnie w Home Assistant; nie trafiają do zdalnych packages.
+esphome:
+  name: room-switcher
+  friendly_name: "Przelacznik pomieszczen"
+  on_boot:
+    priority: -100
+    then:
+      - light.turn_on:
+          id: tft_backlight
+          brightness: 100%
+      # Ekran tytulowy sam sie pokazuje (jest pierwsza strona),
+      # po chwili przechodzimy do pelnoekranowego testu R/G/B
+      - delay: 2000ms
+      - lvgl.page.show:
+          id: page_flash
+          animation: NONE
+
+wifi:
+  id: wifi_comp
+  output_power: 20dB
+  networks:
+    - ssid: !secret wifi_ssid
+      password: !secret wifi_password
+    - ssid: !secret wifi_backup_ssid
+      password: !secret wifi_backup_pass
+  ap:
+    ssid: "RoomSwitcher"
+
+api:
+  encryption:
+    key: !secret room_switcher__encryption_key
+
+# Moduły pobierane z repozytorium podczas kompilacji.
+packages:
+  hardware: github://MarLip1981/Jarvis/packages/hardware.yaml@main
+  entities: github://MarLip1981/Jarvis/packages/entities.yaml@main
+  logic: github://MarLip1981/Jarvis/packages/logic.yaml@main
+  lvgl_base: github://MarLip1981/Jarvis/packages/ui/base.yaml@main
+  pages_system: github://MarLip1981/Jarvis/packages/ui/pages/system.yaml@main
+  pages_dashboard: github://MarLip1981/Jarvis/packages/ui/pages/dashboard.yaml@main
+  pages_living_room: github://MarLip1981/Jarvis/packages/ui/pages/living-room.yaml@main
+  pages_bedrooms: github://MarLip1981/Jarvis/packages/ui/pages/bedrooms.yaml@main
+  pages_heating: github://MarLip1981/Jarvis/packages/ui/pages/heating.yaml@main
+  runtime: github://MarLip1981/Jarvis/packages/runtime.yaml@main

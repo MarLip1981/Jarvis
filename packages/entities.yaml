@@ -1,0 +1,603 @@
+# JARVIS 2.0 — ENCJE HOME ASSISTANT I SENSORY LOKALNE
+# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
+# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+
+sensor:
+  - platform: homeassistant
+    id: radio_glosnosc_attr
+    entity_id: number.salon_atlascube_radio_glosnosc
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_radio_glosnosc
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_radio_glosnosc
+                  text: !lambda |-
+                    char buf[24];
+                    snprintf(buf, sizeof(buf), "Glosnosc: %d", (int) x);
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_radio_glosnosc
+                  text: "Glosnosc: --"
+
+  - platform: homeassistant
+    id: salon_brightness_attr
+    entity_id: light.salon_lampka
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_salon_brightness
+                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+              - lvgl.label.update:
+                  id: lbl_salon_brightness_val
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_salon_brightness_val
+                  text: "--"
+
+  - platform: homeassistant
+    id: salon_colortemp_attr
+    entity_id: light.salon_lampka
+    attribute: color_temp_kelvin
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_salon_colortemp
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_salon_colortemp_val
+                  text: !lambda |-
+                    char buf[10];
+                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_salon_colortemp_val
+                  text: "--"
+
+  - platform: homeassistant
+    id: piec_current_temp
+    entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+    attribute: current_temperature
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_piec_temp
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "Temp: %.1f C", x);
+              return std::string(buf);
+
+  - platform: homeassistant
+    id: piec_target_temp
+    entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+    attribute: temperature
+    on_value:
+      then:
+        - globals.set:
+            id: cache_piec_target
+            value: !lambda 'return x;'
+        - lvgl.label.update:
+            id: lbl_piec_target
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "Zadana: %.1f C", x);
+              return std::string(buf);
+
+  - platform: homeassistant
+    id: cwu_tank_temp
+    entity_id: sensor.dom_domestic_hot_water_0_tank_temperature
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_cwu_temp
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "Zbiornik: %.1f C", x);
+              return std::string(buf);
+
+  - platform: homeassistant
+    id: pulpit_indoor_temp
+    entity_id: sensor.kuchnia_piec_ogrzewanie_current_temperature
+    on_value:
+      then:
+        - globals.set:
+            id: cache_indoor_temp
+            value: !lambda 'return x;'
+        - script.execute: update_pulpit_climate_line
+
+  - platform: homeassistant
+    id: pulpit_humidity
+    entity_id: sensor.dom_zone_ogrzewanie_circuit_0_humidity
+    on_value:
+      then:
+        - globals.set:
+            id: cache_humidity
+            value: !lambda 'return x;'
+        - script.execute: update_pulpit_climate_line
+
+  - platform: homeassistant
+    id: pulpit_outdoor_temp
+    entity_id: sensor.dom_outdoor_temperature
+    on_value:
+      then:
+        - globals.set:
+            id: cache_outdoor_temp
+            value: !lambda 'return x;'
+        - script.execute: update_pulpit_climate_line
+
+  - platform: homeassistant
+    id: erni_brightness_attr
+    entity_id: light.sypialnia
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_erni_brightness
+                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+              - lvgl.label.update:
+                  id: lbl_erni_brightness_val
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_erni_brightness_val
+                  text: "--"
+
+  - platform: homeassistant
+    id: erni_colortemp_attr
+    entity_id: light.sypialnia
+    attribute: color_temp_kelvin
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_erni_colortemp
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_erni_colortemp_val
+                  text: !lambda |-
+                    char buf[10];
+                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    return std::string(buf);
+            else:
+              - lvgl.label.update:
+                  id: lbl_erni_colortemp_val
+                  text: "--"
+
+  - platform: internal_temperature
+    id: cpu_temp_sensor
+    name: "Temperatura CPU"
+  - platform: adc
+    pin: GPIO34
+    id: ambient_light_raw
+    name: "Czujnik swiatla (raw)"
+    update_interval: 5s
+    attenuation: 12db
+    filters:
+      - lambda: |-
+          // odwracamy i skalujemy orientacyjnie do 0.1 - 1.0
+          float v = 1.0 - x;
+          if (v < 0.1) v = 0.1;
+          if (v > 1.0) v = 1.0;
+          return v;
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !id(screen_dimmed) && !id(screen_off);'
+            then:
+              - light.turn_on:
+                  id: tft_backlight
+                  brightness: !lambda "return x;"
+                  transition_length: 500ms
+
+  - platform: wifi_signal
+    id: wifi_db
+    name: "WiFi sygnal"
+    update_interval: 15s
+    on_value:
+      then:
+        - lvgl.obj.update:
+            id: wifi_bar1
+            bg_color: !lambda 'return x >= -85 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+        - lvgl.obj.update:
+            id: wifi_bar2
+            bg_color: !lambda 'return x >= -75 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+        - lvgl.obj.update:
+            id: wifi_bar3
+            bg_color: !lambda 'return x >= -65 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+        - lvgl.obj.update:
+            id: wifi_bar4
+            bg_color: !lambda 'return x >= -55 ? lv_color_hex(0x00FF00) : lv_color_hex(0x555555);'
+
+  # --------------------------------------------------------------
+  # Bateria - USTALONE: ta plytka NIE MA wbudowanego analogowego
+  # pomiaru napiecia baterii (potwierdzone kodem producenta - jedyny
+  # analogowy wejscie to czujnik swiatla). Ikonka zostaje wizualnym
+  # placeholderem "n/a" dopoki nie dolaczysz wlasnego dzielnika
+  # napiecia na jeden z wolnych pinow (np. IO21/IO22/IO27) i nie
+  # wrocimy tu zeby to podpiac.
+  # --------------------------------------------------------------
+
+# Status polaczenia z HA (API) - do ikonki HA w gornym pasku
+binary_sensor:
+  - platform: homeassistant
+    id: state_salon_lampka
+    entity_id: light.salon_lampka
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_salon_lampka_status
+            text: !lambda |-
+              return x ? std::string("Stan: #00FF00 WLACZONA#") : std::string("Stan: #FF0000 wylaczona#");
+        - lvgl.label.update:
+            id: lbl_salon_glowna_icon
+            text: !lambda |-
+              return x ? std::string("\U000F0335") : std::string("\U000F0E50");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: gpio
+    pin:
+      number: GPIO0
+      mode:
+        input: true
+        pullup: true
+      inverted: true
+    id: sw1_button
+    name: "Przycisk SW1"
+    internal: true
+    filters:
+      - delayed_on: 20ms
+    on_press:
+      - globals.set:
+          id: last_activity_ms
+          value: !lambda 'return (esphome::millis)();'
+      - if:
+          condition:
+            lambda: 'return id(screen_dimmed) || id(screen_off);'
+          then:
+            - globals.set:
+                id: screen_dimmed
+                value: "false"
+            - globals.set:
+                id: screen_off
+                value: "false"
+            - component.update: ambient_light_raw
+
+  - platform: status
+    id: node_status
+    name: "Status polaczenia"
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_ha
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+
+  - platform: homeassistant
+    id: state_erni_lampa
+    entity_id: light.sypialnia
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_erni_lampa
+            text: !lambda |-
+              return x ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.label.update:
+            id: lbl_erni_lampa_icon
+            text: !lambda |-
+              return x ? std::string("\U000F0335") : std::string("\U000F0E50");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_sypialnia_lampa
+    entity_id: light.studio
+    on_state:
+      then:
+        - lvgl.label.update:
+            id: lbl_sypialnia_lampa
+            text: !lambda |-
+              return x ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.label.update:
+            id: lbl_sypialnia_lampa_icon
+            text: !lambda |-
+              return x ? std::string("\U000F0335") : std::string("\U000F0E50");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_drzwi
+    entity_id: binary_sensor.intelignty_czujnik_otwarcia_melink_drzwi
+    on_state:
+      then:
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+        - if:
+            condition:
+              lambda: 'return x;'
+            then:
+              # Drzwi wlasnie sie otworzyly - zapamietujemy moment
+              - globals.set:
+                  id: door_open_since_ms
+                  value: !lambda 'return (esphome::millis)();'
+        # Sam tekst na ekranie NIE jest ustawiany tutaj - w interval
+        # 1s nizej jest jedno miejsce, ktore co sekunde odswieza tekst
+        # na podstawie AKTUALNEGO stanu (dokladnie tak jak licznik lamp),
+        # zamiast polegac wylacznie na zlapaniu tego zdarzenia.
+
+text_sensor:
+  - platform: homeassistant
+    id: radio_stacja
+    entity_id: sensor.atlascube_radio_stacja_radiowa
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_radio_stacja
+            text: !lambda 'return std::string("Stacja: ") + x;'
+
+  - platform: homeassistant
+    id: radio_tytul
+    entity_id: sensor.atlascube_radio_tytul_utworu
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_radio_tytul
+            text: !lambda 'return std::string("Utwor: ") + x;'
+
+  - platform: homeassistant
+    id: radio_stan
+    entity_id: sensor.atlascube_9140_playback
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_radio_stan
+            text: !lambda |-
+              return std::string("Stan: #00FF00 ") + x + std::string("#");
+        # UWAGA: "playing" to zalozenie do zweryfikowania - podmien na
+        # rzeczywista wartosc jaka realnie przyjmuje ten sensor w HA,
+        # jesli ikonka play/stop nie przelacza sie poprawnie.
+        - globals.set:
+            id: radio_is_playing
+            value: !lambda 'return (x == "playing");'
+        - lvgl.label.update:
+            id: lbl_radio_playstop_icon
+            text: !lambda |-
+              return (x == "playing") ? std::string("\U000F0666") : std::string("\U000F040C");
+
+  - platform: homeassistant
+    id: tv_state
+    entity_id: media_player.tv_samsung_7_series_49_2
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_tv_status
+            text: !lambda 'return std::string("Stan: ") + x;'
+
+  - platform: homeassistant
+    id: piec_mode_state
+    entity_id: sensor.dom_circuit_0_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_piec_mode
+            text: !lambda |-
+              return (x == "Heating")
+                ? std::string("Tryb: #FFAA00 HEATING#")
+                : std::string("Tryb: #00FF00 STANDBY#");
+        - lvgl.button.update:
+            id: btn_piec_auto
+            bg_color: !lambda 'return (x == "Heating") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_piec_off
+            bg_color: !lambda 'return (x == "Standby") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+
+  - platform: homeassistant
+    id: cwu_mode
+    entity_id: water_heater.dom_domestic_hot_water_0
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_cwu_status
+            text: !lambda 'return std::string("Status: ") + x;'
+        - lvgl.button.update:
+            id: btn_cwu_auto
+            bg_color: !lambda 'return (x == "Auto") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_cwu_off
+            bg_color: !lambda 'return (x == "Off") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_cwu_day
+            bg_color: !lambda 'return (x == "Day") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_cwu_boost
+            bg_color: !lambda 'return (x == "Cylinder Boost") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+
+  - platform: homeassistant
+    id: state_scena_studio
+    entity_id: input_select.animacja_swiatla_studio
+    on_value:
+      then:
+        - lvgl.button.update:
+            id: btn_scene_auto
+            bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_bialy
+            bg_color: !lambda 'return (x == "Bialy") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_wschod
+            bg_color: !lambda 'return (x == "Wschod") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_zachod
+            bg_color: !lambda 'return (x == "Zachod") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_tecza
+            bg_color: !lambda 'return (x == "Tecza") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.button.update:
+            id: btn_scene_ognisko
+            bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_scena_opis
+    entity_id: input_text.aktualna_scena_studio
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_scena_studio
+            text: !lambda 'return x;'
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_piec
+    entity_id: sensor.dom_circuit_0_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_pulpit_piec
+            text: !lambda |-
+              return (x == "Heating")
+                ? std::string("Piec: #FFAA00 grzeje#")
+                : std::string("Piec: #00FF00 nie pracuje#");
+        - lvgl.label.update:
+            id: lbl_piec_icon
+            text_color: !lambda |-
+              return (x == "Heating") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x666666);
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+  - platform: homeassistant
+    id: state_brama
+    entity_id: sensor.brama_wjazdowa_dokladny_stan_bramy
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_pulpit_brama
+            text: !lambda 'return std::string("Brama: ") + x;'
+            text_color: !lambda |-
+              if (x == "Otwarta") return lv_color_hex(0xFF0000);
+              if (x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF0000);
+              if (x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
+              if (x == "Otwieranie" || x == "Zamykanie") return lv_color_hex(0xFFAA00);
+              return lv_color_hex(0x888888);   // Zamknieta / inne
+        - lvgl.label.update:
+            id: lbl_brama_icon
+            text: !lambda |-
+              if (x.find("Furtka") != std::string::npos) return std::string("\U000F0A48");
+              return (x == "Otwarta") ? std::string("\U000F116A") : std::string("\U000F0299");
+            text_color: !lambda |-
+              if (x == "Otwarta") return lv_color_hex(0xFF0000);
+              if (x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF0000);
+              if (x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
+              if (x == "Otwieranie" || x == "Zamykanie") return lv_color_hex(0xFFAA00);
+              return lv_color_hex(0x888888);
+        - lvgl.label.update:
+            id: lbl_brama_btn_text
+            text: !lambda |-
+              if (x == "Zamknieta" || x == "Zamknięta") return std::string("Otworz");
+              if (x == "Otwarta") return std::string("Zamknij");
+              return std::string("Stop");
+        - globals.set:
+            id: brama_blinking
+            value: !lambda |-
+              return (x == "Otwieranie" || x == "Zamykanie");
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: false
+        - delay: 400ms
+        - lvgl.obj.update:
+            id: lbl_arrow_down
+            hidden: true
+
+display:
+
+button:
+  - platform: template
+    name: "Znajdz JARVIS"
+    id: find_device_button
+    on_press:
+      - script.execute: identify_device
+
+switch:
+  - platform: homeassistant
+    id: sypialnia_lampa
+    entity_id: light.studio
+
+  - platform: homeassistant
+    id: erni_lampa
+    entity_id: light.sypialnia
+
+# ---------------------------------------------------------
+# LVGL
+# ---------------------------------------------------------

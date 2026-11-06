@@ -1,0 +1,166 @@
+# JARVIS 2.0 — ZADANIA OKRESOWE I ODSWIEŻANIE WSKAZAŃ
+# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
+# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+
+interval:
+  - interval: 1s
+    then:
+      # --- Chowanie licznika pozostalych kliknie easter egga, jesli
+      # minelo okno 3s bez kolejnego dotkniecia ikonki HA ---
+      - if:
+          condition:
+            lambda: 'return id(easter_tap_count) > 0 && ((esphome::millis)() - id(easter_tap_last_ms)) > 3000;'
+          then:
+            - globals.set:
+                id: easter_tap_count
+                value: "0"
+            - lvgl.obj.update:
+                id: lbl_easter_countdown
+                hidden: true
+      # --- Oszczedzanie baterii: 60s bezczynnosci = przygaszenie do 50%,
+      # 120s = calkowite wygaszenie. Wybudzenie dotykiem (patrz on_touch
+      # w touchscreen:) przywraca normalna jasnosc. ---
+      - lambda: |-
+          uint32_t idle_ms = (esphome::millis)() - id(last_activity_ms);
+          if (idle_ms > 120000 && !id(screen_off)) {
+            id(screen_off) = true;
+            id(screen_dimmed) = true;
+            id(tft_backlight).turn_off().perform();
+          } else if (idle_ms > 60000 && idle_ms <= 120000 && !id(screen_dimmed)) {
+            id(screen_dimmed) = true;
+            auto call = id(tft_backlight).turn_on();
+            call.set_brightness(0.5);
+            call.perform();
+          }
+      # --- Status drzwi (aktualizowany co sekunde z aktualnego stanu,
+      # niezaleznie od zlapania konkretnego zdarzenia zmiany).
+      # 3 stany: brak danych z HA (--), otwarte (z liczeniem czasu
+      # od sekund), zamkniete. ---
+      - if:
+          condition:
+            lambda: 'return !id(state_drzwi).has_state();'
+          then:
+            - lvgl.label.update:
+                id: lbl_pulpit_drzwi
+                text: "Drzwi: #888888 --#"
+            - lvgl.label.update:
+                id: lbl_drzwi_icon
+                text: "\U000F081B"
+                text_color: 0x888888
+          else:
+            - if:
+                condition:
+                  lambda: 'return id(state_drzwi).state;'
+                then:
+                  - lvgl.label.update:
+                      id: lbl_pulpit_drzwi
+                      text: !lambda |-
+                        uint32_t sec = ((esphome::millis)() - id(door_open_since_ms)) / 1000;
+                        uint32_t h = sec / 3600;
+                        uint32_t m = (sec % 3600) / 60;
+                        uint32_t s = sec % 60;
+                        char buf[48];
+                        if (h > 0) {
+                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
+                        } else if (m > 0) {
+                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
+                        } else {
+                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %us#", (unsigned) s);
+                        }
+                        return std::string(buf);
+                  - lvgl.label.update:
+                      id: lbl_drzwi_icon
+                      text: "\U000F081C"
+                      text_color: 0xFF0000
+                else:
+                  - lvgl.label.update:
+                      id: lbl_pulpit_drzwi
+                      text: "Drzwi: #00FF00 zamkniete#"
+                  - lvgl.label.update:
+                      id: lbl_drzwi_icon
+                      text: "\U000F081B"
+                      text_color: 0x00FF00
+      # --- Miganie napisu bramy w stanach przejsciowych
+      # (Otwieranie/Zamykanie) - przelacza widocznosc co sekunde ---
+      - if:
+          condition:
+            lambda: 'return id(brama_blinking);'
+          then:
+            - globals.set:
+                id: brama_blink_on
+                value: !lambda 'return !id(brama_blink_on);'
+            - lvgl.obj.update:
+                id: lbl_pulpit_brama
+                hidden: !lambda 'return !id(brama_blink_on);'
+          else:
+            - lvgl.obj.update:
+                id: lbl_pulpit_brama
+                hidden: false
+      - lvgl.label.update:
+          id: lbl_clock
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            char buf[9];
+            if (t.is_valid()) {
+              snprintf(buf, sizeof(buf), "%02d:%02d:%02d", t.hour, t.minute, t.second);
+            } else {
+              snprintf(buf, sizeof(buf), "--:--:--");
+            }
+            return std::string(buf);
+      - lvgl.label.update:
+          id: lbl_pulpit_day
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            if (!t.is_valid()) return std::string("---");
+            static const char* dni[] = {"Niedziela","Poniedzialek","Wtorek","Sroda",
+                                         "Czwartek","Piatek","Sobota"};
+            return std::string(dni[t.day_of_week - 1]);
+      - lvgl.label.update:
+          id: lbl_pulpit_date
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            if (!t.is_valid()) return std::string("--.--.----");
+            static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
+                                              "czerwca","lipca","sierpnia","wrzesnia",
+                                              "pazdziernika","listopada","grudnia"};
+            char buf[32];
+            snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
+            return std::string(buf);
+      - lvgl.label.update:
+          id: lbl_pulpit_lamps
+          text: !lambda |-
+            int on_count = 0;
+            if (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) on_count++;
+            if (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) on_count++;
+            if (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) on_count++;
+            return std::string("Ilosc wlaczonych lamp: ") + std::to_string(on_count);
+      # --- Ciagle odswiezanie przyciskow lamp z aktualnego stanu (nie
+      # tylko przy zlapaniu zdarzenia zmiany) - dzieki temu po starcie
+      # urzadzenia przycisk pokazuje prawdziwy stan od razu, bez
+      # koniecznosci najpierw go klikniecia ---
+      - lvgl.label.update:
+          id: lbl_sypialnia_lampa
+          text: !lambda |-
+            if (!id(state_sypialnia_lampa).has_state()) return std::string("Lampa: ...");
+            return id(state_sypialnia_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+          text_color: !lambda |-
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+      - lvgl.label.update:
+          id: lbl_sypialnia_lampa_icon
+          text: !lambda |-
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
+          text_color: !lambda |-
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+      - lvgl.label.update:
+          id: lbl_erni_lampa
+          text: !lambda |-
+            if (!id(state_erni_lampa).has_state()) return std::string("Lampa: ...");
+            return id(state_erni_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+          text_color: !lambda |-
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+      - lvgl.label.update:
+          id: lbl_erni_lampa_icon
+          text: !lambda |-
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
+          text_color: !lambda |-
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);

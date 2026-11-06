@@ -1,0 +1,218 @@
+# JARVIS 2.0 — WSPÓLNA WARSTWA LVGL — TOP BAR I KONFIGURACJA EKRANU
+# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
+# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+
+lvgl:
+  displays:
+    - my_display
+  touchscreens:
+    - my_touch
+
+  # Gorny pasek - top_layer rysuje sie NA WIERZCHU wszystkich stron,
+  # wiec definiujemy go raz i mamy na kazdym ekranie za darmo
+  top_layer:
+    widgets:
+      - obj:
+          id: top_bar
+          x: 0
+          y: 0
+          width: 240
+          height: 30
+          bg_opa: TRANSP
+          border_width: 0
+          radius: 0
+          pad_all: 0
+          scrollable: false
+          hidden: true
+          widgets:
+          - obj:
+              x: 0
+              y: 0
+              width: 240
+              height: 30
+              bg_color: 0x111111
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+
+          # --- Paski WiFi: 4 slupki o rosnacej, stalej wysokosci (jak w
+          # czujniku gazu), dolne krawedzie wyrownane, kolor zielony/szary
+          # przelaczany wg progu RSSI (patrz sensor wifi_signal) ---
+          - obj:
+              id: wifi_bar1
+              x: 3
+              y: 16
+              width: 3
+              height: 4
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - obj:
+              id: wifi_bar2
+              x: 8
+              y: 12
+              width: 3
+              height: 8
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - obj:
+              id: wifi_bar3
+              x: 13
+              y: 8
+              width: 3
+              height: 12
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - obj:
+              id: wifi_bar4
+              x: 18
+              y: 4
+              width: 3
+              height: 16
+              bg_color: 0x555555
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+
+          # --- Strzalki wysylania (gora, blyska przy kliknieciu = wysylka
+          # komendy do HA) / odbierania (dol, blyska przy odebraniu nowego
+          # stanu z HA). ---
+          - label:
+              id: lbl_arrow_up
+              text: "\U000F0360"
+              x: 26
+              y: -1
+              text_font: icon_font_bar
+              text_color: 0x00FFFF
+              hidden: true
+          - label:
+              id: lbl_arrow_down
+              text: "\U000F035D"
+              x: 50
+              y: -1
+              text_font: icon_font_bar
+              text_color: 0x00FFFF
+              hidden: true
+
+          - label:
+              id: lbl_clock
+              text: "--:--:--"
+              align: TOP_MID
+              y: 6
+              text_font: montserrat_18
+              text_color: 0xFFFFFF
+
+          # --- Ikona HA - prawdziwy glif z Material Design Icons,
+          # taki sam jak na czujniku gazu. Dodatkowo: 5x szybkie
+          # dotkniecie w ciagu 3s odpala ukryty easter egg. Zwykla
+          # etykieta NIE jest klikalna w LVGL - stad niewidoczny
+          # przycisk "opakowujacy" ja, zeby on_click w ogole zadzialal. ---
+          - button:
+              id: lbl_ha_tap_btn
+              x: 155
+              y: 0
+              width: 44
+              height: 30
+              bg_opa: TRANSP
+              border_width: 0
+              shadow_width: 0
+              pad_all: 0
+              widgets:
+                - label:
+                    align: CENTER
+                    id: lbl_ha
+                    text: "\U000F07D0"
+                    text_font: icon_font_ha
+                    text_color: 0xFF0000
+              on_click:
+                - lambda: |-
+                    uint32_t now = (esphome::millis)();
+                    if (now - id(easter_tap_last_ms) > 3000) {
+                      id(easter_tap_count) = 0;
+                    }
+                    id(easter_tap_last_ms) = now;
+                    id(easter_tap_count) = id(easter_tap_count) + 1;
+                - lvgl.obj.update:
+                    id: lbl_ha_tap_btn
+                    bg_opa: COVER
+                    bg_color: 0x2196F3
+                - delay: 150ms
+                - lvgl.obj.update:
+                    id: lbl_ha_tap_btn
+                    bg_opa: TRANSP
+                - if:
+                    condition:
+                      lambda: 'return id(easter_tap_count) < 5;'
+                    then:
+                      - lvgl.label.update:
+                          id: lbl_easter_countdown
+                          text: !lambda |-
+                            return std::to_string(5 - id(easter_tap_count));
+                      - lvgl.obj.update:
+                          id: lbl_easter_countdown
+                          hidden: false
+                - if:
+                    condition:
+                      lambda: 'return id(easter_tap_count) >= 5;'
+                    then:
+                      - globals.set:
+                          id: easter_tap_count
+                          value: "0"
+                      - lvgl.obj.update:
+                          id: lbl_easter_countdown
+                          hidden: true
+                      - script.execute: easter_egg_ironman
+
+          # --- Ikonka baterii: obrys + wypelnienie proporcjonalne do % +
+          # "nub" po prawej, tak jak wyglada prawdziwa ikona baterii.
+          # Na razie PLACEHOLDER (niewidoczne wypelnienie, TRANSP) - do
+          # podlaczenia realnego ADC gdy dolaczysz ogniwo 18650. ---
+          - obj:
+              id: battery_outline
+              x: 200
+              y: 5
+              width: 26
+              height: 13
+              bg_opa: TRANSP
+              border_width: 1
+              border_color: 0x888888
+              radius: 2
+          - obj:
+              id: battery_nub
+              x: 226
+              y: 8
+              width: 2
+              height: 7
+              bg_color: 0x888888
+              bg_opa: COVER
+              radius: 0
+          - obj:
+              id: battery_fill
+              x: 202
+              y: 7
+              width: 0
+              height: 9
+              bg_color: 0x00FF00
+              bg_opa: COVER
+              border_width: 0
+              radius: 0
+          - label:
+              id: lbl_battery_pct
+              text: "n/a"
+              x: 205
+              y: 19
+              text_font: montserrat_12
+              text_color: 0x666666
+      - label:
+          id: lbl_easter_countdown
+          text: ""
+          align: BOTTOM_MID
+          y: -4
+          text_font: montserrat_14
+          text_color: 0x2196F3
+          hidden: true

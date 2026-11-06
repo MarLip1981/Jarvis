@@ -1,0 +1,565 @@
+# JARVIS 2.0 — STRONY SYSTEMOWE: BOOT, TEST, DIAGNOSTYKA, IRON MAN, IDENTYFIKACJA
+# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
+# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+
+lvgl:
+  pages:
+    - id: page_boot
+      bg_color: 0x000000
+      widgets:
+        - label:
+            text: "\U000F10CB"
+            align: CENTER
+            y: -90
+            text_font: icon_font_title
+            text_color: 0x00AEEF
+        - label:
+            text: "JARVIS"
+            align: CENTER
+            y: -10
+            text_font: montserrat_40
+            text_color: 0x00AEEF
+        - label:
+            text: "v0.01 alfa"
+            align: CENTER
+            y: 35
+            text_font: montserrat_14
+            text_color: 0x888888
+
+    # ------------------------------------------------------
+    # Pelnoekranowy test R/G/B - CALKOWICIE pusty ekran, zero
+    # tekstu, tylko wypelnienie kolorem, zsynchronizowane z LED
+    # ------------------------------------------------------
+    - id: page_flash
+      bg_color: 0x000000
+      on_load:
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0xFF0000
+        - light.turn_on:
+            id: status_led
+            red: 1.0
+            green: 0.0
+            blue: 0.0
+        - delay: 800ms
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0x00FF00
+        - light.turn_on:
+            id: status_led
+            red: 0.0
+            green: 1.0
+            blue: 0.0
+        - delay: 800ms
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0x0000FF
+        - light.turn_on:
+            id: status_led
+            red: 0.0
+            green: 0.0
+            blue: 1.0
+        - delay: 800ms
+        - lvgl.page.update:
+            id: page_flash
+            bg_color: 0x000000
+        - light.turn_off: status_led
+        - lvgl.page.show:
+            id: page_diag
+            animation: NONE
+      widgets: []
+
+    # ------------------------------------------------------
+    # Diagnostyka - lista testow w stylu linuksowego boot-loga
+    # ------------------------------------------------------
+    - id: page_diag
+      bg_color: 0x000000
+      on_load:
+        # --- Sekcja natychmiastowa: CPU/RAM/self-test sprzetu, znane
+        # od razu bez czekania na siec ---
+        - lvgl.label.update:
+            id: lbl_diag_cpu_status
+            text: !lambda |-
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%u MHz", (unsigned) ESP.getCpuFreqMHz());
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_cputemp_status
+            text: !lambda |-
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%.1f C", id(cpu_temp_sensor).state);
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_ram_status
+            text: !lambda |-
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%u KB", (unsigned) (ESP.getFreeHeap() / 1024));
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_ekran_status
+            text: "OK"
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_led_status
+            text: "OK"
+            text_color: 0x00FF00
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_buzzer_status
+            text: "BRAK"
+            text_color: 0x666666
+        - delay: 250ms
+        # --- Sekcja sieciowa: wymaga czasu na polaczenie ---
+        - lvgl.label.update:
+            id: lbl_diag_wifi_status
+            text: "LACZENIE"
+            text_color: 0xFFAA00
+        - delay: 2500ms
+        - lvgl.label.update:
+            id: lbl_diag_wifi_status
+            text: !lambda |-
+              return id(wifi_comp).is_connected()
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return id(wifi_comp).is_connected() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+        - delay: 200ms
+        - lvgl.label.update:
+            id: lbl_diag_signal_status
+            text: !lambda |-
+              if (!id(wifi_comp).is_connected()) return std::string("n/a");
+              char buf[16];
+              snprintf(buf, sizeof(buf), "%d dBm", (int) id(wifi_db).state);
+              return std::string(buf);
+            text_color: 0x00FF00
+        - delay: 200ms
+        - lvgl.label.update:
+            id: lbl_diag_ip_status
+            text: !lambda |-
+              if (!id(wifi_comp).is_connected()) return std::string("n/a");
+              char ip_buf[46];
+              id(wifi_comp).wifi_sta_ip_addresses()[0].str_to(ip_buf);
+              return std::string(ip_buf);
+            text_color: 0x00FF00
+        - delay: 300ms
+        - lvgl.label.update:
+            id: lbl_diag_time_status
+            text: "SYNCHRONIZACJA"
+            text_color: 0xFFAA00
+        - delay: 900ms
+        - lvgl.label.update:
+            id: lbl_diag_time_status
+            text: !lambda |-
+              return id(sntp_time).now().is_valid()
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return id(sntp_time).now().is_valid() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+        - delay: 300ms
+        - lvgl.label.update:
+            id: lbl_diag_ha_status
+            text: "LACZENIE"
+            text_color: 0xFFAA00
+        - delay: 900ms
+        - lvgl.label.update:
+            id: lbl_diag_ha_status
+            text: !lambda |-
+              return (id(node_status).has_state() && id(node_status).state)
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return (id(node_status).has_state() && id(node_status).state)
+                ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+        - delay: 900ms
+        - lvgl.obj.update:
+            id: top_bar
+            hidden: false
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: FADE_IN
+            time: 600ms
+      widgets:
+        - label:
+            text: "DIAGNOSTYKA"
+            align: TOP_MID
+            y: 10
+            text_font: montserrat_18
+            text_color: 0xFFFFFF
+
+        # --- CPU ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 45
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "CPU"
+            x: 15
+            y: 45
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_cpu_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 45
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- CPU temp ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 67
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "CPU temp"
+            x: 15
+            y: 67
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_cputemp_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 67
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- RAM ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 89
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "RAM"
+            x: 15
+            y: 89
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ram_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 89
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Ekran ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 111
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Ekran"
+            x: 15
+            y: 111
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ekran_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 111
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- LED RGB ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 133
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "LED RGB"
+            x: 15
+            y: 133
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_led_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 133
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Buzzer ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 155
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Buzzer"
+            x: 15
+            y: 155
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_buzzer_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 155
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- WiFi laczenie ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 177
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "WiFi laczenie"
+            x: 15
+            y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_wifi_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- WiFi sygnal ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 199
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "WiFi sygnal"
+            x: 15
+            y: 199
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_signal_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 199
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- WiFi IP ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 221
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "WiFi IP"
+            x: 15
+            y: 221
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ip_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 221
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Czas sync ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 243
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Czas sync"
+            x: 15
+            y: 243
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_time_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 243
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+        # --- Homeassistant ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 265
+            width: 210
+            text_font: montserrat_14
+            text_color: 0x333333
+        - label:
+            text: "Homeassistant"
+            x: 15
+            y: 265
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_ha_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 265
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: montserrat_14
+            text_color: 0x666666
+
+    # ------------------------------------------------------
+    # Easter egg: Iron Man. Odslaniana dopiero po animacji migania
+    # z easter_egg_ironman. Wyjscie: swipe w KAZDA strone wraca
+    # na Pulpit i chowa reaktor/napis z powrotem.
+    # ------------------------------------------------------
+    - id: page_ironman
+      bg_color: 0x000000
+      on_swipe_left:
+        - script.execute: exit_ironman
+      on_swipe_right:
+        - script.execute: exit_ironman
+      widgets:
+        - image:
+            id: ironman_img
+            x: 0
+            y: -20
+            src: img_ironman
+            hidden: true
+        - label:
+            id: lbl_ironman_text
+            text: "I AM IRON MAN"
+            align: CENTER
+            y: 130
+            text_font: montserrat_24
+            text_color: 0xFFD700
+            bg_color: 0x000000
+            bg_opa: 60%
+            hidden: true
+
+    # ------------------------------------------------------
+    # Identyfikacja urzadzenia - wywolywana przyciskiem z HA.
+    # Bialy ekran, dopoki ktos nie dotknie ZNALEZIONE.
+    # ------------------------------------------------------
+    - id: page_identify
+      bg_color: 0xFFFFFF
+      widgets:
+        - label:
+            text: "\U000F10CB"
+            align: CENTER
+            y: -70
+            text_font: icon_font_title
+            text_color: 0x000000
+        - label:
+            text: "JARVIS"
+            align: CENTER
+            y: 5
+            text_font: montserrat_24
+            text_color: 0x000000
+        - label:
+            text: "Tu jestem!"
+            align: CENTER
+            y: 40
+            text_font: montserrat_14
+            text_color: 0x333333
+        - button:
+            x: 20
+            y: 240
+            width: 200
+            height: 55
+            bg_color: 0x00AA00
+            pressed:
+              bg_color: 0x006600
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "ZNALEZIONE"
+                  text_font: montserrat_18
+                  text_color: 0xFFFFFF
+            on_click:
+              - globals.set:
+                  id: identify_active
+                  value: "false"
+
+    # ------------------------------------------------------
+    # Pulpit - docelowo ekran glowny karuzeli
+    # ------------------------------------------------------

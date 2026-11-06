@@ -1,0 +1,344 @@
+# JARVIS 2.0 — STRONA PIECA I CWU ORAZ PLACEHOLDER OŚWIETLENIA
+# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
+# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+
+lvgl:
+  pages:
+    - id: page_piec
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_zewnetrzne
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "PIEC"
+            align: TOP_MID
+            y: 30
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - obj:
+            x: 2
+            y: 56
+            width: 236
+            height: 124
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "OGRZEWANIE"
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0x888888
+              - label:
+                  id: lbl_piec_temp
+                  text: "Temp: --.- C"
+                  x: 0
+                  y: 18
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_piec_target
+                  text: "Zadana: --.- C"
+                  x: 0
+                  y: 40
+                  text_font: montserrat_12
+                  text_color: 0xAAAAAA
+              - button:
+                  id: btn_piec_minus
+                  x: 150
+                  y: 34
+                  width: 32
+                  height: 26
+                  bg_color: 0x333333
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "-"
+                        text_font: montserrat_18
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_temperature
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                              data_template:
+                                temperature: !lambda |-
+                                  float t = id(cache_piec_target) - 0.5f;
+                                  if (t < 5.0f) t = 5.0f;
+                                  char buf[8];
+                                  snprintf(buf, sizeof(buf), "%.1f", t);
+                                  return std::string(buf);
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_piec_plus
+                  x: 186
+                  y: 34
+                  width: 32
+                  height: 26
+                  bg_color: 0x333333
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "+"
+                        text_font: montserrat_18
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_temperature
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                              data_template:
+                                temperature: !lambda |-
+                                  float t = id(cache_piec_target) + 0.5f;
+                                  if (t > 30.0f) t = 30.0f;
+                                  char buf[8];
+                                  snprintf(buf, sizeof(buf), "%.1f", t);
+                                  return std::string(buf);
+                          - script.execute: confirm_click
+              - label:
+                  id: lbl_piec_mode
+                  text: "Tryb: ..."
+                  x: 0
+                  y: 66
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+                  recolor: true
+              - button:
+                  id: btn_piec_auto
+                  x: 0
+                  y: 86
+                  width: 112
+                  height: 24
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "AUTO"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_hvac_mode
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                                hvac_mode: "auto"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_piec_off
+                  x: 116
+                  y: 86
+                  width: 112
+                  height: 24
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "OFF"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_hvac_mode
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                                hvac_mode: "off"
+                          - script.execute: confirm_click
+
+        - obj:
+            x: 2
+            y: 184
+            width: 236
+            height: 134
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "CIEPLA WODA"
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0x888888
+              - label:
+                  id: lbl_cwu_status
+                  text: "Status: ..."
+                  x: 0
+                  y: 18
+                  text_font: montserrat_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_cwu_temp
+                  text: "Zbiornik: n/a"
+                  x: 0
+                  y: 36
+                  text_font: montserrat_12
+                  text_color: 0x666666
+              - button:
+                  id: btn_cwu_auto
+                  x: 0
+                  y: 58
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Auto"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Auto"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_cwu_off
+                  x: 116
+                  y: 58
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Off"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Off"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_cwu_day
+                  x: 0
+                  y: 92
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Day"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Day"
+                          - script.execute: confirm_click
+              - button:
+                  id: btn_cwu_boost
+                  x: 116
+                  y: 92
+                  width: 112
+                  height: 28
+                  bg_color: 0x333333
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "Boost"
+                        text_font: montserrat_12
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep);'
+                        then:
+                          - homeassistant.action:
+                              action: water_heater.set_operation_mode
+                              data:
+                                entity_id: water_heater.dom_domestic_hot_water_0
+                                operation_mode: "Cylinder Boost"
+                          - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Oswietlenie zewnetrzne - PLACEHOLDER
+    # ------------------------------------------------------
+    - id: page_zewnetrzne
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_piec
+            animation: MOVE_LEFT
+            time: 300ms
+      widgets:
+        - label:
+            text: "OSWIETLENIE"
+            align: TOP_MID
+            y: 25
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - label:
+            text: "ZEWNETRZNE"
+            align: TOP_MID
+            y: 55
+            text_font: montserrat_18
+            text_color: 0xAAAAAA
+        - obj:
+            x: 2
+            y: 100
+            width: 236
+            height: 100
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "Wkrotce..."
+                  x: 0
+                  y: 0
+                  text_font: montserrat_14
+                  text_color: 0x666666
+
+# ---------------------------------------------------------
+# Zegar w gornym pasku - aktualizacja co sekunde
+# ---------------------------------------------------------
