@@ -98,13 +98,13 @@ lvgl:
             text_color: 0xFFFFFF
             recolor: true
 
-        # Karta BRAMA — na razie tylko placeholder z tytulem.
-        # Sterowanie i wskazania dodamy w kolejnym etapie.
+        # Karta BRAMA — zachowujemy pelny podglad stanu i sterowanie.
+        # Umieszczona pod paskiem radia i informacjami o domu.
         - obj:
-            x: 15
-            y: 218
-            width: 210
-            height: 52
+            x: 10
+            y: 210
+            width: 220
+            height: 88
             bg_color: 0x101820
             bg_opa: COVER
             border_width: 1
@@ -115,9 +115,86 @@ lvgl:
             widgets:
               - label:
                   text: "BRAMA"
-                  align: CENTER
+                  align: TOP_MID
+                  y: 3
+                  text_font: montserrat_12
+                  text_color: 0x888888
+              - label:
+                  id: lbl_brama_icon
+                  text: "\\U000F0299"
+                  x: 12
+                  y: 23
+                  text_font: icon_font_btn
+                  text_color: 0x888888
+              - label:
+                  id: lbl_pulpit_brama
+                  text: "Brama: ..."
+                  x: 40
+                  y: 25
                   text_font: montserrat_14
                   text_color: 0x888888
+                  recolor: true
+              - button:
+                  x: 8
+                  y: 50
+                  width: 98
+                  height: 32
+                  bg_color: 0x2196F3
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        align: CENTER
+                        id: lbl_brama_btn_text
+                        text: "Otworz/Zamknij"
+                        text_font: montserrat_12
+                  on_press:
+                    - globals.set:
+                        id: btn_press_ms
+                        value: !lambda 'return (esphome::millis)();'
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                        then:
+                          - homeassistant.action:
+                              action: button.press
+                              data:
+                                entity_id: button.brama_wjazdowa_otworz_zamknij_brame
+                          - script.execute: confirm_click
+              - button:
+                  x: 114
+                  y: 50
+                  width: 98
+                  height: 32
+                  bg_color: 0x2196F3
+                  pressed:
+                    bg_color: 0x00FF00
+                  widgets:
+                    - label:
+                        text: "\\U000F0A48"
+                        x: 5
+                        y: 6
+                        text_font: icon_font_btn
+                    - label:
+                        text: "Furtka"
+                        align: CENTER
+                        text_font: montserrat_12
+                  on_press:
+                    - globals.set:
+                        id: btn_press_ms
+                        value: !lambda 'return (esphome::millis)();'
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                        then:
+                          - homeassistant.action:
+                              action: button.press
+                              data:
+                                entity_id: button.brama_wjazdowa_otworz_jako_furtke
+                          - script.execute: confirm_click
+
 
     # ------------------------------------------------------
     # Salon
