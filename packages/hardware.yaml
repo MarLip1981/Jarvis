@@ -153,6 +153,9 @@ touchscreen:
   cs_pin: GPIO33
   interrupt_pin: GPIO36
   update_interval: 50ms
+  # IRQ wykrywa pierwszy kontakt, a touch_timeout wymusza kolejne odczyty
+  # podczas trzymania palca. Dzięki temu on_update widzi przeciągnięcia.
+  touch_timeout: 50ms
   calibration:
     x_min: 230
     x_max: 3860
