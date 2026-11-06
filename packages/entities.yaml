@@ -362,6 +362,9 @@ binary_sensor:
         - lvgl.obj.update:
             id: btn_pulpit_furtka
             hidden: !lambda 'return !x;'
+        - lvgl.obj.update:
+            id: btn_brama_karta_pedestrian
+            hidden: !lambda 'return !x;'
   - platform: homeassistant
     id: brama_photocell
     entity_id: binary_sensor.wjazd_brama_wjazdowa_fotokomorka_przeszkoda
