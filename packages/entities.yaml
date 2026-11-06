@@ -231,6 +231,75 @@ sensor:
                   brightness: !lambda "return x;"
                   transition_length: 500ms
 
+  # Pomiar baterii 1S (jedno ogniwo lub dwa ogniwa 18650 rownolegle).
+  # Dzielnik: BAT+ -- 100k -- GPIO35 -- 100k -- GND.
+  # Przy 4.2 V na baterii ADC widzi ok. 2.1 V. GPIO35 nalezy do ADC1.
+  - platform: adc
+    pin: GPIO35
+    id: battery_voltage
+    name: "Napiecie baterii Jarvis"
+    unit_of_measurement: "V"
+    device_class: voltage
+    state_class: measurement
+    accuracy_decimals: 2
+    update_interval: 10s
+    attenuation: 12db
+    filters:
+      - multiply: 2.0
+  # Procent jest orientacyjnym oszacowaniem dla ogniwa Li-Ion 1S.
+  # Napiecie mocno zalezy od obciazenia i temperatury; nie zastapi BMS.
+  - platform: template
+    id: battery_percent
+    name: "Poziom baterii Jarvis"
+    unit_of_measurement: "%"
+    device_class: battery
+    state_class: measurement
+    accuracy_decimals: 0
+    update_interval: 10s
+    lambda: |-
+      const float v = id(battery_voltage).state;
+      if (!std::isfinite(v) || v < 2.5f || v > 4.35f) return NAN;
+      if (v >= 4.20f) return 100.0f;
+      if (v >= 4.10f) return 90.0f + (v - 4.10f) * 100.0f;
+      if (v >= 4.00f) return 80.0f + (v - 4.00f) * 100.0f;
+      if (v >= 3.90f) return 60.0f + (v - 3.90f) * 200.0f;
+      if (v >= 3.80f) return 40.0f + (v - 3.80f) * 200.0f;
+      if (v >= 3.70f) return 20.0f + (v - 3.70f) * 200.0f;
+      if (v >= 3.60f) return 10.0f + (v - 3.60f) * 100.0f;
+      if (v >= 3.50f) return 5.0f + (v - 3.50f) * 50.0f;
+      if (v >= 3.30f) return (v - 3.30f) * 25.0f;
+      return 0.0f;
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return std::isfinite(x);'
+            then:
+              - lvgl.label.update:
+                  id: lbl_battery_pct
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%.0f%%", x);
+                    return std::string(buf);
+                  text_color: !lambda |-
+                    return x <= 15.0f ? lv_color_hex(0xFF3333)
+                      : (x <= 35.0f ? lv_color_hex(0xFFAA00) : lv_color_hex(0x00FF00));
+              - lvgl.obj.update:
+                  id: battery_fill
+                  width: !lambda 'return (int) (22.0f * x / 100.0f);'
+                  bg_color: !lambda |-
+                    return x <= 15.0f ? lv_color_hex(0xFF3333)
+                      : (x <= 35.0f ? lv_color_hex(0xFFAA00) : lv_color_hex(0x00FF00));
+            else:
+              - lvgl.label.update:
+                  id: lbl_battery_pct
+                  text: "n/a"
+                  text_color: 0x666666
+              - lvgl.obj.update:
+                  id: battery_fill
+                  width: 0
+                  bg_color: 0x666666
+
   - platform: wifi_signal
     id: wifi_db
     name: "WiFi sygnal"

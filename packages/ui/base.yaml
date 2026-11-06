@@ -172,10 +172,8 @@ lvgl:
                               hidden: true
                           - script.execute: easter_egg_ironman
   
-          # --- Ikonka baterii: obrys + wypelnienie proporcjonalne do % +
-          # "nub" po prawej, tak jak wyglada prawdziwa ikona baterii.
-          # Na razie PLACEHOLDER (niewidoczne wypelnienie, TRANSP) - do
-          # podlaczenia realnego ADC gdy dolaczysz ogniwo 18650. ---
+          # --- Ikonka baterii: rzeczywisty pomiar ADC GPIO35.
+          # Wypelnienie i kolor sa aktualizowane przez sensor battery_percent. ---
           - obj:
               id: battery_outline
               x: 200
