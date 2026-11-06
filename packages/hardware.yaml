@@ -164,6 +164,11 @@ touchscreen:
     swap_xy: true
   on_touch:
     then:
+      # Każdy nowy kontakt rozpoczyna osobny gest. Jeśli ekran był uśpiony,
+      # ten pierwszy kontakt zostanie odrzucony jako wyłącznie wybudzający.
+      - globals.set:
+          id: touch_gesture_blocked
+          value: "false"
       - globals.set:
           id: last_activity_ms
           value: !lambda 'return (esphome::millis)();'
@@ -173,6 +178,9 @@ touchscreen:
           then:
             - globals.set:
                 id: screen_was_asleep
+                value: "true"
+            - globals.set:
+                id: touch_gesture_blocked
                 value: "true"
             - globals.set:
                 id: screen_dimmed
