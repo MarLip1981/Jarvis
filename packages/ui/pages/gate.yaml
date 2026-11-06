@@ -1,0 +1,114 @@
+# JARVIS 2.0 — STRONA BRAMA
+# Podglad dokladnego stanu i sterowanie przeniesione z pulpitu.
+# Pulpit zawiera tylko kafelek nawigacyjny; ta strona jest osobnym widokiem.
+
+lvgl:
+  pages:
+    - id: page_brama
+      bg_color: 0x000000
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "BRAMA"
+            align: TOP_MID
+            y: 36
+            text_font: montserrat_24
+            text_color: 0xFFFFFF
+        - obj:
+            x: 10
+            y: 76
+            width: 220
+            height: 126
+            bg_color: 0x101820
+            bg_opa: COVER
+            border_width: 1
+            border_color: 0x45515C
+            radius: 6
+            pad_all: 0
+            scrollable: false
+            widgets:
+              - label:
+                  id: lbl_brama_icon
+                  text: "\U000F0299"
+                  align: TOP_MID
+                  y: 12
+                  text_font: icon_font_title
+                  text_color: 0x888888
+              - label:
+                  id: lbl_pulpit_brama
+                  text: "Stan: oczekiwanie na dane"
+                  align: TOP_MID
+                  y: 86
+                  text_font: montserrat_14
+                  text_color: 0x888888
+                  recolor: true
+        - button:
+            x: 10
+            y: 220
+            width: 105
+            height: 48
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  align: CENTER
+                  id: lbl_brama_btn_text
+                  text: "Otworz/Zamknij"
+                  text_font: montserrat_12
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                  then:
+                    - homeassistant.action:
+                        action: button.press
+                        data:
+                          entity_id: button.brama_wjazdowa_otworz_zamknij_brame
+                    - script.execute: confirm_click
+        - button:
+            x: 125
+            y: 220
+            width: 105
+            height: 48
+            bg_color: 0x2196F3
+            pressed:
+              bg_color: 0x00FF00
+            widgets:
+              - label:
+                  text: "\U000F0A48"
+                  x: 8
+                  y: 10
+                  text_font: icon_font_btn
+              - label:
+                  text: "Furtka"
+                  align: CENTER
+                  text_font: montserrat_12
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) > 500;'
+                  then:
+                    - homeassistant.action:
+                        action: button.press
+                        data:
+                          entity_id: button.brama_wjazdowa_otworz_jako_furtke
+                    - script.execute: confirm_click
+        - label:
+            text: "SWIPE W PRAWO - POWROT"
+            align: BOTTOM_MID
+            y: -10
+            text_font: montserrat_12
+            text_color: 0x666666

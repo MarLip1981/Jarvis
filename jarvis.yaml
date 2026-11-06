@@ -49,4 +49,5 @@ packages:
       - packages/ui/pages/living-room.yaml
       - packages/ui/pages/bedrooms.yaml
       - packages/ui/pages/heating.yaml
+      - packages/ui/pages/gate.yaml
       - packages/runtime.yaml
