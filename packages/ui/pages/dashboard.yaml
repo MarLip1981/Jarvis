@@ -100,7 +100,7 @@ lvgl:
         # Status bramy widoczny bez otwierania jej karty.
         - label:
             id: lbl_pulpit_brama_icon
-            text: "\\U000F06D9"
+            text: "\U000F0299"
             x: 15
             y: 210
             text_font: icon_font_btn
