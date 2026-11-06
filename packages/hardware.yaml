@@ -123,6 +123,7 @@ light:
 
 # Czujnik swiatla LDR -> auto-jasnosc podswietlenia
 
+display:
   - platform: ili9xxx
     model: ST7796
     id: my_display
