@@ -548,15 +548,17 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_piec_mode
             text: !lambda |-
-              return (x == "Heating")
-                ? std::string("Tryb: #FFAA00 HEATING#")
-                : std::string("Tryb: #00FF00 STANDBY#");
+              return (x == "HEATING")
+                ? std::string("Tryb: #FFAA00 GRZEJE#")
+                : (x == "STANDBY")
+                  ? std::string("Tryb: #00FF00 CZUWA#")
+                  : std::string("Tryb: #888888 --");
         - lvgl.button.update:
             id: btn_piec_auto
-            bg_color: !lambda 'return (x == "Heating") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "HEATING") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
         - lvgl.button.update:
             id: btn_piec_off
-            bg_color: !lambda 'return (x == "Standby") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "STANDBY") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
 
   - platform: homeassistant
     id: cwu_mode
@@ -626,13 +628,15 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_piec
             text: !lambda |-
-              return (x == "Heating")
+              return (x == "HEATING")
                 ? std::string("Piec: #FFAA00 grzeje#")
-                : std::string("Piec: #00FF00 nie pracuje#");
+                : (x == "STANDBY")
+                  ? std::string("Piec: #00FF00 nie pracuje#")
+                  : std::string("Piec: #888888 brak danych#");
         - lvgl.label.update:
             id: lbl_piec_icon
             text_color: !lambda |-
-              return (x == "Heating") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x666666);
+              return (x == "HEATING") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x666666);
 
 
   - platform: homeassistant
