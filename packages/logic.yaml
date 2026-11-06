@@ -121,6 +121,19 @@ script:
           id: lbl_arrow_up
           hidden: true
 
+  # Wskaźnik odbioru: miga po aktualizacji dowolnej encji HA używanej przez Jarvisa.
+  # Tryb restart utrzymuje strzałkę widoczną przez 300 ms od ostatniej aktualizacji.
+  - id: ha_rx_flash
+    mode: restart
+    then:
+      - lvgl.obj.update:
+          id: lbl_arrow_down
+          hidden: false
+      - delay: 300ms
+      - lvgl.obj.update:
+          id: lbl_arrow_down
+          hidden: true
+
   # --- Easter egg: 5x szybkie dotkniecie ikonki HA. Ekran mruga
   # czerwono-zlotem w rytm LED, potem pokazuje "reaktor" i napis. ---
   - id: easter_egg_ironman
