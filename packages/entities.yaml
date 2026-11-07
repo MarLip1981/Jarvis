@@ -500,6 +500,7 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
+              if (!id(radio_is_playing)) return std::string("RADIO NIE GRA");
               std::string station = x;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
@@ -514,10 +515,11 @@ text_sensor:
         - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_radio_tytul
-            text: !lambda 'return std::string("Utwor: ") + x;'
+            text: !lambda 'return std::string("Utwór: ") + x;'
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
+              if (!id(radio_is_playing)) return std::string("RADIO NIE GRA");
               std::string station = id(radio_stacja).state;
               std::string track = x;
               if (station.empty()) station = "--";
@@ -544,6 +546,15 @@ text_sensor:
             id: lbl_radio_playstop_icon
             text: !lambda |-
               return (x == "playing") ? std::string("\U000F0666") : std::string("\U000F040C");
+        - lvgl.label.update:
+            id: lbl_pulpit_radio
+            text: !lambda |-
+              if (x != "playing") return std::string("RADIO NIE GRA");
+              std::string station = id(radio_stacja).state;
+              std::string track = id(radio_tytul).state;
+              if (station.empty()) station = "--";
+              if (track.empty()) track = "--";
+              return std::string("RADIO > ") + station + "  * " + track;
 
   - platform: homeassistant
     id: tv_state
