@@ -20,12 +20,12 @@ sensor:
                   id: lbl_radio_glosnosc
                   text: !lambda |-
                     char buf[24];
-                    snprintf(buf, sizeof(buf), "Glosnosc: %d", (int) x);
+                    snprintf(buf, sizeof(buf), "Głośność: %d", (int) x);
                     return std::string(buf);
             else:
               - lvgl.label.update:
                   id: lbl_radio_glosnosc
-                  text: "Glosnosc: --"
+                  text: "Głośność: --"
 
   - platform: homeassistant
     id: salon_brightness_attr
@@ -88,7 +88,7 @@ sensor:
             id: lbl_piec_temp
             text: !lambda |-
               char buf[24];
-              snprintf(buf, sizeof(buf), "Temp: %.1f C", x);
+              snprintf(buf, sizeof(buf), "Temperatura: %.1f °C", x);
               return std::string(buf);
 
   - platform: homeassistant
@@ -118,7 +118,7 @@ sensor:
             id: lbl_cwu_temp
             text: !lambda |-
               char buf[24];
-              snprintf(buf, sizeof(buf), "Zbiornik: %.1f C", x);
+              snprintf(buf, sizeof(buf), "Zbiornik: %.1f °C", x);
               return std::string(buf);
 
   - platform: homeassistant
@@ -385,7 +385,7 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_salon_lampka_status
             text: !lambda |-
-              return x ? std::string("Stan: #00FF00 WLACZONA#") : std::string("Stan: #FF0000 wylaczona#");
+              return x ? std::string("Stan: #00FF00 WŁĄCZONA#") : std::string("Stan: #FF0000 wyłączona#");
         - lvgl.label.update:
             id: lbl_salon_glowna_icon
             text: !lambda |-
@@ -446,7 +446,7 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_erni_lampa
             text: !lambda |-
-              return x ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+              return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
         - lvgl.label.update:
             id: lbl_erni_lampa_icon
@@ -467,7 +467,7 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_sypialnia_lampa
             text: !lambda |-
-              return x ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+              return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
         - lvgl.label.update:
             id: lbl_sypialnia_lampa_icon
