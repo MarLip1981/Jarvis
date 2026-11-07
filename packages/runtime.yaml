@@ -76,7 +76,7 @@ interval:
           then:
             - lvgl.label.update:
                 id: lbl_pulpit_drzwi
-                text: "Drzwi: #888888 --#"
+                text: "Drzwi:   #888888 --#"
             - lvgl.label.update:
                 id: lbl_drzwi_icon
                 text: "\U000F081B"
@@ -95,11 +95,11 @@ interval:
                         uint32_t s = sec % 60;
                         char buf[48];
                         if (h > 0) {
-                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
+                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
                         } else if (m > 0) {
-                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
+                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
                         } else {
-                          snprintf(buf, sizeof(buf), "Drzwi: #FF0000 OTWARTE %us#", (unsigned) s);
+                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %us#", (unsigned) s);
                         }
                         return std::string(buf);
                   - lvgl.label.update:
@@ -109,7 +109,7 @@ interval:
                 else:
                   - lvgl.label.update:
                       id: lbl_pulpit_drzwi
-                      text: "Drzwi: #00FF00 zamknięte#"
+                      text: "Drzwi:   #00FF00 zamknięte#"
                   - lvgl.label.update:
                       id: lbl_drzwi_icon
                       text: "\U000F081B"
