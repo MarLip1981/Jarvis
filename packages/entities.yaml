@@ -730,6 +730,24 @@ text_sensor:
               if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00FF00);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
+            id: lbl_brama_main_button
+            text: !lambda |-
+              if (x.find("Otwieranie") != std::string::npos || x.find("Zamykanie") != std::string::npos)
+                return std::string("STOP");
+              if (x == "Otwarta") return std::string("ZAMKNIJ");
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0)
+                return std::string("OTWÓRZ");
+              return std::string("STERUJ");
+        - lvgl.label.update:
+            id: lbl_brama_aux_button
+            text: !lambda |-
+              if (!id(brama_pedestrian_enabled).state) {
+                if (id(brama_entrance_lighting_state).has_state() && id(brama_entrance_lighting_state).state == "on")
+                  return std::string("OŚWIETLENIE WŁ.");
+                return std::string("OŚWIETLENIE WYŁ.");
+              }
+              return x == "Otwarta" ? std::string("FURTKA / ZAMKNIJ") : std::string("FURTKA / OTWÓRZ");
+        - lvgl.label.update:
             id: lbl_pulpit_brama_status
             text: !lambda |-
               if (x == "Otwarta") return std::string("otwarta");
@@ -827,6 +845,18 @@ text_sensor:
     id: brama_entrance_lighting_state
     entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: entrance_lighting_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_brama_p4
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFFCC00) : lv_color_hex(0x777777);'
+        - lvgl.label.update:
+            id: lbl_brama_aux_button
+            text: !lambda |-
+              if (!id(brama_pedestrian_enabled).state)
+                return x == "on" ? std::string("OŚWIETLENIE WŁ.") : std::string("OŚWIETLENIE WYŁ.");
+              return id(brama_ha_status).has_state() && id(brama_ha_status).state == "Otwarta"
+                ? std::string("FURTKA / ZAMKNIJ") : std::string("FURTKA / OTWÓRZ");
   - platform: homeassistant
     id: brama_lighting_enabled
     entity_id: sensor.brama_przesuwna_bft_jarvis
