@@ -65,10 +65,13 @@ lvgl:
               - label:
                   id: lbl_piec_target
                   text: "--.- °C"
-                  x: 8
+                  x: 12
                   y: 42
+                  width: 90
+                  height: 26
                   text_font: font_ui_18
                   text_color: 0xFFFFFF
+                  text_align: CENTER
               - label:
                   id: lbl_piec_temp
                   text: "--.- °C"
