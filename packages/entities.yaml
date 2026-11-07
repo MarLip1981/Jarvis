@@ -549,10 +549,6 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_radio_stan
-            text: !lambda |-
-              return std::string("Stan: #00FF00 ") + x + std::string("#");
         # Sensor Atlascube zwraca "playing" podczas odtwarzania; pozostale stany
         # traktujemy jako zatrzymane radio.
         - globals.set:
