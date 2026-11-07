@@ -135,7 +135,7 @@ script:
       - lvgl.obj.update:
           id: lbl_arrow_up
           hidden: false
-      - delay: 400ms
+      - delay: 750ms
       - light.turn_off: status_led
       - lvgl.obj.update:
           id: lbl_arrow_up
@@ -149,7 +149,7 @@ script:
       - lvgl.obj.update:
           id: lbl_arrow_down
           hidden: false
-      - delay: 300ms
+      - delay: 750ms
       - lvgl.obj.update:
           id: lbl_arrow_down
           hidden: true
