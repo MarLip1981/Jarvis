@@ -360,6 +360,9 @@ binary_sensor:
         - lvgl.obj.update:
             id: lbl_brama_warning
             hidden: !lambda 'return !x;'
+        - lvgl.obj.update:
+            id: lbl_brama_warning_icon
+            hidden: !lambda 'return !x;'
   - platform: homeassistant
     id: state_salon_lampka
     entity_id: light.salon_lampka
