@@ -300,7 +300,10 @@ lvgl:
                         data_template:
                           entity_id: "{{ target_button }}"
                         variables:
-                          target_button: !lambda 'return id(brama_pedestrian_button_entity).state;'
+                          target_button: !lambda |-
+                            if (id(brama_ha_status).has_state() && id(brama_ha_status).state == "Otwarta")
+                              return id(brama_main_button_entity).state;
+                            return id(brama_pedestrian_button_entity).state;
                     - script.execute: confirm_click
               - if:
                   condition:
