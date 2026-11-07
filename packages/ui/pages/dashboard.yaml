@@ -21,26 +21,26 @@ lvgl:
             id: lbl_pulpit_day
             text: "---"
             align: TOP_MID
-            y: 36
+            y: 30
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
             id: lbl_pulpit_date
             text: "--.--.----"
             align: TOP_MID
-            y: 64
+            y: 56
             text_font: font_ui_14
             text_color: 0x888888
         - label:
             id: lbl_pulpit_climate
             text: "--.-°C  --%  Zewnątrz --.-°C"
             align: TOP_MID
-            y: 84
+            y: 76
             text_font: font_ui_12
             text_color: 0x00AEEF
         - obj:
             x: 10
-            y: 108
+            y: 100
             width: 220
             height: 1
             bg_color: 0x333333
@@ -50,8 +50,8 @@ lvgl:
         # Klikalny, jednowierszowy pasek radia. Tekst przewija sie wewnatrz przycisku.
         - button:
             id: btn_pulpit_radio
-            x: 10
-            y: 110
+            x: 4
+            y: 102
             width: 220
             height: 22
             bg_opa: TRANSP
@@ -67,10 +67,10 @@ lvgl:
                   text_color: 0x888888
               - label:
                   id: lbl_pulpit_radio
-                  text: "RADIO > --  * --"
-                  x: 28
+                  text: "Radio: --  * --"
+                  x: 30
                   y: 2
-                  width: 187
+                  width: 184
                   height: 18
                   text_font: font_radio_12
                   text_color: 0xAAAAAA
@@ -88,8 +88,8 @@ lvgl:
         # Podsumowanie oswietlenia - dotkniecie otwiera liste aktualnie wlaczonych lamp.
         - button:
             id: btn_pulpit_lights
-            x: 10
-            y: 134
+            x: 4
+            y: 126
             width: 220
             height: 24
             bg_opa: TRANSP
@@ -105,8 +105,8 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
-                  text: "Światła"
-                  x: 32
+                  text: "Światła:"
+                  x: 30
                   y: 3
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
@@ -130,8 +130,8 @@ lvgl:
                     - script.execute: confirm_click
         - button:
             id: btn_pulpit_piec
-            x: 10
-            y: 158
+            x: 4
+            y: 150
             width: 220
             height: 24
             bg_opa: TRANSP
@@ -149,7 +149,7 @@ lvgl:
               - label:
                   id: lbl_pulpit_piec
                   text: "Piec: ..."
-                  x: 32
+                  x: 30
                   y: 5
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
@@ -174,8 +174,8 @@ lvgl:
         - label:
             id: lbl_pulpit_drzwi
             text: "Drzwi: ..."
-            x: 42
-            y: 188
+            x: 30
+            y: 180
             text_font: font_ui_14
             text_color: 0xFFFFFF
             recolor: true
@@ -190,24 +190,24 @@ lvgl:
             text_color: 0x888888
         - label:
             id: lbl_pulpit_brama_title
-            text: "Brama"
-            x: 42
-            y: 214
+            text: "Brama:"
+            x: 30
+            y: 206
             text_font: font_ui_14
             text_color: 0xFFFFFF
         - label:
             id: lbl_pulpit_brama_status
             text: "--"
-            x: 105
-            y: 214
+            x: 100
+            y: 206
             text_font: font_ui_14
             text_color: 0x888888
 
         # Dwa niezalezne przyciski pilota. Sterowanie dopiero po przytrzymaniu.
         - button:
             id: btn_pulpit_brama
-            x: 10
-            y: 237
+            x: 4
+            y: 229
             width: 105
             height: 36
             bg_color: 0x18232B
