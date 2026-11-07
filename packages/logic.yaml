@@ -294,8 +294,8 @@ script:
                 encoded += hex[ch & 0x0F];
               }
             }
-            return std::string("https://itunes.apple.com/search?term=") +
-                   encoded + "&country=PL&media=music&entity=song&limit=3";
+            return (std::string("https://itunes.apple.com/search?term=") +
+                    encoded + "&country=PL&media=music&entity=song&limit=3").c_str();
           capture_response: true
           max_response_buffer_size: 8192
           on_response:
@@ -325,7 +325,7 @@ script:
                         then:
                           - online_image.set_url:
                               id: img_radio_cover
-                              url: !lambda 'return id(radio_cover_url);'
+                              url: !lambda 'return id(radio_cover_url).c_str();'
                   else:
                     - logger.log:
                         format: "iTunes search failed: HTTP %d"
