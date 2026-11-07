@@ -77,6 +77,42 @@ lvgl:
                   bg_color: 0x9AA3A8
                   border_width: 0
                   radius: 1
+              # Sygnalizator BFT — swieci przy otwartej bramie i podczas ruchu.
+              - obj:
+                  id: gate_beacon
+                  x: 23
+                  y: 9
+                  width: 13
+                  height: 8
+                  bg_color: 0xFF8A00
+                  bg_opa: TRANSP
+                  border_width: 1
+                  border_color: 0xFFD080
+                  radius: 3
+              # Uproszczony naped BFT DEIMOS w scenie.
+              - obj:
+                  x: 181
+                  y: 82
+                  width: 25
+                  height: 26
+                  bg_color: 0x26323A
+                  border_width: 1
+                  border_color: 0xAAB2B7
+                  radius: 2
+                  widgets:
+                    - label:
+                        text: "BFT"
+                        align: CENTER
+                        text_font: font_ui_10
+                        text_color: 0xFFFFFF
+              - label:
+                  id: lbl_brama_warning_icon
+                  text: "\U000F0027"
+                  x: 151
+                  y: 5
+                  text_font: icon_font_btn
+                  text_color: 0xFFCC00
+                  hidden: true
               - obj:
                   id: gate_leaf
                   x: 44
@@ -180,10 +216,16 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
             on_click:
+              # Krotkie przytrzymanie odpowiada kliknieciu karty HA.
+              # Dlugie (>=1.5 s) pozostaje zarezerwowane dla P3.
               - if:
                   condition:
-                    lambda: 'return id(brama_main_button_entity).has_state() && !id(brama_main_button_entity).state.empty();'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && ((esphome::millis)() - id(btn_press_ms)) < 1500 && id(brama_main_button_entity).has_state() && !id(brama_main_button_entity).state.empty();'
                   then:
                     - homeassistant.action:
                         action: button.press
@@ -209,10 +251,16 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+            on_press:
+              - globals.set:
+                  id: btn_press_ms
+                  value: !lambda 'return (esphome::millis)();'
             on_click:
+              # Krotkie przytrzymanie odpowiada kliknieciu karty HA.
+              # Dlugie (>=1.5 s) pozostaje zarezerwowane dla P4.
               - if:
                   condition:
-                    lambda: 'return id(brama_pedestrian_enabled).state && id(brama_pedestrian_button_entity).has_state() && !id(brama_pedestrian_button_entity).state.empty();'
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && ((esphome::millis)() - id(btn_press_ms)) < 1500 && id(brama_pedestrian_enabled).state && id(brama_pedestrian_button_entity).has_state() && !id(brama_pedestrian_button_entity).state.empty();'
                   then:
                     - homeassistant.action:
                         action: button.press
