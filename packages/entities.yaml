@@ -602,10 +602,10 @@ text_sensor:
                   : std::string("Tryb: #888888 --");
         - lvgl.button.update:
             id: btn_piec_auto
-            bg_color: !lambda 'return (x == "HEATING") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "HEATING") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_piec_off
-            bg_color: !lambda 'return (x == "STANDBY") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "STANDBY") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
 
   - platform: homeassistant
     id: cwu_mode
@@ -618,16 +618,16 @@ text_sensor:
             text: !lambda 'return std::string("Status: ") + x;'
         - lvgl.button.update:
             id: btn_cwu_auto
-            bg_color: !lambda 'return (x == "Auto") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Auto") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_cwu_off
-            bg_color: !lambda 'return (x == "Off") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Off") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_cwu_day
-            bg_color: !lambda 'return (x == "Day") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Day") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_cwu_boost
-            bg_color: !lambda 'return (x == "Cylinder Boost") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Cylinder Boost") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
 
   - platform: homeassistant
     id: state_scena_studio
@@ -637,22 +637,22 @@ text_sensor:
         - script.execute: ha_rx_flash
         - lvgl.button.update:
             id: btn_scene_auto
-            bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_scene_bialy
-            bg_color: !lambda 'return (x == "Bialy") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Bialy") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_scene_wschod
-            bg_color: !lambda 'return (x == "Wschod") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Wschod") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_scene_zachod
-            bg_color: !lambda 'return (x == "Zachod") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Zachod") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_scene_tecza
-            bg_color: !lambda 'return (x == "Tecza") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Tecza") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_scene_ognisko
-            bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x2196F3) : lv_color_hex(0x333333);'
+            bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
 
 
   - platform: homeassistant
