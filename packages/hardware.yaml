@@ -48,11 +48,12 @@ image:
     resize: 120x120
     on_download_finished:
       then:
+        - logger.log: "RADIO COVER: obraz pobrany i zdekodowany"
         - lvgl.widget.hide: lbl_radio_cover_placeholder
         - lvgl.widget.show: img_radio_cover_widget
     on_error:
       then:
-        - logger.log: "Nie udalo sie pobrac okładki radia"
+        - logger.log: "RADIO COVER: blad pobierania lub dekodowania obrazu"
 
 font:
   # Jedno zrodlo Montserrat Regular (Latin + Latin Extended); wszystkie rozmiary korzystaja
