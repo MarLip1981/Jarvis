@@ -168,14 +168,14 @@ lvgl:
         - label:
             id: lbl_drzwi_icon
             text: "\U000F081B"
-            x: 4
+            x: 8
             y: 176
             text_font: icon_font_btn
             text_color: 0x888888
         - label:
             id: lbl_pulpit_drzwi
             text: "Drzwi: ..."
-            x: 30
+            x: 34
             y: 180
             text_font: font_ui_14
             text_color: 0xFFFFFF
@@ -185,14 +185,14 @@ lvgl:
         - label:
             id: lbl_pulpit_brama_icon
             text: "\U000F0299"
-            x: 4
+            x: 8
             y: 202
             text_font: icon_font_btn
             text_color: 0x888888
         - label:
             id: lbl_pulpit_brama_title
             text: "Brama:"
-            x: 30
+            x: 34
             y: 206
             text_font: font_ui_14
             text_color: 0xFFFFFF
