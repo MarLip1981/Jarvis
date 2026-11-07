@@ -207,7 +207,7 @@ lvgl:
               id: lbl_battery_pct
               text: "n/a"
               x: 205
-              y: 16
+              y: 19
               text_font: font_ui_12
               text_color: 0x666666
       - label:
