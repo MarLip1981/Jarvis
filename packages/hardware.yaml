@@ -286,9 +286,9 @@ touchscreen:
               int dy = touch.y - touch.y_org;
               if (dx < 0) dx = -dx;
               if (dy < 0) dy = -dy;
-              // 8 px wystarcza, by rozpoznać także wolniejsze przeciągnięcie,
-              // a nadal zostawia niewielki margines na naturalne drgania panelu.
-              if (dx >= 8 || dy >= 8) {
+              // 12 px odróżnia przeciągnięcie od lekkiego przesunięcia palca
+              // podczas spokojnego, dłuższego kliknięcia.
+              if (dx >= 12 || dy >= 12) {
                 id(touch_gesture_blocked) = true;
               }
             }
