@@ -122,21 +122,6 @@ lvgl:
                         animation: MOVE_LEFT
                         time: 250ms
                     - script.execute: confirm_click
-        - label:
-            id: lbl_piec_icon
-            text: "\U000F0238"
-            x: 15
-            y: 159
-            text_font: icon_font_btn
-            text_color: 0x888888
-        - label:
-            id: lbl_pulpit_piec
-            text: "Piec: ..."
-            x: 42
-            y: 163
-            text_font: font_ui_14
-            text_color: 0xFFFFFF
-            recolor: true
         - button:
             id: btn_pulpit_piec
             x: 10
@@ -147,6 +132,22 @@ lvgl:
             border_width: 0
             shadow_width: 0
             pad_all: 0
+            widgets:
+              - label:
+                  id: lbl_piec_icon
+                  text: "\U000F0238"
+                  x: 5
+                  y: 1
+                  text_font: icon_font_btn
+                  text_color: 0x888888
+              - label:
+                  id: lbl_pulpit_piec
+                  text: "Piec: ..."
+                  x: 32
+                  y: 5
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  recolor: true
             on_click:
               - if:
                   condition:
