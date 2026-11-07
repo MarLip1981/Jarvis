@@ -9,11 +9,6 @@ esp32:
 
 captive_portal:
 
-# Pobieranie okładek iTunes dla ekranu radia.
-http_request:
-  timeout: 4.5s
-
-
 logger:
 
 ota:
@@ -40,21 +35,6 @@ image:
     id: img_ironman
     type: RGB565
     resize: 240x360
-  - platform: online_image
-    url: "https://example.com/radio-cover.jpg"
-    id: img_radio_cover
-    format: JPEG
-    type: RGB565
-    resize: 120x120
-    on_download_finished:
-      then:
-        - logger.log: "RADIO COVER: obraz pobrany i zdekodowany"
-        - lvgl.widget.hide: lbl_radio_cover_placeholder
-        - lvgl.widget.show: img_radio_cover_widget
-    on_error:
-      then:
-        - logger.log: "RADIO COVER: blad pobierania lub dekodowania obrazu"
-
 font:
   # Jedno zrodlo Montserrat Regular (Latin + Latin Extended); wszystkie rozmiary korzystaja
   # z tego samego pliku TTF, aby polskie glify mialy identyczny kroj i metryki.
