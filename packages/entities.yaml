@@ -88,7 +88,7 @@ sensor:
             id: lbl_piec_temp
             text: !lambda |-
               char buf[24];
-              snprintf(buf, sizeof(buf), "Temperatura: %.1f °C", x);
+              snprintf(buf, sizeof(buf), "%.1f °C", x);
               return std::string(buf);
 
   - platform: homeassistant
@@ -105,7 +105,7 @@ sensor:
             id: lbl_piec_target
             text: !lambda |-
               char buf[24];
-              snprintf(buf, sizeof(buf), "Zadana: %.1f C", x);
+              snprintf(buf, sizeof(buf), "%.1f °C", x);
               return std::string(buf);
 
   - platform: homeassistant
@@ -118,7 +118,7 @@ sensor:
             id: lbl_cwu_temp
             text: !lambda |-
               char buf[24];
-              snprintf(buf, sizeof(buf), "Zbiornik: %.1f °C", x);
+              snprintf(buf, sizeof(buf), "%.1f °C", x);
               return std::string(buf);
 
   - platform: homeassistant
@@ -596,10 +596,10 @@ text_sensor:
             id: lbl_piec_mode
             text: !lambda |-
               return (x == "HEATING")
-                ? std::string("Tryb: #FFAA00 GRZEJE#")
+                ? std::string("#FFAA00 GRZEJE#")
                 : (x == "STANDBY")
-                  ? std::string("Tryb: #00FF00 CZUWA#")
-                  : std::string("Tryb: #888888 --");
+                  ? std::string("#00FF00 CZUWA#")
+                  : std::string("#888888 --");
         - lvgl.button.update:
             id: btn_piec_auto
             bg_color: !lambda 'return (x == "HEATING") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
