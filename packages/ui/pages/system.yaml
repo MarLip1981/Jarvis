@@ -17,13 +17,13 @@ lvgl:
             text: "JARVIS"
             align: CENTER
             y: -10
-            text_font: montserrat_40
+            text_font: font_ui_40
             text_color: 0x00AEEF
         - label:
             text: "v0.01 alfa"
             align: CENTER
             y: 35
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x888888
 
     # ------------------------------------------------------
@@ -187,7 +187,7 @@ lvgl:
             text: "DIAGNOSTYKA"
             align: TOP_MID
             y: 10
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xFFFFFF
 
         # --- CPU ---
@@ -196,7 +196,7 @@ lvgl:
             x: 15
             y: 45
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "CPU"
@@ -204,7 +204,7 @@ lvgl:
             y: 45
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_cpu_status
@@ -214,7 +214,7 @@ lvgl:
             y: 45
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- CPU temp ---
@@ -223,7 +223,7 @@ lvgl:
             x: 15
             y: 67
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "CPU temp"
@@ -231,7 +231,7 @@ lvgl:
             y: 67
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_cputemp_status
@@ -241,7 +241,7 @@ lvgl:
             y: 67
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- RAM ---
@@ -250,7 +250,7 @@ lvgl:
             x: 15
             y: 89
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "RAM"
@@ -258,7 +258,7 @@ lvgl:
             y: 89
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_ram_status
@@ -268,7 +268,7 @@ lvgl:
             y: 89
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- Ekran ---
@@ -277,7 +277,7 @@ lvgl:
             x: 15
             y: 111
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Ekran"
@@ -285,7 +285,7 @@ lvgl:
             y: 111
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_ekran_status
@@ -295,7 +295,7 @@ lvgl:
             y: 111
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- LED RGB ---
@@ -304,7 +304,7 @@ lvgl:
             x: 15
             y: 133
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "LED RGB"
@@ -312,7 +312,7 @@ lvgl:
             y: 133
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_led_status
@@ -322,7 +322,7 @@ lvgl:
             y: 133
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- Buzzer ---
@@ -331,7 +331,7 @@ lvgl:
             x: 15
             y: 155
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Buzzer"
@@ -339,7 +339,7 @@ lvgl:
             y: 155
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_buzzer_status
@@ -349,7 +349,7 @@ lvgl:
             y: 155
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- WiFi laczenie ---
@@ -358,7 +358,7 @@ lvgl:
             x: 15
             y: 177
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "WiFi laczenie"
@@ -366,7 +366,7 @@ lvgl:
             y: 177
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_wifi_status
@@ -376,7 +376,7 @@ lvgl:
             y: 177
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- WiFi sygnal ---
@@ -385,7 +385,7 @@ lvgl:
             x: 15
             y: 199
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "WiFi sygnal"
@@ -393,7 +393,7 @@ lvgl:
             y: 199
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_signal_status
@@ -403,7 +403,7 @@ lvgl:
             y: 199
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- WiFi IP ---
@@ -412,7 +412,7 @@ lvgl:
             x: 15
             y: 221
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "WiFi IP"
@@ -420,7 +420,7 @@ lvgl:
             y: 221
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_ip_status
@@ -430,7 +430,7 @@ lvgl:
             y: 221
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- Czas sync ---
@@ -439,7 +439,7 @@ lvgl:
             x: 15
             y: 243
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Czas sync"
@@ -447,7 +447,7 @@ lvgl:
             y: 243
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_time_status
@@ -457,7 +457,7 @@ lvgl:
             y: 243
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
         # --- Homeassistant ---
@@ -466,7 +466,7 @@ lvgl:
             x: 15
             y: 265
             width: 210
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Homeassistant"
@@ -474,7 +474,7 @@ lvgl:
             y: 265
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_diag_ha_status
@@ -484,7 +484,7 @@ lvgl:
             y: 265
             bg_color: 0x000000
             bg_opa: COVER
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x666666
 
     # ------------------------------------------------------
@@ -510,7 +510,7 @@ lvgl:
             text: "I AM IRON MAN"
             align: CENTER
             y: 130
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFD700
             bg_color: 0x000000
             bg_opa: 60%
@@ -533,13 +533,13 @@ lvgl:
             text: "JARVIS"
             align: CENTER
             y: 5
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0x000000
         - label:
             text: "Tu jestem!"
             align: CENTER
             y: 40
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x333333
         - button:
             x: 20
@@ -553,7 +553,7 @@ lvgl:
               - label:
                   align: CENTER
                   text: "ZNALEZIONE"
-                  text_font: montserrat_18
+                  text_font: font_ui_18
                   text_color: 0xFFFFFF
             on_click:
               - if:
