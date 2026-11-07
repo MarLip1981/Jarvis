@@ -103,7 +103,7 @@ lvgl:
                     - label:
                         text: "BFT"
                         align: CENTER
-                        text_font: font_ui_10
+                        text_font: font_ui_12
                         text_color: 0xFFFFFF
               - label:
                   id: lbl_brama_warning_icon
