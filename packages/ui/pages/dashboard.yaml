@@ -60,11 +60,17 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
+                  text: "\U000F0439"
+                  x: 4
+                  y: 1
+                  text_font: icon_font_btn
+                  text_color: 0x888888
+              - label:
                   id: lbl_pulpit_radio
                   text: "RADIO > --  * --"
-                  x: 5
+                  x: 28
                   y: 2
-                  width: 210
+                  width: 187
                   height: 18
                   text_font: font_radio_12
                   text_color: 0xAAAAAA
