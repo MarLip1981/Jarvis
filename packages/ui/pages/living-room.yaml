@@ -487,7 +487,7 @@ lvgl:
               - label:
                   text: "\U000F0439"
                   align: CENTER
-                  text_font: icon_font_btn
+                  text_font: icon_font_radio
                   text_color: 0x526575
 
         - label:
@@ -516,7 +516,7 @@ lvgl:
               - label:
                   align: CENTER
                   text: "\U000F0663"
-                  text_font: icon_font_btn
+                  text_font: icon_font_radio
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -546,7 +546,7 @@ lvgl:
                   align: CENTER
                   id: lbl_radio_playstop_icon
                   text: "\U000F040C"
-                  text_font: icon_font_btn
+                  text_font: icon_font_radio
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -583,7 +583,7 @@ lvgl:
               - label:
                   align: CENTER
                   text: "\U000F0661"
-                  text_font: icon_font_btn
+                  text_font: icon_font_radio
                   text_color: 0xFFFFFF
             on_click:
               - if:
