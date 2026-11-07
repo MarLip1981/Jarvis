@@ -513,7 +513,7 @@ text_sensor:
         - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_radio_stacja
-            text: !lambda 'return std::string("Stacja: ") + x;'
+            text: !lambda 'return x;'
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
@@ -532,7 +532,7 @@ text_sensor:
         - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_radio_tytul
-            text: !lambda 'return std::string("Utwór: ") + x;'
+            text: !lambda 'return x;'
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
