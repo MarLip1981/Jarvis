@@ -67,15 +67,18 @@ lvgl:
                   text: "--.- °C"
                   x: 8
                   y: 42
-                  text_font: font_ui_24
+                  text_font: font_ui_18
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_piec_temp
                   text: "--.- °C"
-                  x: 126
-                  y: 42
-                  text_font: font_ui_18
+                  x: 120
+                  y: 40
+                  width: 108
+                  height: 34
+                  text_font: font_ui_24
                   text_color: 0xFFFFFF
+                  text_align: CENTER
               - button:
                   id: btn_piec_plus
                   x: 12
