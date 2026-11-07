@@ -637,22 +637,22 @@ text_sensor:
         - script.execute: ha_rx_flash
         - lvgl.button.update:
             id: btn_scene_auto
-            bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "AUTO") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x333333);'
         - lvgl.button.update:
             id: btn_scene_bialy
-            bg_color: !lambda 'return (x == "Bialy") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "Bialy") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x333333);'
         - lvgl.button.update:
             id: btn_scene_wschod
-            bg_color: !lambda 'return (x == "Wschod") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "Wschod") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x333333);'
         - lvgl.button.update:
             id: btn_scene_zachod
-            bg_color: !lambda 'return (x == "Zachod") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "Zachod") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x333333);'
         - lvgl.button.update:
             id: btn_scene_tecza
-            bg_color: !lambda 'return (x == "Tecza") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "Tecza") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x333333);'
         - lvgl.button.update:
             id: btn_scene_ognisko
-            bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "Ognisko") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x333333);'
 
 
   - platform: homeassistant
