@@ -21,7 +21,7 @@ lvgl:
             text: "SYPIALNIA"
             align: TOP_MID
             y: 30
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
         - button:
             x: 12
@@ -88,7 +88,7 @@ lvgl:
             text: "SYPIALNIA - SCENY"
             align: TOP_MID
             y: 30
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xFFFFFF
         - obj:
             x: 2
@@ -114,7 +114,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Wlacz / Wylacz"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -127,7 +127,7 @@ lvgl:
                   text: "..."
                   x: 0
                   y: 34
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
 
               # --- Siatka 6 przyciskow scen 2x3. Podswietlenie
@@ -146,7 +146,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "AUTO"
-                        text_font: montserrat_14
+                        text_font: font_ui_14
                   on_click:
                     - if:
                         condition:
@@ -169,7 +169,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Bialy"
-                        text_font: montserrat_14
+                        text_font: font_ui_14
                   on_click:
                     - if:
                         condition:
@@ -192,7 +192,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Wschod"
-                        text_font: montserrat_14
+                        text_font: font_ui_14
                   on_click:
                     - if:
                         condition:
@@ -215,7 +215,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Zachod"
-                        text_font: montserrat_14
+                        text_font: font_ui_14
                   on_click:
                     - if:
                         condition:
@@ -238,7 +238,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Tecza"
-                        text_font: montserrat_14
+                        text_font: font_ui_14
                   on_click:
                     - if:
                         condition:
@@ -261,7 +261,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Ognisko"
-                        text_font: montserrat_14
+                        text_font: font_ui_14
                   on_click:
                     - if:
                         condition:
@@ -294,7 +294,7 @@ lvgl:
             text: "ERNI"
             align: TOP_MID
             y: 30
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
         - button:
             x: 12
@@ -361,7 +361,7 @@ lvgl:
             text: "ERNI - LAMPA"
             align: TOP_MID
             y: 30
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xFFFFFF
         - obj:
             x: 2
@@ -387,7 +387,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Wlacz / Wylacz"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -400,7 +400,7 @@ lvgl:
                   text: "Jasnosc"
                   x: 5
                   y: 34
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_erni_brightness
@@ -430,7 +430,7 @@ lvgl:
                   text: "Barwa"
                   x: 125
                   y: 34
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_erni_colortemp
@@ -461,7 +461,7 @@ lvgl:
                   align: TOP_LEFT
                   x: 15
                   y: 188
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_erni_colortemp_val
@@ -469,7 +469,7 @@ lvgl:
                   align: TOP_LEFT
                   x: 148
                   y: 188
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
 
     # ------------------------------------------------------
