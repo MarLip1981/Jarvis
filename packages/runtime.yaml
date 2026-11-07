@@ -130,8 +130,8 @@ interval:
           text: !lambda |-
             auto t = id(sntp_time).now();
             if (!t.is_valid()) return std::string("---");
-            static const char* dni[] = {"Niedziela","Poniedzialek","Wtorek","Sroda",
-                                         "Czwartek","Piatek","Sobota"};
+            static const char* dni[] = {"Niedziela","Poniedziałek","Wtorek","Środa",
+                                         "Czwartek","Piątek","Sobota"};
             return std::string(dni[t.day_of_week - 1]);
       - lvgl.label.update:
           id: lbl_pulpit_date
@@ -139,8 +139,8 @@ interval:
             auto t = id(sntp_time).now();
             if (!t.is_valid()) return std::string("--.--.----");
             static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
-                                              "czerwca","lipca","sierpnia","wrzesnia",
-                                              "pazdziernika","listopada","grudnia"};
+                                              "czerwca","lipca","sierpnia","września",
+                                              "października","listopada","grudnia"};
             char buf[32];
             snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
             return std::string(buf);
@@ -151,7 +151,7 @@ interval:
             if (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) on_count++;
             if (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) on_count++;
             if (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) on_count++;
-            return std::string("Ilosc wlaczonych lamp: ") + std::to_string(on_count);
+            return std::string("Ilość włączonych lamp: ") + std::to_string(on_count);
       # --- Ciagle odswiezanie przyciskow lamp z aktualnego stanu (nie
       # tylko przy zlapaniu zdarzenia zmiany) - dzieki temu po starcie
       # urzadzenia przycisk pokazuje prawdziwy stan od razu, bez
