@@ -20,14 +20,14 @@ lvgl:
         - label:
             text: "PIEC"
             align: TOP_MID
-            y: 8
+            y: 25
             text_font: font_ui_18
             text_color: 0xFFFFFF
         - obj:
             x: 2
-            y: 34
+            y: 48
             width: 236
-            height: 144
+            height: 132
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -37,29 +37,85 @@ lvgl:
             widgets:
               - label:
                   text: "OGRZEWANIE"
-                  x: 0
-                  y: 0
+                  x: 6
+                  y: 3
                   text_font: font_ui_14
                   text_color: 0x888888
               - label:
-                  id: lbl_piec_temp
-                  text: "Temperatura: --.- °C"
-                  x: 0
-                  y: 22
+                  id: lbl_piec_mode
+                  text: "..."
+                  align: TOP_RIGHT
+                  x: -6
+                  y: 3
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  recolor: true
               - label:
-                  id: lbl_piec_target
-                  text: "Zadana: --.- °C"
-                  x: 124
-                  y: 18
+                  text: "Zadana"
+                  x: 8
+                  y: 25
                   text_font: font_ui_12
                   text_color: 0xAAAAAA
+              - label:
+                  text: "Temperatura"
+                  x: 126
+                  y: 25
+                  text_font: font_ui_12
+                  text_color: 0xAAAAAA
+              - label:
+                  id: lbl_piec_target
+                  text: "--.- °C"
+                  x: 8
+                  y: 42
+                  text_font: font_ui_18
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_piec_temp
+                  text: "--.- °C"
+                  x: 126
+                  y: 42
+                  text_font: font_ui_18
+                  text_color: 0xFFFFFF
+              - button:
+                  id: btn_piec_plus
+                  x: 72
+                  y: 68
+                  width: 40
+                  height: 26
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
+                  widgets:
+                    - label:
+                        align: CENTER
+                        text: "+"
+                        text_font: font_ui_18
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: climate.set_temperature
+                              data:
+                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+                              data_template:
+                                temperature: !lambda |-
+                                  float t = id(cache_piec_target) + 0.5f;
+                                  if (t > 30.0f) t = 30.0f;
+                                  char buf[8];
+                                  snprintf(buf, sizeof(buf), "%.1f", t);
+                                  return std::string(buf);
+                          - script.execute: confirm_click
               - button:
                   id: btn_piec_minus
-                  x: 150
-                  y: 42
-                  width: 32
+                  x: 118
+                  y: 68
+                  width: 40
                   height: 26
                   bg_color: 0x18232B
                   border_width: 1
@@ -91,53 +147,10 @@ lvgl:
                                   return std::string(buf);
                           - script.execute: confirm_click
               - button:
-                  id: btn_piec_plus
-                  x: 186
-                  y: 42
-                  width: 32
-                  height: 26
-                  bg_color: 0x18232B
-                  border_width: 1
-                  border_color: 0x45515C
-                  radius: 5
-                  shadow_width: 0
-                  pressed:
-                    bg_color: 0x3A6A84
-                  widgets:
-                    - label:
-                        align: CENTER
-                        text: "+"
-                        text_font: font_ui_18
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                        then:
-                          - homeassistant.action:
-                              action: climate.set_temperature
-                              data:
-                                entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
-                              data_template:
-                                temperature: !lambda |-
-                                  float t = id(cache_piec_target) + 0.5f;
-                                  if (t > 30.0f) t = 30.0f;
-                                  char buf[8];
-                                  snprintf(buf, sizeof(buf), "%.1f", t);
-                                  return std::string(buf);
-                          - script.execute: confirm_click
-              - label:
-                  id: lbl_piec_mode
-                  text: "Tryb: ..."
-                  x: 0
-                  y: 66
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-                  recolor: true
-              - button:
                   id: btn_piec_auto
-                  x: 0
-                  y: 92
-                  width: 112
+                  x: 4
+                  y: 101
+                  width: 110
                   height: 24
                   bg_color: 0x18232B
                   border_width: 1
@@ -164,9 +177,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_piec_off
-                  x: 116
-                  y: 92
-                  width: 112
+                  x: 120
+                  y: 101
+                  width: 110
                   height: 24
                   bg_color: 0x18232B
                   border_width: 1
@@ -194,9 +207,9 @@ lvgl:
 
         - obj:
             x: 2
-            y: 184
+            y: 186
             width: 236
-            height: 134
+            height: 132
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -206,29 +219,35 @@ lvgl:
             widgets:
               - label:
                   text: "CIEPŁA WODA"
-                  x: 0
-                  y: 0
+                  x: 6
+                  y: 3
                   text_font: font_ui_14
                   text_color: 0x888888
               - label:
+                  text: "Temperatura"
+                  x: 132
+                  y: 3
+                  text_font: font_ui_12
+                  text_color: 0xAAAAAA
+              - label:
                   id: lbl_cwu_status
                   text: "Status: ..."
-                  x: 0
-                  y: 18
+                  x: 6
+                  y: 29
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_cwu_temp
-                  text: "Zbiornik: n/a"
-                  x: 0
-                  y: 36
-                  text_font: font_ui_12
-                  text_color: 0x666666
+                  text: "--.- °C"
+                  x: 132
+                  y: 24
+                  text_font: font_ui_18
+                  text_color: 0xFFFFFF
               - button:
                   id: btn_cwu_auto
-                  x: 0
+                  x: 4
                   y: 58
-                  width: 112
+                  width: 110
                   height: 28
                   bg_color: 0x18232B
                   border_width: 1
@@ -255,9 +274,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_cwu_off
-                  x: 116
+                  x: 120
                   y: 58
-                  width: 112
+                  width: 110
                   height: 28
                   bg_color: 0x18232B
                   border_width: 1
@@ -284,9 +303,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_cwu_day
-                  x: 0
+                  x: 4
                   y: 92
-                  width: 112
+                  width: 110
                   height: 28
                   bg_color: 0x18232B
                   border_width: 1
@@ -313,9 +332,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_cwu_boost
-                  x: 116
+                  x: 120
                   y: 92
-                  width: 112
+                  width: 110
                   height: 28
                   bg_color: 0x18232B
                   border_width: 1
