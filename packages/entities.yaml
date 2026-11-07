@@ -299,6 +299,24 @@ sensor:
                     char buf[24];
                     snprintf(buf, sizeof(buf), "Pozycja: %.0f%%", x);
                     return std::string(buf);
+              - if:
+                  condition:
+                    lambda: |-
+                      return id(brama_ha_status).has_state() &&
+                        (id(brama_ha_status).state.find("Otwieranie") != std::string::npos ||
+                         id(brama_ha_status).state.find("Zamykanie") != std::string::npos ||
+                         id(brama_ha_status).state.find("Furtka") != std::string::npos);
+                  then:
+                    - lvgl.label.update:
+                        id: lbl_pulpit_brama_status
+                        text: !lambda |-
+                          char buf[32];
+                          const std::string status = id(brama_ha_status).state;
+                          snprintf(buf, sizeof(buf), "%s %.0f%%",
+                            status.find("Zamykanie") != std::string::npos ? "zamykanie" : "otwieranie",
+                            x);
+                          return std::string(buf);
+                        text_color: 0xFFAA00;
 
   - platform: wifi_signal
     id: wifi_db
@@ -654,6 +672,32 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
+        # Ruch wykryty bezposrednio z HA: karta bramy ma sie otworzyc
+        # niezaleznie od tego, skad przyszlo polecenie (pilot, HA lub Jarvis).
+        - if:
+            condition:
+              lambda: |-
+                return x.find("Otwieranie") != std::string::npos ||
+                       x.find("Zamykanie") != std::string::npos ||
+                       x.find("Furtka") != std::string::npos;
+            then:
+              - if:
+                  condition:
+                    lambda: 'return !id(brama_page_active);'
+                  then:
+                    - globals.set:
+                        id: brama_page_active
+                        value: "true"
+                    - globals.set:
+                        id: brama_waiting_for_motion
+                        value: "false"
+                    - globals.set:
+                        id: brama_closed_since_ms
+                        value: "0"
+                    - lvgl.page.show:
+                        id: page_brama
+                        animation: MOVE_LEFT
+                        time: 300ms
         - lvgl.label.update:
             id: lbl_brama_status
             text: !lambda 'return std::string("Stan: ") + x;'
@@ -671,7 +715,16 @@ text_sensor:
               if (x == "Zatrzymanie Awaryjne!") return std::string("awaria");
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
-                  x.find("Furtka") != std::string::npos) return std::string("w ruchu");
+                  x.find("Furtka") != std::string::npos) {
+                if (id(brama_ha_position).has_state() && std::isfinite(id(brama_ha_position).state)) {
+                  char buf[32];
+                  snprintf(buf, sizeof(buf), "%s %.0f%%",
+                    x.find("Zamykanie") != std::string::npos ? "zamykanie" : "otwieranie",
+                    id(brama_ha_position).state);
+                  return std::string(buf);
+                }
+                return std::string("w ruchu");
+              }
               if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return std::string("zamknięta");
               return std::string("--");
             text_color: !lambda |-
