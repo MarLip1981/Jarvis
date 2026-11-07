@@ -20,14 +20,14 @@ lvgl:
         - label:
             text: "PIEC"
             align: TOP_MID
-            y: 30
-            text_font: font_ui_24
+            y: 8
+            text_font: font_ui_18
             text_color: 0xFFFFFF
         - obj:
             x: 2
-            y: 56
+            y: 34
             width: 236
-            height: 124
+            height: 144
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -45,25 +45,29 @@ lvgl:
                   id: lbl_piec_temp
                   text: "Temperatura: --.- °C"
                   x: 0
-                  y: 18
+                  y: 22
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_piec_target
                   text: "Zadana: --.- °C"
-                  x: 0
-                  y: 40
+                  x: 124
+                  y: 18
                   text_font: font_ui_12
                   text_color: 0xAAAAAA
               - button:
                   id: btn_piec_minus
                   x: 150
-                  y: 34
+                  y: 42
                   width: 32
                   height: 26
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   pressed:
-                    bg_color: 0x00FF00
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -89,12 +93,16 @@ lvgl:
               - button:
                   id: btn_piec_plus
                   x: 186
-                  y: 34
+                  y: 42
                   width: 32
                   height: 26
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   pressed:
-                    bg_color: 0x00FF00
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -128,10 +136,16 @@ lvgl:
               - button:
                   id: btn_piec_auto
                   x: 0
-                  y: 86
+                  y: 92
                   width: 112
                   height: 24
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -151,10 +165,16 @@ lvgl:
               - button:
                   id: btn_piec_off
                   x: 116
-                  y: 86
+                  y: 92
                   width: 112
                   height: 24
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -210,7 +230,13 @@ lvgl:
                   y: 58
                   width: 112
                   height: 28
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -233,7 +259,13 @@ lvgl:
                   y: 58
                   width: 112
                   height: 28
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -256,7 +288,13 @@ lvgl:
                   y: 92
                   width: 112
                   height: 28
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
@@ -279,7 +317,13 @@ lvgl:
                   y: 92
                   width: 112
                   height: 28
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x3A6A84
                   widgets:
                     - label:
                         align: CENTER
