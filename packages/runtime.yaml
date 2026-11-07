@@ -178,17 +178,17 @@ interval:
           text: !lambda |-
             return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
           text_color: !lambda |-
-            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_erni_lampa
           text: !lambda |-
             if (!id(state_erni_lampa).has_state()) return std::string("Lampa: ...");
             return id(state_erni_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
           text_color: !lambda |-
-            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_erni_lampa_icon
           text: !lambda |-
             return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
           text_color: !lambda |-
-            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
