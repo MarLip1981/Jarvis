@@ -19,7 +19,7 @@ lvgl:
             text: "BRAMA"
             align: TOP_MID
             y: 30
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
 
         # Scena: podjazd, prowadnica, slupki i ruchome skrzydlo.
@@ -160,7 +160,7 @@ lvgl:
             text: "Pozycja: --%"
             align: TOP_MID
             y: 238
-            text_font: montserrat_12
+            text_font: font_ui_12
             text_color: 0x00AEEF
         # Sterowanie brama i trybem furtki bezposrednio z karty.
         - button:
@@ -178,7 +178,7 @@ lvgl:
               - label:
                   text: "BRAMA"
                   align: CENTER
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -207,7 +207,7 @@ lvgl:
               - label:
                   text: "FURTKA"
                   align: CENTER
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -226,6 +226,6 @@ lvgl:
             text: "UWAGA: FOTOKOMORKA"
             align: BOTTOM_MID
             y: -8
-            text_font: montserrat_12
+            text_font: font_ui_12
             text_color: 0xFFCC00
             hidden: true
