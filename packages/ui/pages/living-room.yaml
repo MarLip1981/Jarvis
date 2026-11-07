@@ -160,7 +160,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Wlacz / Wylacz"
+                        text: "Włącz / Wyłącz"
                         text_font: font_ui_12
                   on_click:
                     - if:
@@ -183,7 +183,7 @@ lvgl:
 
               - label:
                   id: lbl_salon_brightness
-                  text: "Jasnosc"
+                  text: "Jasność"
                   x: 5
                   y: 58
                   text_font: font_ui_14
@@ -483,7 +483,7 @@ lvgl:
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_radio_tytul
-                  text: "Utwor: ..."
+                  text: "Utwór: ..."
                   x: 0
                   y: 20
                   text_font: font_ui_12
@@ -505,7 +505,7 @@ lvgl:
                   text_color: 0xCCCCCC
               - label:
                   id: lbl_radio_glosnosc
-                  text: "Glosnosc: ..."
+                  text: "Głośność: ..."
                   x: 26
                   y: 65
                   text_font: font_ui_14
