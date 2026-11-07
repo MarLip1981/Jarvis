@@ -379,6 +379,9 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
+        - lvgl.obj.update:
+            id: btn_lampy_salon
+            hidden: !lambda 'return !x;'
         - lvgl.label.update:
             id: lbl_salon_lampka_status
             text: !lambda |-
@@ -437,6 +440,9 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
+        - lvgl.obj.update:
+            id: btn_lampy_erni
+            hidden: !lambda 'return !x;'
         - lvgl.label.update:
             id: lbl_erni_lampa
             text: !lambda |-
@@ -455,6 +461,9 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
+        - lvgl.obj.update:
+            id: btn_lampy_sypialnia
+            hidden: !lambda 'return !x;'
         - lvgl.label.update:
             id: lbl_sypialnia_lampa
             text: !lambda |-
@@ -683,9 +692,8 @@ text_sensor:
               if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00DD66);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
-            id: lbl_pulpit_brama
-            text: !lambda 'return std::string("Brama: ") + x;'
-            text_font: font_gate_14
+            id: lbl_pulpit_brama_status
+            text: !lambda 'return x;'
             text_color: !lambda |-
               if (x == "Otwarta" || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
               if (x.find("Otwieranie") != std::string::npos ||
