@@ -258,9 +258,9 @@ lvgl:
         - button:
             id: btn_brama_karta_pedestrian
             x: 124
-            y: 270
+            y: 290
             width: 104
-            height: 38
+            height: 26
             bg_color: 0x18232B
             border_width: 1
             border_color: 0xB88632
