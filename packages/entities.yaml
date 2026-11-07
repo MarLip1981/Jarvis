@@ -662,7 +662,7 @@ text_sensor:
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
                   x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x888888);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00FF00);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_pulpit_brama_status
