@@ -74,7 +74,7 @@ lvgl:
                   width: 184
                   height: 18
                   text_font: font_radio_12
-                  text_color: 0xAAAAAA
+                  text_color: 0xFFFFFF
                   long_mode: SCROLL_CIRCULAR
             on_click:
               - if:
