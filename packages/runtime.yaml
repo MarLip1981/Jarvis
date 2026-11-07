@@ -109,7 +109,7 @@ interval:
                 else:
                   - lvgl.label.update:
                       id: lbl_pulpit_drzwi
-                      text: "Drzwi: #00FF00 zamkniete#"
+                      text: "Drzwi: #00FF00 zamknięte#"
                   - lvgl.label.update:
                       id: lbl_drzwi_icon
                       text: "\U000F081B"
@@ -170,7 +170,7 @@ interval:
           id: lbl_sypialnia_lampa
           text: !lambda |-
             if (!id(state_sypialnia_lampa).has_state()) return std::string("Lampa: ...");
-            return id(state_sypialnia_lampa).state ? std::string("Lampa: #00FF00 WLACZONA#") : std::string("Lampa: #888888 wylaczona#");
+            return id(state_sypialnia_lampa).state ? std::string("Lampa: #00FF00 WŁĄCZONA#") : std::string("Lampa: #888888 wyłączona#");
           text_color: !lambda |-
             return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
@@ -183,7 +183,7 @@ interval:
           id: lbl_erni_lampa
           text: !lambda |-
             if (!id(state_erni_lampa).has_state()) return std::string("Lampa: ...");
-            return id(state_erni_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
+            return id(state_erni_lampa).state ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
             return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
