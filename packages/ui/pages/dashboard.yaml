@@ -22,21 +22,21 @@ lvgl:
             text: "---"
             align: TOP_MID
             y: 36
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
             id: lbl_pulpit_date
             text: "--.--.----"
             align: TOP_MID
             y: 64
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0x888888
         - label:
             id: lbl_pulpit_climate
             text: "--.-C  --%  Zewn --.-C"
             align: TOP_MID
             y: 84
-            text_font: montserrat_12
+            text_font: font_ui_12
             text_color: 0x00AEEF
         - obj:
             x: 10
@@ -64,7 +64,7 @@ lvgl:
             text: "Ilosc wlaczonych lamp: ..."
             x: 15
             y: 136
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_piec_icon
@@ -78,7 +78,7 @@ lvgl:
             text: "Piec: ..."
             x: 42
             y: 163
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xFFFFFF
             recolor: true
         - label:
@@ -93,7 +93,7 @@ lvgl:
             text: "Drzwi: ..."
             x: 42
             y: 188
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xFFFFFF
             recolor: true
 
@@ -130,7 +130,7 @@ lvgl:
               - label:
                   text: "BRAMA"
                   align: CENTER
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_press:
               - globals.set:
@@ -176,7 +176,7 @@ lvgl:
               - label:
                   text: "FURTKA"
                   align: CENTER
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_press:
               - globals.set:
