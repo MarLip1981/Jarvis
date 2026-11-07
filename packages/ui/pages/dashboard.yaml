@@ -59,13 +59,49 @@ lvgl:
             text_font: font_radio_12
             text_color: 0xAAAAAA
             long_mode: SCROLL_CIRCULAR
-        - label:
-            id: lbl_pulpit_lamps
-            text: "Ilosc wlaczonych lamp: ..."
-            x: 15
-            y: 136
-            text_font: font_ui_14
-            text_color: 0xCCCCCC
+        # Podsumowanie oswietlenia — dotkniecie otwiera liste aktualnie wlaczonych lamp.
+        - button:
+            id: btn_pulpit_lights
+            x: 10
+            y: 134
+            width: 220
+            height: 24
+            bg_opa: TRANSP
+            border_width: 0
+            shadow_width: 0
+            pad_all: 0
+            widgets:
+              - label:
+                  id: lbl_pulpit_lamps_icon
+                  text: "\U000F0E50"
+                  x: 5
+                  y: 1
+                  text_font: icon_font_btn
+                  text_color: 0xFF0000
+              - label:
+                  text: "Światła"
+                  x: 32
+                  y: 3
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_pulpit_lamps
+                  text: "#00DD66 0#"
+                  x: 112
+                  y: 3
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  recolor: true
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_lampy
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
         - label:
             id: lbl_piec_icon
             text: "\U000F0238"
@@ -97,7 +133,7 @@ lvgl:
             text_color: 0xFFFFFF
             recolor: true
 
-        # Status bramy widoczny bez otwierania jej karty.
+        # Brama — bialy tytul, kolor zmienia tylko status.
         - label:
             id: lbl_pulpit_brama_icon
             text: "\U000F0299"
@@ -106,13 +142,19 @@ lvgl:
             text_font: icon_font_btn
             text_color: 0x888888
         - label:
-            id: lbl_pulpit_brama
-            text: "Brama: ..."
+            id: lbl_pulpit_brama_title
+            text: "Brama"
             x: 42
             y: 214
-            text_font: font_gate_14
+            text_font: font_ui_14
             text_color: 0xFFFFFF
-            recolor: true
+        - label:
+            id: lbl_pulpit_brama_status
+            text: "--"
+            x: 105
+            y: 214
+            text_font: font_ui_14
+            text_color: 0x888888
 
         # Dwa niezalezne przyciski pilota. Sterowanie dopiero po przytrzymaniu.
         - button:
@@ -207,6 +249,145 @@ lvgl:
                         animation: MOVE_LEFT
                         time: 300ms
                     - script.execute: confirm_click
+
+
+
+    # ------------------------------------------------------
+    # Lista aktualnie wlaczonych lamp. Wybor lampy otwiera
+    # odpowiadajaca jej strone pomieszczenia.
+    # ------------------------------------------------------
+    - id: page_lampy
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_RIGHT
+            time: 250ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_RIGHT
+            time: 250ms
+      widgets:
+        - label:
+            text: "WŁĄCZONE ŚWIATŁA"
+            align: TOP_MID
+            y: 36
+            text_font: font_ui_18
+            text_color: 0xFFFFFF
+        - button:
+            id: btn_lampy_salon
+            x: 10
+            y: 82
+            width: 220
+            height: 44
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  text: "\U000F0335"
+                  x: 12
+                  y: 10
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  text: "Salon — lampa"
+                  x: 48
+                  y: 13
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_salon
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
+        - button:
+            id: btn_lampy_sypialnia
+            x: 10
+            y: 136
+            width: 220
+            height: 44
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  text: "\U000F0335"
+                  x: 12
+                  y: 10
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  text: "Sypialnia — lampa"
+                  x: 48
+                  y: 13
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_sypialnia
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
+        - button:
+            id: btn_lampy_erni
+            x: 10
+            y: 190
+            width: 220
+            height: 44
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  text: "\U000F0335"
+                  x: 12
+                  y: 10
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  text: "Ernie — lampa"
+                  x: 48
+                  y: 13
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_erni
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
+        - label:
+            id: lbl_lampy_empty
+            text: "Brak włączonych lamp"
+            align: CENTER
+            y: 145
+            text_font: font_ui_14
+            text_color: 0x888888
+            hidden: true
 
 
 
