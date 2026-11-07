@@ -212,9 +212,6 @@ lvgl:
               bg_opa: COVER
               border_width: 0
               radius: 0
-          - label:
-              id: lbl_battery_pct
-              text: "75%"
       - label:
           id: lbl_easter_countdown
           text: ""
