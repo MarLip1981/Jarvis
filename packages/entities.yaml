@@ -269,37 +269,6 @@ sensor:
       if (v >= 3.50f) return 5.0f + (v - 3.50f) * 50.0f;
       if (v >= 3.30f) return (v - 3.30f) * 25.0f;
       return 0.0f;
-    on_value:
-      then:
-        - if:
-            condition:
-              lambda: 'return std::isfinite(x);'
-            then:
-              - lvgl.label.update:
-                  id: lbl_battery_pct
-                  text: !lambda |-
-                    char buf[8];
-                    snprintf(buf, sizeof(buf), "%.0f%%", x);
-                    return std::string(buf);
-                  text_color: !lambda |-
-                    return x <= 15.0f ? lv_color_hex(0xFF3333)
-                      : (x <= 35.0f ? lv_color_hex(0xFFAA00) : lv_color_hex(0x00FF00));
-              - lvgl.obj.update:
-                  id: battery_fill
-                  width: !lambda 'return (int) (22.0f * x / 100.0f);'
-                  bg_color: !lambda |-
-                    return x <= 15.0f ? lv_color_hex(0xFF3333)
-                      : (x <= 35.0f ? lv_color_hex(0xFFAA00) : lv_color_hex(0x00FF00));
-            else:
-              - lvgl.label.update:
-                  id: lbl_battery_pct
-                  text: "n/a"
-                  text_color: 0x666666
-              - lvgl.obj.update:
-                  id: battery_fill
-                  width: 0
-                  bg_color: 0x666666
-
   - platform: homeassistant
     id: brama_ha_position
     entity_id: sensor.brama_przesuwna_bft_jarvis
