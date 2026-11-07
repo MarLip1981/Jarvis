@@ -254,7 +254,7 @@ lvgl:
         - button:
             id: btn_pulpit_furtka
             x: 125
-            y: 237
+            y: 229
             width: 105
             height: 36
             bg_color: 0x18232B
