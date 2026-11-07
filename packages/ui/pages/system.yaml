@@ -119,7 +119,7 @@ lvgl:
         # --- Sekcja sieciowa: wymaga czasu na polaczenie ---
         - lvgl.label.update:
             id: lbl_diag_wifi_status
-            text: "LACZENIE"
+            text: "ŁĄCZENIE"
             text_color: 0xFFAA00
         - delay: 2500ms
         - lvgl.label.update:
@@ -163,7 +163,7 @@ lvgl:
         - delay: 300ms
         - lvgl.label.update:
             id: lbl_diag_ha_status
-            text: "LACZENIE"
+            text: "ŁĄCZENIE"
             text_color: 0xFFAA00
         - delay: 900ms
         - lvgl.label.update:
@@ -217,7 +217,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x666666
 
-        # --- CPU temp ---
+        # --- Temperatura CPU ---
         - label:
             text: "........................................................................"
             x: 15
@@ -226,7 +226,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x333333
         - label:
-            text: "CPU temp"
+            text: "Temperatura CPU"
             x: 15
             y: 67
             bg_color: 0x000000
@@ -352,7 +352,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x666666
 
-        # --- WiFi laczenie ---
+        # --- Połączenie Wi-Fi ---
         - label:
             text: "........................................................................"
             x: 15
@@ -361,7 +361,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x333333
         - label:
-            text: "WiFi laczenie"
+            text: "Połączenie Wi-Fi"
             x: 15
             y: 177
             bg_color: 0x000000
@@ -379,7 +379,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x666666
 
-        # --- WiFi sygnal ---
+        # --- Sygnał Wi-Fi ---
         - label:
             text: "........................................................................"
             x: 15
@@ -388,7 +388,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x333333
         - label:
-            text: "WiFi sygnal"
+            text: "Sygnał Wi-Fi"
             x: 15
             y: 199
             bg_color: 0x000000
@@ -433,7 +433,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x666666
 
-        # --- Czas sync ---
+        # --- Synchronizacja czasu ---
         - label:
             text: "........................................................................"
             x: 15
@@ -442,7 +442,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x333333
         - label:
-            text: "Czas sync"
+            text: "Synchronizacja czasu"
             x: 15
             y: 243
             bg_color: 0x000000
@@ -460,7 +460,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x666666
 
-        # --- Homeassistant ---
+        # --- Home Assistant ---
         - label:
             text: "........................................................................"
             x: 15
@@ -469,7 +469,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x333333
         - label:
-            text: "Homeassistant"
+            text: "Home Assistant"
             x: 15
             y: 265
             bg_color: 0x000000
