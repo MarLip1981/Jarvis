@@ -270,6 +270,10 @@ script:
   - id: radio_cover_lookup
     mode: restart
     then:
+      - logger.log:
+          format: "RADIO COVER: start, track=%s"
+          args:
+            - id(radio_tytul).state.c_str()
       - lvgl.widget.hide: img_radio_cover_widget
       - lvgl.widget.show: lbl_radio_cover_placeholder
       - online_image.release: img_radio_cover
@@ -300,6 +304,12 @@ script:
           max_response_buffer_size: 8192
           on_response:
             then:
+              - logger.log:
+                  format: "RADIO COVER: HTTP %d, czas %u ms, body %u B"
+                  args:
+                    - response->status_code
+                    - response->duration_ms
+                    - body.size()
               - if:
                   condition:
                     lambda: 'return response->status_code == 200;'
@@ -323,9 +333,15 @@ script:
                         condition:
                           lambda: 'return !id(radio_cover_url).empty();'
                         then:
+                          - logger.log:
+                              format: "RADIO COVER: znaleziono URL: %s"
+                              args:
+                                - id(radio_cover_url).c_str()
                           - online_image.set_url:
                               id: img_radio_cover
                               url: !lambda 'return id(radio_cover_url).c_str();'
+                        else:
+                          - logger.log: "RADIO COVER: brak wynikow z artworkUrl100"
                   else:
                     - logger.log:
                         format: "iTunes search failed: HTTP %d"
