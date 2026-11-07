@@ -50,7 +50,7 @@ lvgl:
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_piec_target
-                  text: "Zadana: --.- C"
+                  text: "Zadana: --.- °C"
                   x: 0
                   y: 40
                   text_font: font_ui_12
@@ -237,7 +237,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Off"
+                        text: "Wyłącz"
                         text_font: font_ui_12
                   on_click:
                     - if:
@@ -260,7 +260,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Day"
+                        text: "Dzień"
                         text_font: font_ui_12
                   on_click:
                     - if:
@@ -283,7 +283,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Boost"
+                        text: "Doładuj"
                         text_font: font_ui_12
                   on_click:
                     - if:
@@ -333,7 +333,7 @@ lvgl:
             scrollable: false
             widgets:
               - label:
-                  text: "Wkrotce..."
+                  text: "Wkrótce..."
                   x: 0
                   y: 0
                   text_font: font_ui_14
