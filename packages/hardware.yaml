@@ -58,6 +58,56 @@ font:
       - "a-z"
       - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
 
+  - file: "gfonts://Montserrat"
+    id: font_ui_12
+    size: 12
+      glyphs:
+        - ' !"#$%&''()*+,-./:;<=>?@[\\]^_`{|}~'
+        - "0-9"
+        - "A-Z"
+        - "a-z"
+        - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
+
+  - file: "gfonts://Montserrat"
+    id: font_ui_14
+    size: 14
+      glyphs:
+        - ' !"#$%&''()*+,-./:;<=>?@[\\]^_`{|}~'
+        - "0-9"
+        - "A-Z"
+        - "a-z"
+        - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
+
+  - file: "gfonts://Montserrat"
+    id: font_ui_18
+    size: 18
+      glyphs:
+        - ' !"#$%&''()*+,-./:;<=>?@[\\]^_`{|}~'
+        - "0-9"
+        - "A-Z"
+        - "a-z"
+        - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
+
+  - file: "gfonts://Montserrat"
+    id: font_ui_24
+    size: 24
+      glyphs:
+        - ' !"#$%&''()*+,-./:;<=>?@[\\]^_`{|}~'
+        - "0-9"
+        - "A-Z"
+        - "a-z"
+        - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
+
+  - file: "gfonts://Montserrat"
+    id: font_ui_40
+    size: 40
+      glyphs:
+        - ' !"#$%&''()*+,-./:;<=>?@[\\]^_`{|}~'
+        - "0-9"
+        - "A-Z"
+        - "a-z"
+        - "ąćęłńóśźżĄĆĘŁŃÓŚŹŻ"
+
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_ha
     size: 22
