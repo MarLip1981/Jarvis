@@ -452,7 +452,7 @@ binary_sensor:
             id: lbl_erni_lampa_icon
             text: !lambda |-
               return x ? std::string("\U000F0335") : std::string("\U000F0E50");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
 
 
   - platform: homeassistant
@@ -473,7 +473,7 @@ binary_sensor:
             id: lbl_sypialnia_lampa_icon
             text: !lambda |-
               return x ? std::string("\U000F0335") : std::string("\U000F0E50");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
 
 
   - platform: homeassistant
@@ -666,12 +666,12 @@ text_sensor:
               return (x == "HEATING")
                 ? std::string("Piec: #FFAA00 grzeje#")
                 : (x == "STANDBY")
-                  ? std::string("Piec: #00FF00 nie pracuje#")
+                  ? std::string("Piec: #888888 nie pracuje#")
                   : std::string("Piec: #888888 brak danych#");
         - lvgl.label.update:
             id: lbl_piec_icon
             text_color: !lambda |-
-              return (x == "HEATING") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x666666);
+              return (x == "HEATING") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x888888);
 
 
   - platform: homeassistant
@@ -689,7 +689,7 @@ text_sensor:
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
                   x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00DD66);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x888888);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_pulpit_brama_status
@@ -706,7 +706,7 @@ text_sensor:
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
                   x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00DD66);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x888888);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_pulpit_brama_icon
