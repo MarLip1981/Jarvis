@@ -43,7 +43,7 @@ lvgl:
                   text_color: 0x888888
               - label:
                   id: lbl_piec_temp
-                  text: "Temp: --.- C"
+                  text: "Temperatura: --.- °C"
                   x: 0
                   y: 18
                   text_font: font_ui_14
@@ -185,7 +185,7 @@ lvgl:
             scrollable: false
             widgets:
               - label:
-                  text: "CIEPLA WODA"
+                  text: "CIEPŁA WODA"
                   x: 0
                   y: 0
                   text_font: font_ui_14
@@ -309,13 +309,13 @@ lvgl:
             time: 300ms
       widgets:
         - label:
-            text: "OSWIETLENIE"
+            text: "OŚWIETLENIE"
             align: TOP_MID
             y: 25
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
-            text: "ZEWNETRZNE"
+            text: "ZEWNĘTRZNE"
             align: TOP_MID
             y: 55
             text_font: font_ui_18
