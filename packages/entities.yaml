@@ -333,7 +333,7 @@ sensor:
 
   - platform: wifi_signal
     id: wifi_db
-    name: "WiFi sygnal"
+    name: "Sygnał Wi-Fi"
     update_interval: 15s
     on_value:
       then:
