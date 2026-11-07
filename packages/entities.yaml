@@ -478,12 +478,12 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("Radio nie gra");
+              if (!id(radio_is_playing)) return std::string("Radio: nie gra");
               std::string station = x;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
               if (track.empty()) track = "--";
-              return std::string("RADIO > ") + station + "  * " + track;
+              return std::string("Radio: ") + station + "  * " + track;
 
   - platform: homeassistant
     id: radio_tytul
@@ -524,14 +524,18 @@ text_sensor:
             text: !lambda |-
               return (x == "playing") ? std::string("\U000F0666") : std::string("\U000F040C");
         - lvgl.label.update:
+            id: lbl_pulpit_radio_icon
+            text_color: !lambda |-
+              return (x == "playing") ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
+        - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (x != "playing") return std::string("Radio nie gra");
+              if (x != "playing") return std::string("Radio: nie gra");
               std::string station = id(radio_stacja).state;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
               if (track.empty()) track = "--";
-              return std::string("RADIO > ") + station + "  * " + track;
+              return std::string("Radio: ") + station + "  * " + track;
 
   - platform: homeassistant
     id: tv_state
@@ -658,7 +662,7 @@ text_sensor:
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
                   x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00FF00);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x888888);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_pulpit_brama_status
