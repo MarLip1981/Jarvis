@@ -500,7 +500,7 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("RADIO NIE GRA");
+              if (!id(radio_is_playing)) return std::string("Radio nie gra");
               std::string station = x;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
@@ -519,7 +519,7 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("RADIO NIE GRA");
+              if (!id(radio_is_playing)) return std::string("Radio nie gra");
               std::string station = id(radio_stacja).state;
               std::string track = x;
               if (station.empty()) station = "--";
@@ -536,9 +536,8 @@ text_sensor:
             id: lbl_radio_stan
             text: !lambda |-
               return std::string("Stan: #00FF00 ") + x + std::string("#");
-        # UWAGA: "playing" to zalozenie do zweryfikowania - podmien na
-        # rzeczywista wartosc jaka realnie przyjmuje ten sensor w HA,
-        # jesli ikonka play/stop nie przelacza sie poprawnie.
+        # Sensor Atlascube zwraca "playing" podczas odtwarzania; pozostale stany
+        # traktujemy jako zatrzymane radio.
         - globals.set:
             id: radio_is_playing
             value: !lambda 'return (x == "playing");'
@@ -549,7 +548,7 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (x != "playing") return std::string("RADIO NIE GRA");
+              if (x != "playing") return std::string("Radio nie gra");
               std::string station = id(radio_stacja).state;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
