@@ -8,6 +8,8 @@ interval:
   # miga podczas zamykania (tryb AUTO jak w karcie HA).
   - interval: 250ms
     then:
+      # Lampka jak w karcie HA: AUTO miga przy zamykaniu,
+      # ALWAYS_BLINK podczas kazdego ruchu, NO_BLINK swieci stale.
       - lvgl.obj.update:
           id: gate_beacon
           bg_opa: !lambda |-
@@ -17,9 +19,37 @@ interval:
             const bool opening = s.find("Otwieranie") != std::string::npos ||
                                  s.find("Furtka") != std::string::npos;
             const bool closing = s.find("Zamykanie") != std::string::npos;
-            if (!(open || opening || closing)) return LV_OPA_TRANSP;
-            if (closing && (((esphome::millis)() / 500) % 2) != 0) return LV_OPA_TRANSP;
+            const bool moving = opening || closing;
+            if (!(open || moving)) return LV_OPA_TRANSP;
+            const std::string mode = id(brama_lamp_mode).has_state()
+              ? id(brama_lamp_mode).state : "auto";
+            const bool blink = moving &&
+              (mode == "always_blink" || (mode != "no_blink" && closing));
+            if (blink && (((esphome::millis)() / 500) % 2) != 0) return LV_OPA_TRANSP;
             return LV_OPA_COVER;
+      # P4 oswietla slupki na scenie.
+      - lvgl.obj.update:
+          id: gate_pillar_left
+          bg_color: !lambda |-
+            return id(brama_entrance_lighting_state).has_state() &&
+                   id(brama_entrance_lighting_state).state == "on"
+              ? lv_color_hex(0xD18A24) : lv_color_hex(0x59636A);
+      - lvgl.obj.update:
+          id: gate_pillar_right
+          bg_color: !lambda |-
+            return id(brama_entrance_lighting_state).has_state() &&
+                   id(brama_entrance_lighting_state).state == "on"
+              ? lv_color_hex(0xD18A24) : lv_color_hex(0x59636A);
+      # Aktywna blokada P3 pulsuje na czerwono.
+      - lvgl.label.update:
+          id: lbl_brama_warning
+          text_color: !lambda |-
+            const bool lock = id(brama_manual_lock_state).has_state() &&
+                              id(brama_manual_lock_state).state == "on";
+            if (!lock) return id(brama_photocell).state
+              ? lv_color_hex(0xFFCC00) : lv_color_hex(0xFF3333);
+            return (((esphome::millis)() / 350) % 2) == 0
+              ? lv_color_hex(0xFF3333) : lv_color_hex(0x8B0000);
   - interval: 20ms
     then:
       - lambda: |-
