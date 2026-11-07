@@ -309,7 +309,7 @@ script:
                         json::parse_json(body, [](JsonObject root) -> bool {
                           JsonArray results = root["results"].as<JsonArray>();
                           if (results.size() == 0) return false;
-                          const char *artwork = results[0]["artworkUrl100"];
+                          const char *artwork = results[0]["artworkUrl100"].as<const char *>();
                           if (artwork == nullptr) return false;
                           std::string url(artwork);
                           size_t pos = url.find("100x100bb");
