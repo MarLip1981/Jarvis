@@ -706,7 +706,7 @@ text_sensor:
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
                   x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x888888);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00FF00);
               return lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_pulpit_brama_icon
@@ -714,7 +714,7 @@ text_sensor:
               const bool closed = x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0;
               return closed ? std::string("\U000F0299") : std::string("\U000F116A");
             text_color: !lambda |-
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x888888);
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return lv_color_hex(0x00FF00);
               if (x == "Otwarta" || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
