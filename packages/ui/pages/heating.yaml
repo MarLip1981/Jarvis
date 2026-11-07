@@ -21,7 +21,7 @@ lvgl:
             text: "PIEC"
             align: TOP_MID
             y: 30
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
         - obj:
             x: 2
@@ -39,21 +39,21 @@ lvgl:
                   text: "OGRZEWANIE"
                   x: 0
                   y: 0
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0x888888
               - label:
                   id: lbl_piec_temp
                   text: "Temp: --.- C"
                   x: 0
                   y: 18
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_piec_target
                   text: "Zadana: --.- C"
                   x: 0
                   y: 40
-                  text_font: montserrat_12
+                  text_font: font_ui_12
                   text_color: 0xAAAAAA
               - button:
                   id: btn_piec_minus
@@ -68,7 +68,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "-"
-                        text_font: montserrat_18
+                        text_font: font_ui_18
                   on_click:
                     - if:
                         condition:
@@ -99,7 +99,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "+"
-                        text_font: montserrat_18
+                        text_font: font_ui_18
                   on_click:
                     - if:
                         condition:
@@ -122,7 +122,7 @@ lvgl:
                   text: "Tryb: ..."
                   x: 0
                   y: 66
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
               - button:
@@ -136,7 +136,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "AUTO"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -159,7 +159,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "OFF"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -188,21 +188,21 @@ lvgl:
                   text: "CIEPLA WODA"
                   x: 0
                   y: 0
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0x888888
               - label:
                   id: lbl_cwu_status
                   text: "Status: ..."
                   x: 0
                   y: 18
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_cwu_temp
                   text: "Zbiornik: n/a"
                   x: 0
                   y: 36
-                  text_font: montserrat_12
+                  text_font: font_ui_12
                   text_color: 0x666666
               - button:
                   id: btn_cwu_auto
@@ -215,7 +215,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Auto"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -238,7 +238,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Off"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -261,7 +261,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Day"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -284,7 +284,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Boost"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -312,13 +312,13 @@ lvgl:
             text: "OSWIETLENIE"
             align: TOP_MID
             y: 25
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
             text: "ZEWNETRZNE"
             align: TOP_MID
             y: 55
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xAAAAAA
         - obj:
             x: 2
@@ -336,7 +336,7 @@ lvgl:
                   text: "Wkrotce..."
                   x: 0
                   y: 0
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0x666666
 
 # ---------------------------------------------------------
