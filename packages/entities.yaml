@@ -497,12 +497,12 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("Radio nie gra");
+              if (!id(radio_is_playing)) return std::string("Radio: nie gra");
               std::string station = id(radio_stacja).state;
               std::string track = x;
               if (station.empty()) station = "--";
               if (track.empty()) track = "--";
-              return std::string("RADIO > ") + station + "  * " + track;
+              return std::string("Radio: ") + station + "  * " + track;
 
   - platform: homeassistant
     id: radio_stan
