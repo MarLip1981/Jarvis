@@ -44,6 +44,7 @@ lvgl:
                   border_width: 0
                   radius: 0
               - obj:
+                  id: gate_pillar_left
                   x: 26
                   y: 18
                   width: 13
@@ -53,6 +54,7 @@ lvgl:
                   border_color: 0xAAB2B7
                   radius: 1
               - obj:
+                  id: gate_pillar_right
                   x: 178
                   y: 18
                   width: 13
@@ -113,6 +115,13 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0xFFCC00
                   hidden: true
+              - label:
+                  id: lbl_brama_p4
+                  text: "P4"
+                  x: 193
+                  y: 5
+                  text_font: font_ui_12
+                  text_color: 0x777777
               - obj:
                   id: gate_leaf
                   x: 44
@@ -187,7 +196,7 @@ lvgl:
             id: lbl_brama_status
             text: "Stan: oczekiwanie na HA"
             align: TOP_MID
-            y: 214
+            y: 208
             text_font: font_gate_14
             text_color: 0x888888
             recolor: true
@@ -195,16 +204,16 @@ lvgl:
             id: lbl_brama_position
             text: "Pozycja: --%"
             align: TOP_MID
-            y: 238
+            y: 228
             text_font: font_ui_12
             text_color: 0x00AEEF
         # Sterowanie brama i trybem furtki bezposrednio z karty.
         - button:
             id: btn_brama_karta_main
             x: 12
-            y: 270
+            y: 290
             width: 104
-            height: 38
+            height: 26
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
@@ -212,17 +221,29 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  text: "BRAMA"
+                  id: lbl_brama_main_button
+                  text: "OTWÓRZ"
                   align: CENTER
-                  text_font: font_ui_14
+                  text_font: font_ui_12
                   text_color: 0xFFFFFF
             on_press:
               - globals.set:
                   id: btn_press_ms
                   value: !lambda 'return (esphome::millis)();'
             on_click:
-              # Krotkie przytrzymanie odpowiada kliknieciu karty HA.
-              # Dlugie (>=1.5 s) pozostaje zarezerwowane dla P3.
+              # Jarvis: 0.6-1.49 s = zwykly klik HA; >=1.5 s = P3.
+              # Krotkie muśnięcie, wybudzenie i przeciaganie nie steruja brama.
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 1500 && id(brama_manual_lock_entity).has_state() && !id(brama_manual_lock_entity).state.empty();'
+                  then:
+                    - homeassistant.action:
+                        action: switch.toggle
+                        data_template:
+                          entity_id: "{{ target_switch }}"
+                        variables:
+                          target_switch: !lambda 'return id(brama_manual_lock_entity).state;'
+                    - script.execute: confirm_click
               - if:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && ((esphome::millis)() - id(btn_press_ms)) < 1500 && id(brama_main_button_entity).has_state() && !id(brama_main_button_entity).state.empty();'
@@ -247,17 +268,29 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  id: lbl_brama_aux_button
                   text: "FURTKA"
                   align: CENTER
-                  text_font: font_ui_14
+                  text_font: font_ui_12
                   text_color: 0xFFFFFF
             on_press:
               - globals.set:
                   id: btn_press_ms
                   value: !lambda 'return (esphome::millis)();'
             on_click:
-              # Krotkie przytrzymanie odpowiada kliknieciu karty HA.
-              # Dlugie (>=1.5 s) pozostaje zarezerwowane dla P4.
+              # Przy aktywnej furtce: 0.6-1.49 s otwiera furtke, >=1.5 s przelacza P4.
+              # Gdy furtka jest wylaczona, przycisk staje sie sterowaniem P4.
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 1500 && id(brama_pedestrian_enabled).state && id(brama_lighting_enabled).has_state() && id(brama_lighting_enabled).state == "true" && id(brama_entrance_lighting_entity).has_state() && !id(brama_entrance_lighting_entity).state.empty();'
+                  then:
+                    - homeassistant.action:
+                        action: switch.toggle
+                        data_template:
+                          entity_id: "{{ target_switch }}"
+                        variables:
+                          target_switch: !lambda 'return id(brama_entrance_lighting_entity).state;'
+                    - script.execute: confirm_click
               - if:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && ((esphome::millis)() - id(btn_press_ms)) < 1500 && id(brama_pedestrian_enabled).state && id(brama_pedestrian_button_entity).has_state() && !id(brama_pedestrian_button_entity).state.empty();'
@@ -269,11 +302,36 @@ lvgl:
                         variables:
                           target_button: !lambda 'return id(brama_pedestrian_button_entity).state;'
                     - script.execute: confirm_click
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && !id(brama_pedestrian_enabled).state && id(brama_lighting_enabled).has_state() && id(brama_lighting_enabled).state == "true" && id(brama_entrance_lighting_entity).has_state() && !id(brama_entrance_lighting_entity).state.empty();'
+                  then:
+                    - homeassistant.action:
+                        action: switch.toggle
+                        data_template:
+                          entity_id: "{{ target_switch }}"
+                        variables:
+                          target_switch: !lambda 'return id(brama_entrance_lighting_entity).state;'
+                    - script.execute: confirm_click
         - label:
             id: lbl_brama_warning
-            text: "UWAGA: FOTOKOMORKA"
-            align: BOTTOM_MID
-            y: -8
+            text: "UWAGA: FOTOKOMÓRKA"
+            align: TOP_MID
+            y: 244
             text_font: font_ui_12
             text_color: 0xFFCC00
             hidden: true
+        - label:
+            id: lbl_brama_gate_event
+            text: "Brama: brak danych"
+            align: TOP_MID
+            y: 260
+            text_font: font_ui_12
+            text_color: 0xAAB2B7
+        - label:
+            id: lbl_brama_wicket_event
+            text: "Furtka: brak danych"
+            align: TOP_MID
+            y: 273
+            text_font: font_ui_12
+            text_color: 0xAAB2B7
