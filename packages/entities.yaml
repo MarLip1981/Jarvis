@@ -210,7 +210,7 @@ sensor:
   - platform: adc
     pin: GPIO34
     id: ambient_light_raw
-    name: "Czujnik swiatla (raw)"
+    name: "Czujnik światła (surowy)"
     update_interval: 5s
     attenuation: 12db
     filters:
@@ -237,7 +237,7 @@ sensor:
   - platform: adc
     pin: GPIO35
     id: battery_voltage
-    name: "Napiecie baterii Jarvis"
+    name: "Napięcie baterii Jarvis"
     unit_of_measurement: "V"
     device_class: voltage
     state_class: measurement
@@ -427,7 +427,7 @@ binary_sensor:
 
   - platform: status
     id: node_status
-    name: "Status polaczenia"
+    name: "Status połączenia"
     on_state:
       then:
         - lvgl.label.update:
@@ -749,7 +749,7 @@ text_sensor:
 
 button:
   - platform: template
-    name: "Znajdz JARVIS"
+    name: "Znajdź JARVIS"
     id: find_device_button
     on_press:
       - script.execute: identify_device
