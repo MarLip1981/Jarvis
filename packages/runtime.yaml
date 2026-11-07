@@ -109,11 +109,11 @@ interval:
                 else:
                   - lvgl.label.update:
                       id: lbl_pulpit_drzwi
-                      text: "Drzwi: #00FF00 zamkniete#"
+                      text: "Drzwi: #888888 zamkniete#"
                   - lvgl.label.update:
                       id: lbl_drzwi_icon
                       text: "\U000F081B"
-                      text_color: 0x00FF00
+                      text_color: 0x888888
       - lvgl.label.update:
           id: lbl_clock
           text: !lambda |-
@@ -150,14 +150,14 @@ interval:
           if (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) on_count++;
           if (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) on_count++;
           if (on_count == 0) {
-            lv_label_set_text(id(lbl_pulpit_lamps), "#00DD66 0#");
+            lv_label_set_text(id(lbl_pulpit_lamps), "#888888 0#");
           } else {
             char count_text[32];
-            snprintf(count_text, sizeof(count_text), on_count == 1 ? "#FFAA00 1 włączona#" : "#FFAA00 %d włączone#", on_count);
+            snprintf(count_text, sizeof(count_text), on_count == 1 ? "#00FF00 1 włączona#" : "#00FF00 %d włączone#", on_count);
             lv_label_set_text(id(lbl_pulpit_lamps), count_text);
           }
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
-            lv_color_hex(on_count > 0 ? 0x00DD66 : 0xFF0000), 0);
+            lv_color_hex(on_count > 0 ? 0x00FF00 : 0x888888), 0);
           lv_label_set_text(id(lbl_pulpit_lamps_icon),
             on_count > 0 ? "\U000F0335" : "\U000F0E50");
           if (on_count > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
@@ -172,7 +172,7 @@ interval:
             if (!id(state_sypialnia_lampa).has_state()) return std::string("Lampa: ...");
             return id(state_sypialnia_lampa).state ? std::string("Lampa: WLACZONA") : std::string("Lampa: wylaczona");
           text_color: !lambda |-
-            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_sypialnia_lampa_icon
           text: !lambda |-
