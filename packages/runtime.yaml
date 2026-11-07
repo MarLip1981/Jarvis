@@ -153,14 +153,15 @@ interval:
             lv_label_set_text(id(lbl_pulpit_lamps), "#00DD66 0#");
           } else {
             char count_text[32];
-            snprintf(count_text, sizeof(count_text), "#FFAA00 %d wlaczone#", on_count);
+            snprintf(count_text, sizeof(count_text), "#FFAA00 %d włączone#", on_count);
             lv_label_set_text(id(lbl_pulpit_lamps), count_text);
           }
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
             lv_color_hex(on_count > 0 ? 0x00DD66 : 0xFF0000), 0);
           lv_label_set_text(id(lbl_pulpit_lamps_icon),
             on_count > 0 ? "\U000F0335" : "\U000F0E50");
-          lv_obj_add_flag(id(lbl_lampy_empty), on_count > 0 ? LV_OBJ_FLAG_HIDDEN : 0);
+          if (on_count > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_clear_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
       # --- Ciagle odswiezanie przyciskow lamp z aktualnego stanu (nie
       # tylko przy zlapaniu zdarzenia zmiany) - dzieki temu po starcie
       # urzadzenia przycisk pokazuje prawdziwy stan od razu, bez
