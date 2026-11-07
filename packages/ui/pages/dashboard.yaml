@@ -114,7 +114,7 @@ lvgl:
               - label:
                   id: lbl_pulpit_lamps
                   text: "#888888 0#"
-                  x: 112
+                  x: 106
                   y: 3
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
