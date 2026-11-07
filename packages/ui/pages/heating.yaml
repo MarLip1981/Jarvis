@@ -67,7 +67,7 @@ lvgl:
                   text: "--.- °C"
                   x: 8
                   y: 42
-                  text_font: font_ui_18
+                  text_font: font_ui_24
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_piec_temp
@@ -78,7 +78,7 @@ lvgl:
                   text_color: 0xFFFFFF
               - button:
                   id: btn_piec_plus
-                  x: 72
+                  x: 12
                   y: 68
                   width: 40
                   height: 26
@@ -113,7 +113,7 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_piec_minus
-                  x: 118
+                  x: 62
                   y: 68
                   width: 40
                   height: 26
