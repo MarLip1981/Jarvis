@@ -478,12 +478,12 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("Radio: nie gra");
+              if (!id(radio_is_playing)) return std::string("Radio:   nie gra");
               std::string station = x;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
               if (track.empty()) track = "--";
-              return std::string("Radio: ") + station + "  * " + track;
+              return std::string("Radio:   ") + station + "  * " + track;
 
   - platform: homeassistant
     id: radio_tytul
@@ -497,12 +497,12 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("Radio: nie gra");
+              if (!id(radio_is_playing)) return std::string("Radio:   nie gra");
               std::string station = id(radio_stacja).state;
               std::string track = x;
               if (station.empty()) station = "--";
               if (track.empty()) track = "--";
-              return std::string("Radio: ") + station + "  * " + track;
+              return std::string("Radio:   ") + station + "  * " + track;
 
   - platform: homeassistant
     id: radio_stan
@@ -530,12 +530,12 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
-              if (x != "playing") return std::string("Radio: nie gra");
+              if (x != "playing") return std::string("Radio:   nie gra");
               std::string station = id(radio_stacja).state;
               std::string track = id(radio_tytul).state;
               if (station.empty()) station = "--";
               if (track.empty()) track = "--";
-              return std::string("Radio: ") + station + "  * " + track;
+              return std::string("Radio:   ") + station + "  * " + track;
 
   - platform: homeassistant
     id: tv_state
@@ -637,10 +637,10 @@ text_sensor:
             id: lbl_pulpit_piec
             text: !lambda |-
               return (x == "HEATING")
-                ? std::string("Piec: #FFAA00 grzeje#")
+                ? std::string("Piec:   #FFAA00 grzeje#")
                 : (x == "STANDBY")
-                  ? std::string("Piec: #00FF00 nie pracuje#")
-                  : std::string("Piec: #888888 brak danych#");
+                  ? std::string("Piec:   #00FF00 nie pracuje#")
+                  : std::string("Piec:   #888888 brak danych#");
         - lvgl.label.update:
             id: lbl_piec_icon
             text_color: !lambda |-
