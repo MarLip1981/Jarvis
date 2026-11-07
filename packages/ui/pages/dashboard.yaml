@@ -1,4 +1,4 @@
-# JARVIS 2.0 — STRONA PULPITU
+# JARVIS 2.0 - STRONA PULPITU
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
@@ -59,7 +59,7 @@ lvgl:
             text_font: font_radio_12
             text_color: 0xAAAAAA
             long_mode: SCROLL_CIRCULAR
-        # Podsumowanie oswietlenia — dotkniecie otwiera liste aktualnie wlaczonych lamp.
+        # Podsumowanie oswietlenia - dotkniecie otwiera liste aktualnie wlaczonych lamp.
         - button:
             id: btn_pulpit_lights
             x: 10
@@ -133,7 +133,7 @@ lvgl:
             text_color: 0xFFFFFF
             recolor: true
 
-        # Brama — bialy tytul, kolor zmienia tylko status.
+        # Brama - bialy tytul, kolor zmienia tylko status.
         - label:
             id: lbl_pulpit_brama_icon
             text: "\U000F0299"
@@ -295,7 +295,7 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  text: "Salon — lampa"
+                  text: "Salon - lampa"
                   x: 48
                   y: 13
                   text_font: font_ui_14
@@ -330,7 +330,7 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  text: "Sypialnia — lampa"
+                  text: "Sypialnia - lampa"
                   x: 48
                   y: 13
                   text_font: font_ui_14
@@ -365,7 +365,7 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  text: "Ernie — lampa"
+                  text: "Ernie - lampa"
                   x: 48
                   y: 13
                   text_font: font_ui_14
