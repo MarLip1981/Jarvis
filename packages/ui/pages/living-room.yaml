@@ -597,14 +597,14 @@ lvgl:
                     - script.execute: confirm_click
 
         - label:
-            text: "GŁOŚNOŚĆ"
+            id: lbl_radio_glosnosc
+            text: "Głośność --"
             x: 8
             y: 270
+            width: 224
+            text_align: LEFT
             text_font: font_ui_12
-            text_color: 0xAAB4BE
-        - label:
-            id: lbl_radio_glosnosc
-            text: "--"
+            text_color: 0xFFFFFF
         - slider:
             id: slider_radio_glosnosc
             x: 8
