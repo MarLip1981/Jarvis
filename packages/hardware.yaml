@@ -166,7 +166,7 @@ light:
   - platform: monochromatic
     output: backlight_pwm
     id: tft_backlight
-    name: "Podswietlenie ekranu"
+    name: "Podświetlenie ekranu"
     restore_mode: ALWAYS_ON
   - platform: rgb
     id: status_led
