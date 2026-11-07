@@ -231,10 +231,13 @@ lvgl:
                   text_color: 0x888888
               - label:
                   text: "Temperatura"
-                  x: 132
+                  x: 126
                   y: 3
+                  width: 108
+                  height: 18
                   text_font: font_ui_12
                   text_color: 0xAAAAAA
+                  text_align: CENTER
               - label:
                   id: lbl_cwu_status
                   text: "Status: ..."
@@ -245,10 +248,13 @@ lvgl:
               - label:
                   id: lbl_cwu_temp
                   text: "--.- °C"
-                  x: 132
+                  x: 126
                   y: 24
+                  width: 108
+                  height: 26
                   text_font: font_ui_18
                   text_color: 0xFFFFFF
+                  text_align: CENTER
               - button:
                   id: btn_cwu_auto
                   x: 4
