@@ -97,10 +97,6 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
-  - id: radio_cover_url
-    type: std::string
-    restore_value: false
-    initial_value: '""'
 
 # ---------------------------------------------------------
 # Wspolny skrypt potwierdzenia kliknięcia - LED na zielono +
@@ -265,91 +261,6 @@ script:
       - lvgl.page.show:
           id: page_pulpit
           animation: NONE
-
-  # Wyszukiwanie okładki aktualnego utworu w katalogu iTunes.
-  - id: radio_cover_lookup
-    mode: restart
-    then:
-      - logger.log:
-          format: "RADIO COVER: start, track=%s"
-          args:
-            - id(radio_tytul).state.c_str()
-      - lvgl.widget.hide: img_radio_cover_widget
-      - lvgl.widget.show: lbl_radio_cover_placeholder
-      - online_image.release: img_radio_cover
-      - globals.set:
-          id: radio_cover_url
-          value: '""'
-      - http_request.get:
-          url: !lambda |-
-            std::string track = id(radio_tytul).state;
-            std::string encoded;
-            const char hex[] = "0123456789ABCDEF";
-            for (unsigned char ch : track) {
-              if ((ch >= 'a' && ch <= 'z') || (ch >= 'A' && ch <= 'Z') ||
-                  (ch >= '0' && ch <= '9') || ch == '-' || ch == '_' ||
-                  ch == '.' || ch == '~') {
-                encoded += static_cast<char>(ch);
-              } else if (ch == ' ') {
-                encoded += '+';
-              } else {
-                encoded += '%';
-                encoded += hex[(ch >> 4) & 0x0F];
-                encoded += hex[ch & 0x0F];
-              }
-            }
-            return (std::string("https://itunes.apple.com/search?term=") +
-                    encoded + "&country=PL&media=music&entity=song&limit=3").c_str();
-          capture_response: true
-          max_response_buffer_size: 8192
-          on_response:
-            then:
-              - logger.log:
-                  format: "RADIO COVER: HTTP %d, czas %u ms, body %u B"
-                  args:
-                    - response->status_code
-                    - response->duration_ms
-                    - body.size()
-              - if:
-                  condition:
-                    lambda: 'return response->status_code == 200;'
-                  then:
-                    - lambda: |-
-                        id(radio_cover_url).clear();
-                        json::parse_json(body, [](JsonObject root) -> bool {
-                          JsonArray results = root["results"].as<JsonArray>();
-                          if (results.size() == 0) return false;
-                          const char *artwork = results[0]["artworkUrl100"].as<const char *>();
-                          if (artwork == nullptr) return false;
-                          std::string url(artwork);
-                          size_t pos = url.find("100x100bb");
-                          if (pos != std::string::npos) {
-                            url.replace(pos, 9, "120x120bb");
-                          }
-                          id(radio_cover_url) = url;
-                          return true;
-                        });
-                    - if:
-                        condition:
-                          lambda: 'return !id(radio_cover_url).empty();'
-                        then:
-                          - logger.log:
-                              format: "RADIO COVER: znaleziono URL: %s"
-                              args:
-                                - id(radio_cover_url).c_str()
-                          - online_image.set_url:
-                              id: img_radio_cover
-                              url: !lambda 'return id(radio_cover_url).c_str();'
-                        else:
-                          - logger.log: "RADIO COVER: brak wynikow z artworkUrl100"
-                  else:
-                    - logger.log:
-                        format: "iTunes search failed: HTTP %d"
-                        args:
-                          - response->status_code
-          on_error:
-            then:
-              - logger.log: "Nie udalo sie wyszukac okladki w iTunes"
 
 # ---------------------------------------------------------
 # Encje z Home Assistanta, ktorymi sterujemy
