@@ -4,6 +4,22 @@
 
 interval:
   # Lokalna animacja: pozycja z HA jest celem, a ESP32 gladko przesuwa skrzydlo.
+  # Sygnalizator: domyslnie swieci przy otwartej bramie i podczas otwierania,
+  # miga podczas zamykania (tryb AUTO jak w karcie HA).
+  - interval: 250ms
+    then:
+      - lvgl.obj.update:
+          id: gate_beacon
+          bg_opa: !lambda |-
+            if (!id(brama_ha_status).has_state()) return LV_OPA_TRANSP;
+            const std::string s = id(brama_ha_status).state;
+            const bool open = s == "Otwarta";
+            const bool opening = s.find("Otwieranie") != std::string::npos ||
+                                 s.find("Furtka") != std::string::npos;
+            const bool closing = s.find("Zamykanie") != std::string::npos;
+            if (!(open || opening || closing)) return LV_OPA_TRANSP;
+            if (closing && (((esphome::millis)() / 500) % 2) != 0) return LV_OPA_TRANSP;
+            return LV_OPA_COVER;
   - interval: 20ms
     then:
       - lambda: |-
