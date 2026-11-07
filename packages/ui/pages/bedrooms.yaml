@@ -113,7 +113,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Wlacz / Wylacz"
+                        text: "Włącz / Wyłącz"
                         text_font: font_ui_12
                   on_click:
                     - if:
@@ -191,7 +191,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Wschod"
+                        text: "Wschód"
                         text_font: font_ui_14
                   on_click:
                     - if:
@@ -202,7 +202,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Wschod"
+                                option: "Wschód"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_zachod
@@ -214,7 +214,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Zachod"
+                        text: "Zachód"
                         text_font: font_ui_14
                   on_click:
                     - if:
@@ -225,7 +225,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Zachod"
+                                option: "Zachód"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_tecza
@@ -237,7 +237,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Tecza"
+                        text: "Tęcza"
                         text_font: font_ui_14
                   on_click:
                     - if:
@@ -248,7 +248,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Tecza"
+                                option: "Tęcza"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_ognisko
@@ -386,7 +386,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Wlacz / Wylacz"
+                        text: "Włącz / Wyłącz"
                         text_font: font_ui_12
                   on_click:
                     - if:
@@ -397,7 +397,7 @@ lvgl:
                         - script.execute: confirm_click
               - label:
                   id: lbl_erni_brightness
-                  text: "Jasnosc"
+                  text: "Jasność"
                   x: 5
                   y: 34
                   text_font: font_ui_14
