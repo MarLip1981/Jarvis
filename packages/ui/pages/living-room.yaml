@@ -441,7 +441,7 @@ lvgl:
                   - script.execute: confirm_click
 
     # ------------------------------------------------------
-    # Salon > Radio - PLACEHOLDER
+    # Salon > Radio — ekran główny
     # ------------------------------------------------------
     - id: page_radio
       bg_color: 0x000000
@@ -458,161 +458,190 @@ lvgl:
       widgets:
         - label:
             text: "RADIO"
-            align: TOP_MID
+            x: 8
             y: 30
-            text_font: font_ui_18
+            text_font: font_ui_14
             text_color: 0xFFFFFF
+        - label:
+            id: lbl_radio_stacja
+            text: "..."
+            x: 78
+            y: 30
+            width: 154
+            text_font: font_ui_14
+            text_color: 0x42B6F5
+            long_mode: DOT
+
+        # Placeholder okładki na czas pierwszej próby układu.
         - obj:
-            x: 2
-            y: 62
-            width: 236
-            height: 200
-            bg_opa: TRANSP
-            border_width: 2
-            border_color: 0x333333
+            x: 60
+            y: 58
+            width: 120
+            height: 120
+            bg_color: 0x151B22
+            border_width: 1
+            border_color: 0x35414D
             radius: 8
-            pad_all: 2
             scrollable: false
             widgets:
               - label:
-                  id: lbl_radio_stacja
-                  text: "Stacja: ..."
-                  x: 0
-                  y: 0
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-              - label:
-                  id: lbl_radio_tytul
-                  text: "Utwór: ..."
-                  x: 0
-                  y: 20
-                  text_font: font_ui_12
-                  text_color: 0xAAAAAA
-              - label:
-                  id: lbl_radio_stan
-                  text: "Stan: ..."
-                  x: 0
-                  y: 38
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-                  recolor: true
-
-              - label:
-                  text: "\U000F057E"
-                  x: 0
-                  y: 60
+                  text: "\U000F0439"
+                  align: CENTER
                   text_font: icon_font_btn
-                  text_color: 0xCCCCCC
-              - label:
-                  id: lbl_radio_glosnosc
-                  text: "Głośność: ..."
-                  x: 26
-                  y: 65
-                  text_font: font_ui_14
-                  text_color: 0xCCCCCC
-              - slider:
-                  id: slider_radio_glosnosc
-                  x: 0
-                  y: 84
-                  width: 232
-                  height: 16
-                  min_value: 0
-                  max_value: 100
-                  value: 50
-                  on_release:
-                    then:
-                      - if:
-                          condition:
-                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                          then:
-                            - homeassistant.action:
-                                action: number.set_value
-                                data:
-                                  entity_id: number.salon_atlascube_radio_glosnosc
-                                data_template:
-                                  value: !lambda 'return std::to_string(lv_slider_get_value(id(slider_radio_glosnosc)));'
-                            - script.execute: confirm_click
+                  text_color: 0x526575
 
-              - button:
-                  x: 10
-                  y: 120
-                  width: 64
-                  height: 40
-                  bg_color: 0x333333
-                  pressed:
-                    bg_color: 0x00FF00
-                  widgets:
-                    - label:
-                        align: CENTER
-                        text: "\U000F0663"
-                        text_font: icon_font_btn
-                  on_click:
+        - label:
+            id: lbl_radio_tytul
+            text: "Oczekiwanie na utwór..."
+            x: 8
+            y: 185
+            width: 224
+            height: 22
+            text_font: font_ui_14
+            text_color: 0xFFFFFF
+            long_mode: SCROLL_CIRCULAR
+
+        - label:
+            id: lbl_radio_stan
+            text: "Stan: ..."
+            align: TOP_MID
+            y: 207
+            text_font: font_ui_12
+            text_color: 0x888888
+            recolor: true
+
+        - button:
+            x: 14
+            y: 229
+            width: 58
+            height: 42
+            bg_color: 0x202A33
+            border_width: 1
+            border_color: 0x35414D
+            radius: 8
+            pressed:
+              bg_color: 0x31546B
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "\U000F0663"
+                  text_font: icon_font_btn
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - homeassistant.action:
+                        action: button.press
+                        data:
+                          entity_id: button.atlascube_9140_previous
+                    - script.execute: confirm_click
+
+        - button:
+            id: btn_radio_playstop
+            x: 91
+            y: 225
+            width: 58
+            height: 50
+            bg_color: 0x176B9A
+            border_width: 1
+            border_color: 0x42B6F5
+            radius: 10
+            pressed:
+              bg_color: 0x2389BD
+            widgets:
+              - label:
+                  align: CENTER
+                  id: lbl_radio_playstop_icon
+                  text: "\U000F040C"
+                  text_font: icon_font_btn
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
                     - if:
                         condition:
-                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          lambda: 'return id(radio_is_playing);'
                         then:
                           - homeassistant.action:
                               action: button.press
                               data:
-                                entity_id: button.atlascube_9140_previous
-                          - script.execute: confirm_click
-              - button:
-                  id: btn_radio_playstop
-                  x: 84
-                  y: 120
-                  width: 64
-                  height: 40
-                  bg_color: 0x2196F3
-                  pressed:
-                    bg_color: 0x00FF00
-                  widgets:
-                    - label:
-                        align: CENTER
-                        id: lbl_radio_playstop_icon
-                        text: "\U000F040C"
-                        text_font: icon_font_btn
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                        then:
-                          - if:
-                              condition:
-                                lambda: 'return id(radio_is_playing);'
-                              then:
-                                - homeassistant.action:
-                                    action: button.press
-                                    data:
-                                      entity_id: button.atlascube_9140_stop
-                              else:
-                                - homeassistant.action:
-                                    action: button.press
-                                    data:
-                                      entity_id: button.atlascube_9140_play
-                          - script.execute: confirm_click
-              - button:
-                  x: 158
-                  y: 120
-                  width: 64
-                  height: 40
-                  bg_color: 0x333333
-                  pressed:
-                    bg_color: 0x00FF00
-                  widgets:
-                    - label:
-                        align: CENTER
-                        text: "\U000F0661"
-                        text_font: icon_font_btn
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                        then:
+                                entity_id: button.atlascube_9140_stop
+                        else:
                           - homeassistant.action:
                               action: button.press
                               data:
-                                entity_id: button.atlascube_9140_next
-                          - script.execute: confirm_click
+                                entity_id: button.atlascube_9140_play
+                    - script.execute: confirm_click
+
+        - button:
+            x: 168
+            y: 229
+            width: 58
+            height: 42
+            bg_color: 0x202A33
+            border_width: 1
+            border_color: 0x35414D
+            radius: 8
+            pressed:
+              bg_color: 0x31546B
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "\U000F0661"
+                  text_font: icon_font_btn
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - homeassistant.action:
+                        action: button.press
+                        data:
+                          entity_id: button.atlascube_9140_next
+                    - script.execute: confirm_click
+
+        - label:
+            text: "GŁOŚNOŚĆ"
+            x: 8
+            y: 282
+            text_font: font_ui_12
+            text_color: 0xAAB4BE
+        - label:
+            id: lbl_radio_glosnosc
+            text: "--"
+            x: 150
+            y: 282
+            width: 82
+            text_align: RIGHT
+            text_font: font_ui_12
+            text_color: 0xFFFFFF
+        - slider:
+            id: slider_radio_glosnosc
+            x: 8
+            y: 301
+            width: 224
+            height: 12
+            min_value: 0
+            max_value: 100
+            value: 50
+            on_release:
+              then:
+                - if:
+                    condition:
+                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                    then:
+                      - homeassistant.action:
+                          action: number.set_value
+                          data:
+                            entity_id: number.salon_atlascube_radio_glosnosc
+                          data_template:
+                            value: !lambda 'return std::to_string(lv_slider_get_value(id(slider_radio_glosnosc)));'
+                      - script.execute: confirm_click
 
     # ------------------------------------------------------
     # Sypialnia
