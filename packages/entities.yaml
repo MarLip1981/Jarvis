@@ -746,7 +746,7 @@ text_sensor:
                   return std::string("OŚWIETLENIE WŁ.");
                 return std::string("OŚWIETLENIE WYŁ.");
               }
-              return x == "Otwarta" ? std::string("FURTKA / ZAMKNIJ") : std::string("FURTKA / OTWÓRZ");
+              return x == "Otwarta" ? std::string("FURTKA ZAMKNIJ") : std::string("FURTKA OTWÓRZ");
         - lvgl.label.update:
             id: lbl_pulpit_brama_status
             text: !lambda |-
