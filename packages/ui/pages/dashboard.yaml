@@ -68,7 +68,7 @@ lvgl:
                   text_color: 0x888888
               - label:
                   id: lbl_pulpit_radio
-                  text: "Radio: --  * --"
+                  text: "Radio:   --  * --"
                   x: 30
                   y: 2
                   width: 184
@@ -149,7 +149,7 @@ lvgl:
                   text_color: 0x888888
               - label:
                   id: lbl_pulpit_piec
-                  text: "Piec: ..."
+                  text: "Piec:   ..."
                   x: 30
                   y: 5
                   text_font: font_ui_14
@@ -174,7 +174,7 @@ lvgl:
             text_color: 0x888888
         - label:
             id: lbl_pulpit_drzwi
-            text: "Drzwi: ..."
+            text: "Drzwi:   ..."
             x: 34
             y: 180
             text_font: font_ui_14
