@@ -20,12 +20,12 @@ sensor:
                   id: lbl_radio_glosnosc
                   text: !lambda |-
                     char buf[24];
-                    snprintf(buf, sizeof(buf), "Głośność: %d", (int) x);
+                    snprintf(buf, sizeof(buf), "Głośność %d", (int) x);
                     return std::string(buf);
             else:
               - lvgl.label.update:
                   id: lbl_radio_glosnosc
-                  text: "Głośność: --"
+                  text: "Głośność --"
 
   - platform: homeassistant
     id: salon_brightness_attr
