@@ -316,7 +316,7 @@ sensor:
                             status.find("Zamykanie") != std::string::npos ? "zamykanie" : "otwieranie",
                             x);
                           return std::string(buf);
-                        text_color: 16755200;
+                        text_color: 0xFFAA00
 
   - platform: wifi_signal
     id: wifi_db
