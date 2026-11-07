@@ -47,18 +47,38 @@ lvgl:
             bg_opa: COVER
             border_width: 0
             radius: 0
-        # Jednowierszowy pasek radia pod separatorem.
-        # Tekst zachowuje oryginalne polskie znaki; font_radio_12 zawiera pelny zestaw glifow.
-        - label:
-            id: lbl_pulpit_radio
-            text: "RADIO > --  * --"
-            x: 15
-            y: 112
-            width: 210
-            height: 18
-            text_font: font_radio_12
-            text_color: 0xAAAAAA
-            long_mode: SCROLL_CIRCULAR
+        # Klikalny, jednowierszowy pasek radia. Tekst przewija sie wewnatrz przycisku.
+        - button:
+            id: btn_pulpit_radio
+            x: 10
+            y: 110
+            width: 220
+            height: 22
+            bg_opa: TRANSP
+            border_width: 0
+            shadow_width: 0
+            pad_all: 0
+            widgets:
+              - label:
+                  id: lbl_pulpit_radio
+                  text: "RADIO > --  * --"
+                  x: 5
+                  y: 2
+                  width: 210
+                  height: 18
+                  text_font: font_radio_12
+                  text_color: 0xAAAAAA
+                  long_mode: SCROLL_CIRCULAR
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_radio
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
         # Podsumowanie oswietlenia - dotkniecie otwiera liste aktualnie wlaczonych lamp.
         - button:
             id: btn_pulpit_lights
@@ -77,7 +97,7 @@ lvgl:
                   x: 5
                   y: 1
                   text_font: icon_font_btn
-                  text_color: 0xFF0000
+                  text_color: 0x888888
               - label:
                   text: "Światła"
                   x: 32
@@ -86,7 +106,7 @@ lvgl:
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_pulpit_lamps
-                  text: "#00DD66 0#"
+                  text: "#888888 0#"
                   x: 112
                   y: 3
                   text_font: font_ui_14
@@ -108,7 +128,7 @@ lvgl:
             x: 15
             y: 159
             text_font: icon_font_btn
-            text_color: 0x666666
+            text_color: 0x888888
         - label:
             id: lbl_pulpit_piec
             text: "Piec: ..."
@@ -117,13 +137,33 @@ lvgl:
             text_font: font_ui_14
             text_color: 0xFFFFFF
             recolor: true
+        - button:
+            id: btn_pulpit_piec
+            x: 10
+            y: 158
+            width: 220
+            height: 24
+            bg_opa: TRANSP
+            border_width: 0
+            shadow_width: 0
+            pad_all: 0
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_piec
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
         - label:
             id: lbl_drzwi_icon
             text: "\U000F081B"
             x: 15
             y: 184
             text_font: icon_font_btn
-            text_color: 0x00FF00
+            text_color: 0x888888
         - label:
             id: lbl_pulpit_drzwi
             text: "Drzwi: ..."
