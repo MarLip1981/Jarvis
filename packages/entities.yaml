@@ -693,7 +693,14 @@ text_sensor:
               return lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_pulpit_brama_status
-            text: !lambda 'return x;'
+            text: !lambda |-
+              if (x == "Otwarta") return std::string("otwarta");
+              if (x == "Zatrzymanie Awaryjne!") return std::string("awaria");
+              if (x.find("Otwieranie") != std::string::npos ||
+                  x.find("Zamykanie") != std::string::npos ||
+                  x.find("Furtka") != std::string::npos) return std::string("w ruchu");
+              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0) return std::string("zamknięta");
+              return std::string("--");
             text_color: !lambda |-
               if (x == "Otwarta" || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
               if (x.find("Otwieranie") != std::string::npos ||
