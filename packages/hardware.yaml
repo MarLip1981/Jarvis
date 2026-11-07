@@ -41,43 +41,50 @@ font:
   # z tego samego pliku TTF, aby polskie glify mialy identyczny kroj i metryki.
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_gate_14
-    size: 15
+    size: 16
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_radio_12
-    size: 13
+    size: 14
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_12
-    size: 13
+    size: 14
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_14
-    size: 15
+    size: 16
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_18
-    size: 19
+    size: 20
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_24
-    size: 25
+    size: 26
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_40
-    size: 41
+    size: 42
+    bpp: 4
     glyphs:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ'
 
