@@ -21,7 +21,7 @@ lvgl:
             text: "SALON"
             align: TOP_MID
             y: 30
-            text_font: montserrat_24
+            text_font: font_ui_24
             text_color: 0xFFFFFF
         - button:
             x: 10
@@ -135,7 +135,7 @@ lvgl:
             text: "SALON - LAMPA"
             align: TOP_MID
             y: 30
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xFFFFFF
         - obj:
             x: 2
@@ -161,7 +161,7 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Wlacz / Wylacz"
-                        text_font: montserrat_12
+                        text_font: font_ui_12
                   on_click:
                     - if:
                         condition:
@@ -177,7 +177,7 @@ lvgl:
                   text: "Stan: ..."
                   x: 0
                   y: 34
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
 
@@ -186,7 +186,7 @@ lvgl:
                   text: "Jasnosc"
                   x: 5
                   y: 58
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_salon_brightness
@@ -215,7 +215,7 @@ lvgl:
                   text: "--"
                   x: 15
                   y: 184
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
 
               - label:
@@ -223,7 +223,7 @@ lvgl:
                   text: "Barwa"
                   x: 125
                   y: 58
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_salon_colortemp
@@ -252,7 +252,7 @@ lvgl:
                   text: "--"
                   x: 148
                   y: 184
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
 
               # --- Gotowe kolory (zamiast dotykowej palety - prostsze
@@ -261,7 +261,7 @@ lvgl:
                   text: "Kolor"
                   x: 5
                   y: 208
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xCCCCCC
               - button:
                   x: 0
@@ -356,14 +356,14 @@ lvgl:
             text: "TELEWIZOR"
             align: TOP_MID
             y: 30
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xFFFFFF
         - label:
             id: lbl_tv_status
             text: "Stan: ..."
             align: TOP_MID
             y: 62
-            text_font: montserrat_14
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - button:
             x: 60
@@ -382,7 +382,7 @@ lvgl:
               - label:
                   text: "Zasilanie"
                   align: CENTER
-                  text_font: montserrat_14
+                  text_font: font_ui_14
             on_click:
               - if:
                   condition:
@@ -405,7 +405,7 @@ lvgl:
               - label:
                   align: CENTER
                   text: "Vol -"
-                  text_font: montserrat_18
+                  text_font: font_ui_18
             on_click:
               - if:
                   condition:
@@ -428,7 +428,7 @@ lvgl:
               - label:
                   align: CENTER
                   text: "Vol +"
-                  text_font: montserrat_18
+                  text_font: font_ui_18
             on_click:
               - if:
                   condition:
@@ -460,7 +460,7 @@ lvgl:
             text: "RADIO"
             align: TOP_MID
             y: 30
-            text_font: montserrat_18
+            text_font: font_ui_18
             text_color: 0xFFFFFF
         - obj:
             x: 2
@@ -479,21 +479,21 @@ lvgl:
                   text: "Stacja: ..."
                   x: 0
                   y: 0
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_radio_tytul
                   text: "Utwor: ..."
                   x: 0
                   y: 20
-                  text_font: montserrat_12
+                  text_font: font_ui_12
                   text_color: 0xAAAAAA
               - label:
                   id: lbl_radio_stan
                   text: "Stan: ..."
                   x: 0
                   y: 38
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
 
@@ -508,7 +508,7 @@ lvgl:
                   text: "Glosnosc: ..."
                   x: 26
                   y: 65
-                  text_font: montserrat_14
+                  text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_radio_glosnosc
