@@ -153,7 +153,7 @@ interval:
             lv_label_set_text(id(lbl_pulpit_lamps), "#00DD66 0#");
           } else {
             char count_text[32];
-            snprintf(count_text, sizeof(count_text), "#FFAA00 %d włączone#", on_count);
+            snprintf(count_text, sizeof(count_text), on_count == 1 ? "#FFAA00 1 włączona#" : "#FFAA00 %d włączone#", on_count);
             lv_label_set_text(id(lbl_pulpit_lamps), count_text);
           }
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
