@@ -175,7 +175,7 @@ lvgl:
           # --- Ikonka baterii: rzeczywisty pomiar ADC GPIO35.
           # Wypelnienie i kolor sa aktualizowane przez sensor battery_percent. ---
           - label:
-              id: lbl_battery_pct
+              id: lbl_battery_percent_text_jarvis
               text: "75%"
               x: 172
               y: 3
