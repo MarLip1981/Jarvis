@@ -85,7 +85,7 @@ lvgl:
           - label:
               id: lbl_arrow_up
               text: "\U000F0360"
-              x: 49
+              x: 44
               y: -1
               text_font: icon_font_bar
               text_color: 0x00FFFF
@@ -93,7 +93,7 @@ lvgl:
           - label:
               id: lbl_arrow_down
               text: "\U000F035D"
-              x: 62
+              x: 53
               y: -1
               text_font: icon_font_bar
               text_color: 0x00FFFF
