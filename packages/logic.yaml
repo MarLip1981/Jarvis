@@ -142,7 +142,7 @@ script:
           hidden: true
 
   # Wskaźnik odbioru: miga po aktualizacji dowolnej encji HA używanej przez Jarvisa.
-  # Tryb restart utrzymuje strzałkę widoczną przez 300 ms od ostatniej aktualizacji.
+  # Tryb restart utrzymuje strzałkę widoczną przez 750 ms od ostatniej aktualizacji.
   - id: ha_rx_flash
     mode: restart
     then:
