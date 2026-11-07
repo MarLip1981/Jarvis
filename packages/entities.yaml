@@ -533,7 +533,6 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_radio_tytul
             text: !lambda 'return x;'
-        - script.execute: radio_cover_lookup
         - lvgl.label.update:
             id: lbl_pulpit_radio
             text: !lambda |-
