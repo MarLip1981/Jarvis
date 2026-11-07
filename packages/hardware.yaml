@@ -9,6 +9,11 @@ esp32:
 
 captive_portal:
 
+# Pobieranie okładek iTunes dla ekranu radia.
+http_request:
+  timeout: 4.5s
+
+
 logger:
 
 ota:
@@ -35,6 +40,19 @@ image:
     id: img_ironman
     type: RGB565
     resize: 240x360
+  - platform: online_image
+    url: "https://example.com/radio-cover.jpg"
+    id: img_radio_cover
+    format: JPEG
+    type: RGB565
+    resize: 120x120
+    on_download_finished:
+      then:
+        - lvgl.widget.hide: lbl_radio_cover_placeholder
+        - lvgl.widget.show: img_radio_cover_widget
+    on_error:
+      then:
+        - logger.log: "Nie udalo sie pobrac okładki radia"
 
 font:
   # Jedno zrodlo Montserrat Regular (Latin + Latin Extended); wszystkie rozmiary korzystaja
@@ -125,12 +143,13 @@ font:
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
-    size: 26
+    size: 32
     glyphs:
       - "\U000F040C" # play
       - "\U000F0666" # stop
       - "\U000F0663" # poprzednia stacja
       - "\U000F0661" # nastepna stacja
+      - "\U000F0439" # radio - placeholder okladki
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_title
