@@ -103,7 +103,7 @@ lvgl:
               id: lbl_clock
               text: "--:--:--"
               align: CENTER
-              y: 0
+              y: -3
               text_font: font_ui_18
               text_color: 0xFFFFFF
 
@@ -115,7 +115,7 @@ lvgl:
           - button:
               id: lbl_ha_tap_btn
               x: 155
-              y: 0
+              y: -3
               width: 44
               height: 30
               bg_opa: TRANSP
@@ -197,7 +197,7 @@ lvgl:
               id: battery_fill
               x: 202
               y: 7
-              width: 0
+              width: 17
               height: 9
               bg_color: 0x00FF00
               bg_opa: COVER
@@ -205,11 +205,11 @@ lvgl:
               radius: 0
           - label:
               id: lbl_battery_pct
-              text: "n/a"
-              x: 205
-              y: 19
+              text: "75%"
+              x: 201
+              y: 3
               text_font: font_ui_12
-              text_color: 0x666666
+              text_color: 0xFFFFFF
       - label:
           id: lbl_easter_countdown
           text: ""
