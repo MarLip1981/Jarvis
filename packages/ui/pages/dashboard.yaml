@@ -21,7 +21,7 @@ lvgl:
             id: lbl_pulpit_day
             text: "---"
             align: TOP_MID
-            y: 30
+            y: 24
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
