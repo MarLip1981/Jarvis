@@ -118,7 +118,7 @@ script:
             else snprintf(hum, sizeof(hum), "--");
             if (!std::isnan(id(cache_outdoor_temp))) snprintf(t_out, sizeof(t_out), "%.1f", id(cache_outdoor_temp));
             else snprintf(t_out, sizeof(t_out), "--.-");
-            snprintf(buf, sizeof(buf), "%sC  %s%%  Zewn %sC", t_in, hum, t_out);
+            snprintf(buf, sizeof(buf), "%s°C  %s%%  Zewnątrz %s°C", t_in, hum, t_out);
             return std::string(buf);
 
   # Wskaźnik wysyłania: potwierdza akcję wywołaną z interfejsu.
