@@ -168,7 +168,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Bialy"
+                        text: "Biały"
                         text_font: font_ui_14
                   on_click:
                     - if:
@@ -202,7 +202,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Wschód"
+                                option: "Wschod"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_zachod
@@ -225,7 +225,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Zachód"
+                                option: "Zachod"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_tecza
@@ -248,7 +248,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Tęcza"
+                                option: "Tecza"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_ognisko
