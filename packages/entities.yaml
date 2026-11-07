@@ -860,7 +860,7 @@ text_sensor:
   - platform: homeassistant
     id: brama_lighting_enabled
     entity_id: sensor.brama_przesuwna_bft_jarvis
-    attribute: entrance_lighting_enabled
+    attribute: entrance_lighting_enabled_text
     on_value:
       then:
         - lvgl.obj.update:
