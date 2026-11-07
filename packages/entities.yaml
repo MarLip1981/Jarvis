@@ -351,7 +351,12 @@ binary_sensor:
             hidden: !lambda 'return !x;'
         - lvgl.obj.update:
             id: btn_brama_karta_pedestrian
-            hidden: !lambda 'return !x;'
+            hidden: !lambda 'return !x && (!id(brama_lighting_enabled).has_state() || id(brama_lighting_enabled).state != "true");'
+        - lvgl.label.update:
+            id: lbl_brama_aux_button
+            text: !lambda |-
+              if (x) return std::string("FURTKA");
+              return std::string("OŚWIETLENIE");
   - platform: homeassistant
     id: brama_photocell
     entity_id: binary_sensor.wjazd_brama_wjazdowa_fotokomorka_przeszkoda
@@ -359,10 +364,23 @@ binary_sensor:
       then:
         - lvgl.obj.update:
             id: lbl_brama_warning
-            hidden: !lambda 'return !x;'
+            hidden: !lambda 'return !x && (!id(brama_manual_lock_state).has_state() || id(brama_manual_lock_state).state != "on");'
+        - lvgl.label.update:
+            id: lbl_brama_warning
+            text: !lambda |-
+              const bool lock = id(brama_manual_lock_state).has_state() && id(brama_manual_lock_state).state == "on";
+              return lock ? (x ? std::string("FOTOKOMÓRKA + BLOKADA") : std::string("BLOKADA ZAMKNIĘCIA")) : std::string("UWAGA: FOTOKOMÓRKA");
+            text_color: !lambda |-
+              return (id(brama_manual_lock_state).has_state() && id(brama_manual_lock_state).state == "on")
+                ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);
         - lvgl.obj.update:
             id: lbl_brama_warning_icon
-            hidden: !lambda 'return !x;'
+            hidden: !lambda 'return !x && (!id(brama_manual_lock_state).has_state() || id(brama_manual_lock_state).state != "on");'
+        - lvgl.label.update:
+            id: lbl_brama_warning_icon
+            text_color: !lambda |-
+              return (id(brama_manual_lock_state).has_state() && id(brama_manual_lock_state).state == "on")
+                ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);
   - platform: homeassistant
     id: state_salon_lampka
     entity_id: light.salon_lampka
@@ -775,6 +793,79 @@ text_sensor:
     id: brama_pedestrian_button_entity
     entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: pedestrian_button_entity
+  - platform: homeassistant
+    id: brama_manual_lock_entity
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: manual_lock_entity
+  - platform: homeassistant
+    id: brama_manual_lock_state
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: manual_lock_state
+    on_value:
+      then:
+        - lvgl.obj.update:
+            id: lbl_brama_warning
+            hidden: !lambda 'return x != "on" && (!id(brama_photocell).has_state() || !id(brama_photocell).state);'
+        - lvgl.obj.update:
+            id: lbl_brama_warning_icon
+            hidden: !lambda 'return x != "on" && (!id(brama_photocell).has_state() || !id(brama_photocell).state);'
+        - lvgl.label.update:
+            id: lbl_brama_warning
+            text: !lambda |-
+              const bool photo = id(brama_photocell).has_state() && id(brama_photocell).state;
+              return photo ? (x == "on" ? std::string("FOTOKOMÓRKA + BLOKADA") : std::string("UWAGA: FOTOKOMÓRKA"))
+                           : std::string("BLOKADA ZAMKNIĘCIA");
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);'
+        - lvgl.label.update:
+            id: lbl_brama_warning_icon
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);'
+  - platform: homeassistant
+    id: brama_entrance_lighting_entity
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: entrance_lighting_entity
+  - platform: homeassistant
+    id: brama_entrance_lighting_state
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: entrance_lighting_state
+  - platform: homeassistant
+    id: brama_lighting_enabled
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: entrance_lighting_enabled
+    on_value:
+      then:
+        - lvgl.obj.update:
+            id: btn_brama_karta_pedestrian
+            hidden: !lambda 'return x != "true" && !id(brama_pedestrian_enabled).state;'
+        - lvgl.label.update:
+            id: lbl_brama_aux_button
+            text: !lambda |-
+              return id(brama_pedestrian_enabled).state ? std::string("FURTKA") : std::string("OŚWIETLENIE");
+  - platform: homeassistant
+    id: brama_gate_button_event
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: gate_button_event_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_brama_gate_event
+            text: !lambda |-
+              if (x == "unknown" || x.empty()) return std::string("Brama: brak danych");
+              return std::string("Brama: ") + x;
+  - platform: homeassistant
+    id: brama_wicket_button_event
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: wicket_button_event_state
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_brama_wicket_event
+            text: !lambda |-
+              if (x == "unknown" || x.empty()) return std::string("Furtka: brak danych");
+              return std::string("Furtka: ") + x;
+  - platform: homeassistant
+    id: brama_lamp_mode
+    entity_id: sensor.brama_przesuwna_bft_jarvis
+    attribute: lamp_mode
 
 button:
   - platform: template
