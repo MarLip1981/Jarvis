@@ -600,12 +600,19 @@ text_sensor:
                 : (x == "STANDBY")
                   ? std::string("#00FF00 CZUWA#")
                   : std::string("#888888 --");
+
+  - platform: homeassistant
+    id: piec_hvac_mode
+    entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
+    on_value:
+      then:
+        - script.execute: ha_rx_flash
         - lvgl.button.update:
             id: btn_piec_auto
-            bg_color: !lambda 'return (x == "HEATING") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "auto") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
         - lvgl.button.update:
             id: btn_piec_off
-            bg_color: !lambda 'return (x == "STANDBY") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
+            bg_color: !lambda 'return (x == "off") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
 
   - platform: homeassistant
     id: cwu_mode
