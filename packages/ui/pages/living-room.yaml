@@ -485,6 +485,7 @@ lvgl:
             scrollable: false
             widgets:
               - label:
+                  id: lbl_radio_cover_placeholder
                   text: "\U000F0439"
                   align: CENTER
                   text_font: icon_font_radio
