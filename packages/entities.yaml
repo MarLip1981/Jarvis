@@ -544,29 +544,6 @@ text_sensor:
               return std::string("Radio:   ") + station + "  * " + track;
 
   - platform: homeassistant
-    id: radio_cover_url
-    entity_id: sensor.atlascube_radio_cover_url
-    on_value:
-      then:
-        - script.execute: ha_rx_flash
-        - if:
-            condition:
-              lambda: 'return x.empty() || x == "none" || x == "unknown" || x == "unavailable";'
-            then:
-              - online_image.release: img_radio_cover
-              - lvgl.widget.hide: img_radio_cover_widget
-              - lvgl.widget.show: lbl_radio_cover_placeholder
-            else:
-              - online_image.release: img_radio_cover
-              - lvgl.widget.hide: img_radio_cover_widget
-              - lvgl.widget.show: lbl_radio_cover_placeholder
-              - online_image.set_url:
-                  id: img_radio_cover
-                  url: !lambda |-
-                    return std::string("http://192.168.1.100:8123") + x;
-                  update: true
-
-  - platform: homeassistant
     id: radio_stan
     entity_id: sensor.atlascube_9140_playback
     on_value:
