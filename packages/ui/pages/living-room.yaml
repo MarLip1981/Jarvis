@@ -474,6 +474,7 @@ lvgl:
 
         # Placeholder okładki na czas pierwszej próby układu.
         - obj:
+            id: obj_radio_cover_placeholder
             x: 60
             y: 58
             width: 120
@@ -490,6 +491,15 @@ lvgl:
                   align: CENTER
                   text_font: icon_font_radio
                   text_color: 0x526575
+        # Obraz pobierany z lokalnego cache HA; ukryty do czasu sukcesu.
+        - image:
+            id: img_radio_cover_widget
+            src: img_radio_cover
+            x: 60
+            y: 58
+            width: 120
+            height: 120
+            hidden: true
         - label:
             id: lbl_radio_tytul
             text: "Oczekiwanie na utwór..."
