@@ -27,41 +27,14 @@ time:
           id: lbl_arrow_down
           hidden: true
 
-# Lokalne pobieranie okładek radia z Home Assistanta (bez HTTPS / iTunes na ESP32).
-# Karta AtlasCube zapisuje wybraną okładkę w HA; Jarvis pobiera gotowy JPEG po LAN.
-http_request:
-  timeout: 8s
-  verify_ssl: false
-  follow_redirects: true
-  redirect_limit: 3
-  useragent: "JARVIS-AtlasCube/1.0"
-
-# Obrazki: Iron Man osadzony przy kompilacji + dynamiczna okładka radia.
+# Obrazek Iron Man do easter egga - ESPHome pobiera go z GitHuba
+# PRZY KOMPILACJI (nie trzeba trzymac zadnych danych lokalnie w YAML)
 image:
   - platform: file
     file: "https://raw.githubusercontent.com/MarLip1981/Jarvis/main/Iron%20man%20Phone%20Wallpapers.jpeg"
     id: img_ironman
     type: RGB565
     resize: 240x360
-  - platform: online_image
-    id: img_radio_cover
-    url: "http://192.168.1.100:8123/local/atlascube-radio-covers/none.jpg"
-    format: JPEG
-    type: RGB565
-    resize: 120x120
-    buffer_size: 8192
-    update_interval: never
-    on_download_finished:
-      then:
-        - lvgl.widget.show: img_radio_cover_widget
-        - lvgl.widget.hide: lbl_radio_cover_placeholder
-    on_error:
-      then:
-        - logger.log:
-            level: WARN
-            format: "Nie udało się pobrać lokalnej okładki radia"
-        - lvgl.widget.hide: img_radio_cover_widget
-        - lvgl.widget.show: lbl_radio_cover_placeholder
 font:
   # Jedno zrodlo Montserrat Regular (Latin + Latin Extended); wszystkie rozmiary korzystaja
   # z tego samego pliku TTF, aby polskie glify mialy identyczny kroj i metryki.
