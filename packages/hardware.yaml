@@ -27,6 +27,11 @@ time:
           id: lbl_arrow_down
           hidden: true
 
+# Lokalny odbiór okładek z cache Home Assistant.
+http_request:
+  timeout: 8s
+  follow_redirects: true
+
 # Obrazek Iron Man do easter egga - ESPHome pobiera go z GitHuba
 # PRZY KOMPILACJI (nie trzeba trzymac zadnych danych lokalnie w YAML)
 image:
@@ -35,6 +40,22 @@ image:
     id: img_ironman
     type: RGB565
     resize: 240x360
+  # Okładka radia pobierana dopiero po otrzymaniu lokalnego URL z HA.
+  - platform: online_image
+    id: img_radio_cover
+    url: "http://192.168.1.100/local/atlascube-radio-covers-test/none.jpg"
+    format: JPEG
+    type: RGB565
+    resize: 120x120
+    buffer_size: 8192
+    on_download_finished:
+      then:
+        - lvgl.widget.hide: obj_radio_cover_placeholder
+        - lvgl.widget.show: img_radio_cover_widget
+    on_error:
+      then:
+        - lvgl.widget.show: obj_radio_cover_placeholder
+        - lvgl.widget.hide: img_radio_cover_widget
 font:
   # Jedno zrodlo Montserrat Regular (Latin + Latin Extended); wszystkie rozmiary korzystaja
   # z tego samego pliku TTF, aby polskie glify mialy identyczny kroj i metryki.
