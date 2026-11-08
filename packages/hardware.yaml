@@ -57,7 +57,9 @@ image:
         - lvgl.widget.hide: lbl_radio_cover_placeholder
     on_error:
       then:
-        - logger.warning: "Nie udało się pobrać lokalnej okładki radia"
+        - logger.log:
+            level: WARN
+            format: "Nie udało się pobrać lokalnej okładki radia"
         - lvgl.widget.hide: img_radio_cover_widget
         - lvgl.widget.show: lbl_radio_cover_placeholder
 font:
