@@ -490,6 +490,11 @@ lvgl:
                   align: CENTER
                   text_font: icon_font_radio
                   text_color: 0x526575
+               - image:
+                   id: img_radio_cover_widget
+                   src: img_radio_cover
+                   align: CENTER
+                   hidden: true
         - label:
             id: lbl_radio_tytul
             text: "Oczekiwanie na utwór..."
