@@ -543,6 +543,28 @@ text_sensor:
               if (track.empty()) track = "--";
               return std::string("Radio:   ") + station + "  * " + track;
 
+  # URL okładki z działającej integracji AtlasCube TEST 0.5.3.
+  - platform: homeassistant
+    id: radio_cover_url
+    entity_id: sensor.atlascube_radio_cover_url_test
+    internal: true
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return x.empty() || x == "none";'
+            then:
+              - online_image.release: img_radio_cover
+              - lvgl.widget.hide: img_radio_cover_widget
+              - lvgl.widget.show: obj_radio_cover_placeholder
+            else:
+              - lvgl.widget.show: obj_radio_cover_placeholder
+              - lvgl.widget.hide: img_radio_cover_widget
+              - online_image.set_url:
+                  id: img_radio_cover
+                  url: !lambda |-
+                    return std::string("http://192.168.1.100") + x;
+
   - platform: homeassistant
     id: radio_stan
     entity_id: sensor.atlascube_9140_playback
