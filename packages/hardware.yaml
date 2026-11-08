@@ -47,6 +47,7 @@ image:
     format: JPEG
     type: RGB565
     resize: 120x120
+    update_interval: never
     buffer_size: 8192
     on_download_finished:
       then:
