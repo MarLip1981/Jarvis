@@ -552,7 +552,7 @@ text_sensor:
       then:
         - if:
             condition:
-              lambda: 'return x.empty() || x == "none";'
+              lambda: 'return x.rfind("/local/atlascube-radio-covers-test/", 0) != 0;'
             then:
               - online_image.release: img_radio_cover
               - lvgl.widget.hide: img_radio_cover_widget
