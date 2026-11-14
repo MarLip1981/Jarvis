@@ -46,7 +46,7 @@ image:
     url: "http://192.168.1.100/local/atlascube-radio-covers-test/none.jpg"
     format: JPEG
     type: RGB565
-    resize: 120x120
+    resize: 64x64
     update_interval: never
     buffer_size: 8192
     on_download_finished:
