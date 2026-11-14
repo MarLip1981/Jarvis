@@ -102,17 +102,17 @@ lvgl:
               - label:
                   id: lbl_pulpit_lamps_icon
                   text: "\U000F0E50"
-                  x: 10
+                  x: 8
                   y: 2
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
                   text: "ŚWIATŁA:"
-                  x: 32
+                  x: 34
                   y: 5
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  text_align: CENTER
+                  text_align: LEFT
               - label:
                   id: lbl_pulpit_lamps
                   text: "#888888 0#"
@@ -121,7 +121,7 @@ lvgl:
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
-                  text_align: CENTER
+                  text_align: LEFT
             on_click:
               - if:
                   condition:
@@ -144,7 +144,7 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  x: 4
+                  x: 8
                   align: LEFT_MID
                   id: lbl_piec_icon
                   text: "\U000F0238"
@@ -154,13 +154,13 @@ lvgl:
                   height: 20
                   id: lbl_pulpit_piec
                   text: "PIEC:   ..."
-                  x: 32
+                  x: 34
                   y: 2
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
                   width: 180
-                  text_align: CENTER
+                  text_align: LEFT
             on_click:
               - if:
                   condition:
