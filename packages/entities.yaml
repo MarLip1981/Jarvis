@@ -391,9 +391,9 @@ binary_sensor:
             id: btn_lampy_salon
             hidden: !lambda 'return !x;'
         - lvgl.label.update:
-            id: lbl_salon_lampka_status
+            id: lbl_salon_lamp_state
             text: !lambda |-
-              return x ? std::string("Stan: #00FF00 WŁĄCZONA#") : std::string("Stan: #FF0000 wyłączona#");
+              return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
         - lvgl.label.update:
             id: lbl_salon_glowna_icon
             text: !lambda |-
