@@ -195,6 +195,13 @@ interval:
           if (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) on_count++;
           if (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) on_count++;
           if (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) on_count++;
+          // Widocznosc listy synchronizowana okresowo, takze po starcie i reconnect API.
+          if (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) lv_obj_clear_flag(id(btn_lampy_salon), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_add_flag(id(btn_lampy_salon), LV_OBJ_FLAG_HIDDEN);
+          if (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) lv_obj_clear_flag(id(btn_lampy_sypialnia), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_add_flag(id(btn_lampy_sypialnia), LV_OBJ_FLAG_HIDDEN);
+          if (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) lv_obj_clear_flag(id(btn_lampy_erni), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_add_flag(id(btn_lampy_erni), LV_OBJ_FLAG_HIDDEN);
           if (on_count == 0) {
             lv_label_set_text(id(lbl_pulpit_lamps), "#888888 0#");
           } else {
@@ -213,12 +220,25 @@ interval:
       # urzadzenia przycisk pokazuje prawdziwy stan od razu, bez
       # koniecznosci najpierw go klikniecia ---
       - lvgl.label.update:
+          id: lbl_salon_glowna_text
+          text: !lambda |-
+            if (!id(state_salon_lampka).has_state()) return std::string("Lampa: ...");
+            return id(state_salon_lampka).state ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
+          text_color: !lambda |-
+            return (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
+      - lvgl.label.update:
+          id: lbl_salon_glowna_icon
+          text: !lambda |-
+            return (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) ? std::string("\U000F0335") : std::string("\U000F0E50");
+          text_color: !lambda |-
+            return (id(state_salon_lampka).has_state() && id(state_salon_lampka).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
+      - lvgl.label.update:
           id: lbl_sypialnia_lampa
           text: !lambda |-
             if (!id(state_sypialnia_lampa).has_state()) return std::string("Lampa: ...");
             return id(state_sypialnia_lampa).state ? std::string("Lampa: #00FF00 WŁĄCZONA#") : std::string("Lampa: #888888 wyłączona#");
           text_color: !lambda |-
-            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
+            return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_sypialnia_lampa_icon
           text: !lambda |-
@@ -231,7 +251,7 @@ interval:
             if (!id(state_erni_lampa).has_state()) return std::string("Lampa: ...");
             return id(state_erni_lampa).state ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
+            return (id(state_erni_lampa).has_state() && id(state_erni_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_erni_lampa_icon
           text: !lambda |-
