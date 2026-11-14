@@ -488,6 +488,89 @@ lvgl:
             text_color: 0x666666
 
     # ------------------------------------------------------
+    # Diagnostyka - dodatkowa strona testowa za placeholderem oswietlenia
+    # ------------------------------------------------------
+    - id: page_diagnostyka
+      bg_color: 0x000000
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_zewnetrzne
+            animation: MOVE_RIGHT
+            time: 300ms
+      widgets:
+        - label:
+            text: "DIAGNOSTYKA"
+            align: TOP_MID
+            y: 35
+            text_font: font_ui_24
+            text_color: 0xFFFFFF
+        - label:
+            text: "Test obrazu z GitHuba"
+            align: TOP_MID
+            y: 75
+            text_font: font_ui_14
+            text_color: 0x888888
+        - button:
+            id: btn_test_github_image
+            x: 20
+            y: 125
+            width: 200
+            height: 55
+            pad_all: 0
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "POKAŻ OBRAZ"
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_test_github
+                        animation: MOVE_LEFT
+                        time: 300ms
+                    - script.execute: confirm_click
+
+    # ------------------------------------------------------
+    # Test wyswietlania obrazu pobranego z GitHuba podczas kompilacji
+    # ------------------------------------------------------
+    - id: page_test_github
+      bg_color: 0x000000
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_diagnostyka
+            animation: MOVE_RIGHT
+            time: 300ms
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_diagnostyka
+            animation: MOVE_LEFT
+            time: 300ms
+      widgets:
+        - image:
+            id: test_github_image_widget
+            x: 0
+            y: -20
+            src: img_ironman
+        - label:
+            text: "TEST"
+            align: BOTTOM_MID
+            y: -12
+            text_font: font_ui_24
+            text_color: 0xFFFFFF
+            bg_color: 0x000000
+            bg_opa: 70%
+
+    # ------------------------------------------------------
     # Easter egg: Iron Man. Odslaniana dopiero po animacji migania
     # z easter_egg_ironman. Wyjscie: swipe w KAZDA strone wraca
     # na Pulpit i chowa reaktor/napis z powrotem.
