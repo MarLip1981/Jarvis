@@ -4,7 +4,7 @@
 
 lvgl:
   # CYD bez PSRAM: mniejszy bufor rysowania zostawia więcej RAM dla okładki online_image.
-  buffer_size: 8%
+  buffer_size: 5%
   displays:
     - my_display
   touchscreens:
