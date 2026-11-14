@@ -133,8 +133,10 @@ font:
     id: icon_font_btn
     size: 20
     glyphs:
-      - "\U000F0335" # zarowka on
-      - "\U000F0E50" # zarowka off
+      - "\U000F0E4F" # zarowka niedostepna / przekreslona
+      - "\U000F0E50" # zarowka wylaczona / wyszarzona
+      - "\U000F06E8" # zarowka wlaczona / rozswietlona
+      - "\U000F0335" # zarowka podstawowa (pozostale widoki)
       - "\U000F081B" # drzwi zamkniete
       - "\U000F081C" # drzwi otwarte
       - "\U000F0238" # piec ogien
@@ -149,6 +151,15 @@ font:
       - "\U000F116A" # brama otwarta
       - "\U000F0439" # radio
       - "\U000F0A48" # furtka
+
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: icon_font_lamp_state
+    size: 42
+    bpp: 4
+    glyphs:
+      - "\U000F0E4F" # niedostepna
+      - "\U000F0E50" # wylaczona
+      - "\U000F06E8" # wlaczona
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
