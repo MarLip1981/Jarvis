@@ -47,9 +47,9 @@ lvgl:
               - label:
                   id: lbl_salon_glowna_text
                   text: "Lampa: ..."
-                  x: 42
+                  x: 0
                   y: 16
-                  width: 164
+                  width: 220
                   height: 20
                   text_align: CENTER
                   text_font: font_ui_14
@@ -156,11 +156,25 @@ lvgl:
             y: 30
             text_font: font_ui_18
             text_color: 0xFFFFFF
+        - label:
+            id: lbl_salon_lamp_state_icon
+            text: "\U000F0E4F"
+            align: TOP_MID
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0xFF3333
+        - label:
+            id: lbl_salon_lamp_state
+            text: "Lampa: niedostępna"
+            align: TOP_MID
+            y: 98
+            text_font: font_ui_14
+            text_color: 0xFF3333
         - obj:
             x: 2
-            y: 62
+            y: 120
             width: 236
-            height: 248
+            height: 196
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -196,27 +210,18 @@ lvgl:
                               entity_id: light.salon_lampka
                         - script.execute: confirm_click
               - label:
-                  id: lbl_salon_lampka_status
-                  text: "Stan: ..."
-                  x: 0
-                  y: 34
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-                  recolor: true
-
-              - label:
                   id: lbl_salon_brightness
                   text: "Jasność"
                   x: 5
-                  y: 58
+                  y: 34
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_salon_brightness
                   x: 20
-                  y: 80
+                  y: 56
                   width: 30
-                  height: 100
+                  height: 70
                   min_value: 1
                   max_value: 100
                   value: 50
@@ -237,7 +242,7 @@ lvgl:
                   id: lbl_salon_brightness_val
                   text: "--"
                   x: 15
-                  y: 184
+                  y: 132
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
 
@@ -245,15 +250,15 @@ lvgl:
                   id: lbl_salon_colortemp
                   text: "Barwa"
                   x: 125
-                  y: 58
+                  y: 34
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_salon_colortemp
                   x: 160
-                  y: 80
+                  y: 56
                   width: 30
-                  height: 100
+                  height: 70
                   min_value: 2000
                   max_value: 6500
                   value: 4000
@@ -274,7 +279,7 @@ lvgl:
                   id: lbl_salon_colortemp_val
                   text: "--"
                   x: 148
-                  y: 184
+                  y: 132
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
 
@@ -283,14 +288,14 @@ lvgl:
               - label:
                   text: "Kolor"
                   x: 5
-                  y: 208
+                  y: 154
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - button:
                   x: 0
-                  y: 226
+                  y: 172
                   width: 55
-                  height: 28
+                  height: 20
                   bg_color: 0xFF0000
                   on_click:
                     - if:
@@ -306,9 +311,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   x: 59
-                  y: 226
+                  y: 172
                   width: 55
-                  height: 28
+                  height: 20
                   bg_color: 0x00FF00
                   on_click:
                     - if:
@@ -324,9 +329,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   x: 118
-                  y: 226
+                  y: 172
                   width: 55
-                  height: 28
+                  height: 20
                   bg_color: 0x0000FF
                   on_click:
                     - if:
@@ -342,9 +347,9 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   x: 177
-                  y: 226
+                  y: 172
                   width: 55
-                  height: 28
+                  height: 20
                   bg_color: 0xFFFFFF
                   on_click:
                     - if:
