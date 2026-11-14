@@ -224,8 +224,9 @@ lvgl:
                   id: lbl_brama_main_button
                   text: "OTWÓRZ"
                   align: CENTER
-                  text_font: font_ui_12
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  text_align: CENTER
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -271,8 +272,9 @@ lvgl:
                   id: lbl_brama_aux_button
                   text: "FURTKA"
                   align: CENTER
-                  text_font: font_ui_12
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  text_align: CENTER
             on_press:
               - globals.set:
                   id: btn_press_ms
