@@ -509,6 +509,23 @@ binary_sensor:
         # zamiast polegac wylacznie na zlapaniu tego zdarzenia.
 
 text_sensor:
+  # Surowe stany encji lamp z HA. Tekst rozroznia takze unavailable/unknown,
+  # czego nie da sie wiarygodnie odczytac z samego binary_sensor.
+  - platform: homeassistant
+    id: state_salon_lampka_raw
+    entity_id: light.salon_lampka
+    internal: true
+
+  - platform: homeassistant
+    id: state_sypialnia_lampa_raw
+    entity_id: light.studio
+    internal: true
+
+  - platform: homeassistant
+    id: state_erni_lampa_raw
+    entity_id: light.sypialnia
+    internal: true
+
   - platform: homeassistant
     id: radio_stacja
     entity_id: sensor.atlascube_radio_stacja_radiowa
