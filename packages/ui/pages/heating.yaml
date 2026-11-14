@@ -395,8 +395,13 @@ lvgl:
       bg_color: 0x000000
       on_swipe_left:
         - lvgl.page.show:
-            id: page_piec
+            id: page_diagnostyka
             animation: MOVE_LEFT
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_piec
+            animation: MOVE_RIGHT
             time: 300ms
       widgets:
         - label:
