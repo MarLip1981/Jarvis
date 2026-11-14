@@ -259,7 +259,7 @@ lvgl:
             height: 36
             bg_color: 0x18232B
             border_width: 1
-            border_color: 0xB88632
+            border_color: 0x45515C
             radius: 5
             shadow_width: 0
             widgets:
