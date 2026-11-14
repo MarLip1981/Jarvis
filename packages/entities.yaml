@@ -444,7 +444,7 @@ binary_sensor:
       then:
         - lvgl.label.update:
             id: lbl_ha
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
 
   - platform: homeassistant
     id: state_erni_lampa
