@@ -52,7 +52,7 @@ lvgl:
                   height: 20
                   text_align: CENTER
                   text_font: font_ui_14
-                  text_color: 0xFFFFFF
+                  text_color: 0xFF3333
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -376,7 +376,7 @@ lvgl:
                   height: 20
                   text_align: CENTER
                   text_font: font_ui_14
-                  text_color: 0xFFFFFF
+                  text_color: 0xFF3333
             on_press:
               - globals.set:
                   id: btn_press_ms
