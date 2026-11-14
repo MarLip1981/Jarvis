@@ -400,7 +400,6 @@ lvgl:
             text_font: font_ui_18
             text_color: 0xFFFFFF
         - label:
-        - label:
             id: lbl_tv_status_icon
             text: "\U000F0502"
             align: TOP_MID
