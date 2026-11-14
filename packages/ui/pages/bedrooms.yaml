@@ -116,9 +116,13 @@ lvgl:
                   y: 0
                   width: 232
                   height: 28
-                  bg_color: 0x2196F3
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   pressed:
-                    bg_color: 0x00FF00
+                    bg_color: 0x31546B
                   widgets:
                     - label:
                         align: CENTER
@@ -150,7 +154,11 @@ lvgl:
                   y: 52
                   width: 112
                   height: 32
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
@@ -173,7 +181,11 @@ lvgl:
                   y: 52
                   width: 112
                   height: 32
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
@@ -196,7 +208,11 @@ lvgl:
                   y: 88
                   width: 112
                   height: 32
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
@@ -219,7 +235,11 @@ lvgl:
                   y: 88
                   width: 112
                   height: 32
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
@@ -242,7 +262,11 @@ lvgl:
                   y: 124
                   width: 112
                   height: 32
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
@@ -265,7 +289,11 @@ lvgl:
                   y: 124
                   width: 112
                   height: 32
-                  bg_color: 0x333333
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
@@ -398,9 +426,13 @@ lvgl:
                   y: 0
                   width: 232
                   height: 28
-                  bg_color: 0x2196F3
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
                   pressed:
-                    bg_color: 0x00FF00
+                    bg_color: 0x31546B
                   widgets:
                     - label:
                         align: CENTER
