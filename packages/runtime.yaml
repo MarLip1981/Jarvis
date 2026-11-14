@@ -236,7 +236,7 @@ interval:
           id: lbl_sypialnia_lampa
           text: !lambda |-
             if (!id(state_sypialnia_lampa).has_state()) return std::string("Lampa: ...");
-            return id(state_sypialnia_lampa).state ? std::string("Lampa: #00FF00 WŁĄCZONA#") : std::string("Lampa: #888888 wyłączona#");
+            return id(state_sypialnia_lampa).state ? std::string("Lampa: #00FF00 WŁĄCZONA#") : std::string("Lampa: #FFFFFF wyłączona#");
           text_color: !lambda |-
             return (id(state_sypialnia_lampa).has_state() && id(state_sypialnia_lampa).state) ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
