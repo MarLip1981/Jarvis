@@ -24,25 +24,36 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - button:
+            id: btn_salon_lampa
             x: 10
             y: 70
             width: 220
             height: 50
-            bg_color: 0x2196F3
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
             pressed:
-              bg_color: 0x00FF00
+              bg_color: 0x31546B
             widgets:
               - label:
                   id: lbl_salon_glowna_icon
                   text: "\U000F0E50"
-                  x: 8
-                  y: 13
+                  x: 14
+                  y: 15
                   text_font: icon_font_btn
-                  text_color: 0xFF0000
+                  text_color: 0x888888
               - label:
-                  text: "Lampa"
-                  x: 36
-                  y: 17
+                  id: lbl_salon_glowna_text
+                  text: "Lampa: ..."
+                  x: 42
+                  y: 16
+                  width: 164
+                  height: 20
+                  text_align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -72,9 +83,13 @@ lvgl:
             y: 130
             width: 220
             height: 50
-            bg_color: 0x2196F3
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
             pressed:
-              bg_color: 0x00FF00
+              bg_color: 0x31546B
             widgets:
               - label:
                   align: CENTER
@@ -94,9 +109,13 @@ lvgl:
             y: 190
             width: 220
             height: 50
-            bg_color: 0x2196F3
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
             pressed:
-              bg_color: 0x00FF00
+              bg_color: 0x31546B
             widgets:
               - label:
                   align: CENTER
@@ -637,6 +656,14 @@ lvgl:
                           data_template:
                             value: !lambda 'return std::to_string(lv_slider_get_value(id(slider_radio_glosnosc)));'
                       - script.execute: confirm_click
+                    else:
+                      - if:
+                          condition:
+                            lambda: 'return id(radio_glosnosc_attr).has_state() && !std::isnan(id(radio_glosnosc_attr).state);'
+                          then:
+                            - lvgl.slider.update:
+                                id: slider_radio_glosnosc
+                                value: !lambda 'return (int) id(radio_glosnosc_attr).state;'
 
     # ------------------------------------------------------
     # Sypialnia
