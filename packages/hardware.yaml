@@ -40,46 +40,6 @@ image:
     id: img_ironman
     type: RGB565
     resize: 240x360
-  # Test: obraz pobierany z GitHuba dopiero na żądanie, już po uruchomieniu Jarvisa.
-  - platform: online_image
-    id: img_test_github_online
-    url: "https://raw.githubusercontent.com/MarLip1981/Jarvis/main/Iron%20man%20Phone%20Wallpapers.jpeg"
-    format: JPEG
-    type: RGB565
-    resize: 240x320
-    update_interval: never
-    buffer_size: 32768
-    on_download_started:
-      then:
-        - logger.log:
-            level: INFO
-            format: "JARVIS TEST: rozpoczęto pobieranie obrazu z GitHuba"
-    on_download_progress:
-      then:
-        - lambda: |-
-            static int last_reported = -1;
-            if (std::isfinite(progress)) {
-              const int bucket = static_cast<int>(progress / 25.0f) * 25;
-              if (bucket != last_reported || progress >= 100.0f) {
-                ESP_LOGI("JARVIS TEST", "GitHub image: %.0f%% (%u B)",
-                         progress, static_cast<unsigned>(bytes_read));
-                last_reported = bucket;
-              }
-            } else {
-              ESP_LOGI("JARVIS TEST", "GitHub image: pobrano %u B",
-                       static_cast<unsigned>(bytes_read));
-            }
-    on_download_finished:
-      then:
-        - logger.log:
-            level: INFO
-            format: "JARVIS TEST: obraz z GitHuba pobrany i zdekodowany"
-    on_error:
-      then:
-        - logger.log:
-            level: ERROR
-            format: "JARVIS TEST: nie udalo sie pobrac lub zdekodowac obrazu z GitHuba"
-
   # Okładka radia pobierana dopiero po otrzymaniu lokalnego URL z HA.
   - platform: online_image
     id: img_radio_cover
