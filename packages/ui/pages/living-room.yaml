@@ -39,6 +39,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   id: lbl_salon_glowna_icon
                   text: "\U000F0E4F"
@@ -420,6 +421,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   text: "\U000F0425"
                   text_font: icon_font_btn
@@ -585,6 +587,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                  x: 2
                   align: CENTER
                   text: "\U000F0663"
                   text_font: icon_font_radio
@@ -615,6 +618,7 @@ lvgl:
               bg_color: 0x2389BD
             widgets:
               - label:
+                  x: 2
                   align: CENTER
                   id: lbl_radio_playstop_icon
                   text: "\U000F040C"
@@ -654,6 +658,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                  x: 2
                   align: CENTER
                   text: "\U000F0661"
                   text_font: icon_font_radio
