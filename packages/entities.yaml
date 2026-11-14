@@ -627,7 +627,18 @@ text_sensor:
         - script.execute: ha_rx_flash
         - lvgl.label.update:
             id: lbl_tv_status
-            text: !lambda 'return std::string("Stan: ") + x;'
+            text: !lambda |-
+              if (x == "off") return std::string("Stan: WYŁĄCZONY");
+              if (x == "unavailable" || x == "unknown" || x.empty()) return std::string("Stan: NIEDOSTĘPNY");
+              return std::string("Stan: WŁĄCZONY");
+            text_color: !lambda |-
+              if (x == "unavailable" || x == "unknown" || x.empty()) return lv_color_hex(0xFF3333);
+              return lv_color_hex(0xFFFFFF);
+        - lvgl.label.update:
+            id: lbl_tv_status_icon
+            text_color: !lambda |-
+              if (x == "unavailable" || x == "unknown" || x.empty()) return lv_color_hex(0xFF3333);
+              return x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0x00FF00);
 
   - platform: homeassistant
     id: piec_mode_state
