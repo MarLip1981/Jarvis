@@ -400,16 +400,24 @@ lvgl:
             text_font: font_ui_18
             text_color: 0xFFFFFF
         - label:
-            id: lbl_tv_status
-            text: "Stan: ..."
+        - label:
+            id: lbl_tv_status_icon
+            text: "\U000F0502"
             align: TOP_MID
-            y: 62
-            text_font: font_ui_14
-            text_color: 0xCCCCCC
-        - button:
-            x: 60
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0x888888
+        - label:
+            id: lbl_tv_status
+            text: "Stan: WYŁĄCZONY"
+            align: TOP_MID
             y: 100
-            width: 120
+            text_font: font_ui_14
+            text_color: 0xFFFFFF
+        - button:
+            x: 20
+            y: 128
+            width: 200
             height: 50
             pad_all: 0
             bg_color: 0x18232B
@@ -427,9 +435,9 @@ lvgl:
                   text_font: icon_font_btn
               - label:
                   text: "ZASILANIE"
-                  x: 32
+                  x: 42
                   y: 15
-                  width: 80
+                  width: 150
                   height: 20
                   text_align: CENTER
                   text_font: font_ui_14
@@ -445,7 +453,7 @@ lvgl:
                   - script.execute: confirm_click
         - button:
             x: 20
-            y: 170
+            y: 188
             width: 95
             height: 50
             pad_all: 0
@@ -474,7 +482,7 @@ lvgl:
                   - script.execute: confirm_click
         - button:
             x: 125
-            y: 170
+            y: 188
             width: 95
             height: 50
             pad_all: 0
