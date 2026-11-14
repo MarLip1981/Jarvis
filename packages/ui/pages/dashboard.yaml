@@ -62,20 +62,21 @@ lvgl:
               - label:
                   id: lbl_pulpit_radio_icon
                   text: "\U000F0439"
-                  x: 4
+                  x: 8
                   y: 1
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
                   id: lbl_pulpit_radio
                   text: "Radio:   --  * --"
-                  x: 30
+                  x: 0
                   y: 2
-                  width: 184
+                  width: 220
                   height: 18
-                  text_font: font_radio_12
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
                   long_mode: SCROLL_CIRCULAR
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -101,7 +102,7 @@ lvgl:
               - label:
                   id: lbl_pulpit_lamps_icon
                   text: "\U000F0E50"
-                  x: 4
+                  x: 8
                   y: 1
                   text_font: icon_font_btn
                   text_color: 0x888888
@@ -111,6 +112,7 @@ lvgl:
                   y: 3
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  text_align: CENTER
               - label:
                   id: lbl_pulpit_lamps
                   text: "#888888 0#"
@@ -119,6 +121,7 @@ lvgl:
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -143,18 +146,20 @@ lvgl:
               - label:
                   id: lbl_piec_icon
                   text: "\U000F0238"
-                  x: 4
+                  x: 8
                   y: 1
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
                   id: lbl_pulpit_piec
                   text: "Piec:   ..."
-                  x: 30
+                  x: 0
                   y: 5
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
+                  width: 220
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -222,6 +227,7 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  text_align: CENTER
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -268,6 +274,7 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  text_align: CENTER
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -338,16 +345,18 @@ lvgl:
             widgets:
               - label:
                   text: "\U000F0335"
-                  x: 12
+                  x: 8
                   y: 10
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
                   text: "Salon - lampa"
-                  x: 48
+                  x: 0
                   y: 13
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  width: 220
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -373,16 +382,18 @@ lvgl:
             widgets:
               - label:
                   text: "\U000F0335"
-                  x: 12
+                  x: 8
                   y: 10
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
                   text: "Sypialnia - lampa"
-                  x: 48
+                  x: 0
                   y: 13
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  width: 220
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -408,16 +419,18 @@ lvgl:
             widgets:
               - label:
                   text: "\U000F0335"
-                  x: 12
+                  x: 8
                   y: 10
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
                   text: "Ernie - lampa"
-                  x: 48
+                  x: 0
                   y: 13
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
+                  width: 220
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
