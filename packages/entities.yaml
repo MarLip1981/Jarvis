@@ -543,7 +543,7 @@ text_sensor:
               if (track.empty()) track = "--";
               return std::string("Radio:   ") + station + "  * " + track;
 
-  # URL okładki z działającej integracji AtlasCube TEST 0.5.3.
+  # Mały URL 200x200 z encji AtlasCube TEST 0.5.8 (stan encji; duży wariant pozostaje po stronie HA).
   - platform: homeassistant
     id: radio_cover_url
     entity_id: sensor.atlascube_radio_cover_url_test
@@ -558,10 +558,14 @@ text_sensor:
               - lvgl.widget.hide: img_radio_cover_widget
               - lvgl.widget.show: obj_radio_cover_placeholder
             else:
+              - logger.log:
+                  level: INFO
+                  format: "JARVIS RADIO: otrzymano lokalny adres okladki z Home Assistant"
               - lvgl.widget.show: obj_radio_cover_placeholder
               - lvgl.widget.hide: img_radio_cover_widget
               - online_image.set_url:
                   id: img_radio_cover
+                  update: true
                   url: !lambda |-
                     return std::string("http://192.168.1.100") + x;
 
