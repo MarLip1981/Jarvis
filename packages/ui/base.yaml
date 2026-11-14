@@ -3,6 +3,8 @@
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
 lvgl:
+  # CYD bez PSRAM: mniejszy bufor rysowania zostawia więcej RAM dla okładki online_image.
+  buffer_size: 8%
   displays:
     - my_display
   touchscreens:
