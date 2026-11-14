@@ -398,7 +398,11 @@ binary_sensor:
             id: lbl_salon_glowna_icon
             text: !lambda |-
               return x ? std::string("\U000F0335") : std::string("\U000F0E50");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
+        - lvgl.label.update:
+            id: lbl_salon_glowna_text
+            text: !lambda 'return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
 
 
   - platform: gpio
@@ -440,7 +444,7 @@ binary_sensor:
       then:
         - lvgl.label.update:
             id: lbl_ha
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
 
   - platform: homeassistant
     id: state_erni_lampa
@@ -455,7 +459,7 @@ binary_sensor:
             id: lbl_erni_lampa
             text: !lambda |-
               return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
         - lvgl.label.update:
             id: lbl_erni_lampa_icon
             text: !lambda |-
@@ -476,7 +480,7 @@ binary_sensor:
             id: lbl_sypialnia_lampa
             text: !lambda |-
               return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
         - lvgl.label.update:
             id: lbl_sypialnia_lampa_icon
             text: !lambda |-
