@@ -60,23 +60,22 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
+                align: LEFT_MID
                   id: lbl_pulpit_radio_icon
                   text: "\U000F0439"
-                  x: 8
-                  y: 1
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
                   id: lbl_pulpit_radio
-                  text: "Radio:   --  * --"
-                  x: 0
-                  y: 2
-                  width: 220
-                  height: 18
+                  text: "RADIO:   --  * --"
+                x: 32
+                y: 0
+                width: 180
+                height: 22
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   long_mode: SCROLL_CIRCULAR
-                  text_align: CENTER
+                text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -107,7 +106,7 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
-                  text: "Światła:"
+                  text: "ŚWIATŁA:"
                   x: 30
                   y: 3
                   text_font: font_ui_14
@@ -144,22 +143,22 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
+                align: LEFT_MID
                   id: lbl_piec_icon
                   text: "\U000F0238"
-                  x: 8
-                  y: 1
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
+                height: 24
                   id: lbl_pulpit_piec
-                  text: "Piec:   ..."
-                  x: 0
-                  y: 5
+                  text: "PIEC:   ..."
+                x: 32
+                y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
-                  width: 220
-                  text_align: CENTER
+                width: 180
+                text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -216,6 +215,7 @@ lvgl:
             y: 229
             width: 105
             height: 36
+            pad_all: 0
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
@@ -263,6 +263,7 @@ lvgl:
             y: 229
             width: 105
             height: 36
+            pad_all: 0
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
@@ -336,6 +337,7 @@ lvgl:
             y: 82
             width: 220
             height: 44
+            pad_all: 0
             hidden: true
             bg_color: 0x18232B
             border_width: 1
@@ -344,19 +346,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                align: LEFT_MID
                   text: "\U000F0335"
-                  x: 8
-                  y: 10
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  text: "Salon - lampa"
-                  x: 0
-                  y: 13
+                height: 44
+                  text: "SALON - LAMPA"
+                x: 32
+                y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  width: 220
-                  text_align: CENTER
+                width: 180
+                text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -373,6 +375,7 @@ lvgl:
             y: 136
             width: 220
             height: 44
+            pad_all: 0
             hidden: true
             bg_color: 0x18232B
             border_width: 1
@@ -381,19 +384,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                align: LEFT_MID
                   text: "\U000F0335"
-                  x: 8
-                  y: 10
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  text: "Sypialnia - lampa"
-                  x: 0
-                  y: 13
+                height: 44
+                  text: "SYPIALNIA - LAMPA"
+                x: 32
+                y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  width: 220
-                  text_align: CENTER
+                width: 180
+                text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -410,6 +413,7 @@ lvgl:
             y: 190
             width: 220
             height: 44
+            pad_all: 0
             hidden: true
             bg_color: 0x18232B
             border_width: 1
@@ -418,19 +422,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                align: LEFT_MID
                   text: "\U000F0335"
-                  x: 8
-                  y: 10
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  text: "Ernie - lampa"
-                  x: 0
-                  y: 13
+                height: 44
+                  text: "ERNIE - LAMPA"
+                x: 32
+                y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  width: 220
-                  text_align: CENTER
+                width: 180
+                text_align: CENTER
             on_click:
               - if:
                   condition:
