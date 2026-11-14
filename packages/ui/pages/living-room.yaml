@@ -39,14 +39,14 @@ lvgl:
             widgets:
               - label:
                   id: lbl_salon_glowna_icon
-                  text: "\U000F0E50"
+                  text: "\U000F0E4F"
                   x: 14
                   y: 15
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
                   id: lbl_salon_glowna_text
-                  text: "Lampa: ..."
+                  text: "Lampa: niedostępna"
                   x: 0
                   y: 16
                   width: 220
@@ -413,7 +413,11 @@ lvgl:
                   text_font: icon_font_btn
               - label:
                   text: "Zasilanie"
-                  align: CENTER
+                  x: 30
+                  y: 15
+                  width: 84
+                  height: 20
+                  text_align: CENTER
                   text_font: font_ui_14
             on_click:
               - if:
