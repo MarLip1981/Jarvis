@@ -160,6 +160,7 @@ font:
       - "\U000F0E4F" # niedostepna
       - "\U000F0336" # wylaczona / kontur
       - "\U000F06E8" # wlaczona
+      - "\U000F0502" # telewizor
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
