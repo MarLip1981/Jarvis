@@ -69,9 +69,9 @@ lvgl:
                   id: lbl_pulpit_radio
                   text: "RADIO:   --  * --"
                   x: 32
-                  y: 0
+                  y: 1
                   width: 180
-                  height: 22
+                  height: 20
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   long_mode: SCROLL_CIRCULAR
@@ -149,11 +149,11 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
-                  height: 24
+                  height: 20
                   id: lbl_pulpit_piec
                   text: "PIEC:   ..."
                   x: 32
-                  y: 0
+                  y: 2
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
@@ -351,10 +351,10 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  height: 44
+                  height: 20
                   text: "SALON - LAMPA"
                   x: 32
-                  y: 0
+                  y: 12
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
@@ -389,10 +389,10 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  height: 44
+                  height: 20
                   text: "SYPIALNIA - LAMPA"
                   x: 32
-                  y: 0
+                  y: 12
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
@@ -427,10 +427,10 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                  height: 44
+                  height: 20
                   text: "ERNIE - LAMPA"
                   x: 32
-                  y: 0
+                  y: 12
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
