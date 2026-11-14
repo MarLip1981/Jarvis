@@ -222,96 +222,96 @@ interval:
       - lvgl.label.update:
           id: lbl_salon_glowna_text
           text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return std::string("Lampa: niedostępna");
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("Lampa: niedostępna");
             return id(state_salon_lampka_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_salon_lampka_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_salon_glowna_icon
           text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return std::string("\U000F0E4F");
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("\U000F0E4F");
             return id(state_salon_lampka_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0E50");
           text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_salon_lampka_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_salon_lamp_state
           text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return std::string("Lampa: niedostępna");
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("Lampa: niedostępna");
             return id(state_salon_lampka_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_salon_lampka_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_salon_lamp_state_icon
           text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return std::string("\U000F0E4F");
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("\U000F0E4F");
             return id(state_salon_lampka_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0E50");
           text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || id(state_salon_lampka_raw).state == "unavailable" || id(state_salon_lampka_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_salon_lampka_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_sypialnia_lampa
           text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return std::string("Lampa: niedostępna");
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("Lampa: niedostępna");
             return id(state_sypialnia_lampa_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_sypialnia_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_sypialnia_lampa_icon
           text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return std::string("\U000F0E4F");
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("\U000F0E4F");
             return id(state_sypialnia_lampa_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0E50");
           text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_sypialnia_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_sypialnia_lamp_state
           text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return std::string("Lampa: niedostępna");
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("Lampa: niedostępna");
             return id(state_sypialnia_lampa_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_sypialnia_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_sypialnia_lamp_state_icon
           text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return std::string("\U000F0E4F");
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("\U000F0E4F");
             return id(state_sypialnia_lampa_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0E50");
           text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || id(state_sypialnia_lampa_raw).state == "unavailable" || id(state_sypialnia_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_sypialnia_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_erni_lampa
           text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return std::string("Lampa: niedostępna");
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("Lampa: niedostępna");
             return id(state_erni_lampa_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_erni_lampa_icon
           text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return std::string("\U000F0E4F");
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("\U000F0E4F");
             return id(state_erni_lampa_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0E50");
           text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
       - lvgl.label.update:
           id: lbl_erni_lamp_state
           text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return std::string("Lampa: niedostępna");
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("Lampa: niedostępna");
             return id(state_erni_lampa_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
           text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
       - lvgl.label.update:
           id: lbl_erni_lamp_state_icon
           text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return std::string("\U000F0E4F");
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("\U000F0E4F");
             return id(state_erni_lampa_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0E50");
           text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || id(state_erni_lampa_raw).state == "unavailable" || id(state_erni_lampa_raw).state == "unknown") return lv_color_hex(0xFF3333);
+            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
