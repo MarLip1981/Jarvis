@@ -567,7 +567,7 @@ text_sensor:
                   id: img_radio_cover
                   update: true
                   url: !lambda |-
-                    return std::string("http://192.168.1.100") + x;
+                    return std::string("http://192.168.1.100:8123") + x;
 
   - platform: homeassistant
     id: radio_stan
