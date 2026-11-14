@@ -60,6 +60,7 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   id: lbl_pulpit_radio_icon
                   text: "\U000F0439"
@@ -101,7 +102,7 @@ lvgl:
               - label:
                   id: lbl_pulpit_lamps_icon
                   text: "\U000F0E50"
-                  x: 8
+                  x: 2
                   y: 1
                   text_font: icon_font_btn
                   text_color: 0x888888
@@ -143,6 +144,7 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   id: lbl_piec_icon
                   text: "\U000F0238"
@@ -346,6 +348,7 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
@@ -384,6 +387,7 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
@@ -422,6 +426,7 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
