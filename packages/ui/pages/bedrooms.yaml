@@ -38,14 +38,14 @@ lvgl:
             widgets:
               - label:
                   id: lbl_sypialnia_lampa_icon
-                  text: "\U000F0E50"
+                  text: "\U000F0E4F"
                   x: 14
                   y: 15
                   text_font: icon_font_btn
-                  text_color: 0x888888
+                  text_color: 0xFF3333
               - label:
                   id: lbl_sypialnia_lampa
-                  text: "Lampa: ..."
+                  text: "Lampa: niedostępna"
                   x: 0
                   y: 16
                   width: 216
@@ -362,14 +362,14 @@ lvgl:
             widgets:
               - label:
                   id: lbl_erni_lampa_icon
-                  text: "\U000F0E50"
+                  text: "\U000F0E4F"
                   x: 14
                   y: 15
                   text_font: icon_font_btn
-                  text_color: 0x888888
+                  text_color: 0xFF3333
               - label:
                   id: lbl_erni_lampa
-                  text: "Lampa: ..."
+                  text: "Lampa: niedostępna"
                   x: 0
                   y: 16
                   width: 216
