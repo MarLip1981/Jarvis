@@ -38,6 +38,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   id: lbl_sypialnia_lampa_icon
                   text: "\U000F0E4F"
@@ -376,6 +377,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                  x: 2
                   align: LEFT_MID
                   id: lbl_erni_lampa_icon
                   text: "\U000F0E4F"
