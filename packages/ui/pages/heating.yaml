@@ -99,7 +99,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "+"
-                        text_font: font_ui_18
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -134,7 +135,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "-"
-                        text_font: font_ui_18
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -169,7 +171,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "AUTO"
-                        text_font: font_ui_12
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -198,7 +201,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "OFF"
-                        text_font: font_ui_12
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -272,7 +276,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Auto"
-                        text_font: font_ui_12
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -301,7 +306,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Wyłącz"
-                        text_font: font_ui_12
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -330,7 +336,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Dzień"
-                        text_font: font_ui_12
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -359,7 +366,8 @@ lvgl:
                     - label:
                         align: CENTER
                         text: "Doładuj"
-                        text_font: font_ui_12
+                        text_font: font_ui_14
+                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
