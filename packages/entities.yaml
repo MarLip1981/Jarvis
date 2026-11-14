@@ -397,7 +397,7 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_salon_glowna_icon
             text: !lambda |-
-              return x ? std::string("\U000F06E8") : std::string("\U000F0E50");
+              return x ? std::string("\U000F06E8") : std::string("\U000F0336");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
         - lvgl.label.update:
             id: lbl_salon_glowna_text
@@ -463,7 +463,7 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_erni_lampa_icon
             text: !lambda |-
-              return x ? std::string("\U000F06E8") : std::string("\U000F0E50");
+              return x ? std::string("\U000F06E8") : std::string("\U000F0336");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
 
 
@@ -484,7 +484,7 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_sypialnia_lampa_icon
             text: !lambda |-
-              return x ? std::string("\U000F06E8") : std::string("\U000F0E50");
+              return x ? std::string("\U000F06E8") : std::string("\U000F0336");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
 
 
