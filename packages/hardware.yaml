@@ -49,6 +49,28 @@ image:
     resize: 120x120
     update_interval: never
     buffer_size: 8192
+    # ESPHome 2026.11: JPEG jest dekodowany w trakcie pobierania.
+    # Nowe zdarzenia pozwalaja odroznic brak odpowiedzi serwera od bledu dekodera.
+    on_download_started:
+      then:
+        - logger.log:
+            level: INFO
+            format: "JARVIS RADIO: serwer rozpoczal wysylanie okladki"
+    on_download_progress:
+      then:
+        - lambda: |-
+            static int last_reported = -1;
+            if (std::isfinite(progress)) {
+              const int bucket = static_cast<int>(progress / 25.0f) * 25;
+              if (bucket != last_reported || progress >= 100.0f) {
+                ESP_LOGI("JARVIS RADIO", "Pobieranie okladki: %.0f%% (%u B)",
+                         progress, static_cast<unsigned>(bytes_read));
+                last_reported = bucket;
+              }
+            } else {
+              ESP_LOGI("JARVIS RADIO", "Pobieranie okladki: %u B (serwer nie podal rozmiaru)",
+                       static_cast<unsigned>(bytes_read));
+            }
     on_download_finished:
       then:
         - logger.log:
