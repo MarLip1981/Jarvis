@@ -28,6 +28,7 @@ lvgl:
             y: 90
             width: 216
             height: 50
+            pad_all: 0
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
@@ -37,20 +38,19 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                align: LEFT_MID
                   id: lbl_sypialnia_lampa_icon
                   text: "\U000F0E4F"
-                  x: 8
-                  y: 15
                   text_font: icon_font_btn
                   text_color: 0xFF3333
               - label:
                   id: lbl_sypialnia_lampa
-                  text: "Lampa: niedostępna"
-                  x: 0
-                  y: 16
-                  width: 216
-                  height: 20
-                  text_align: CENTER
+                  text: "LAMPA: NIEDOSTĘPNA"
+                x: 32
+                y: 0
+                width: 176
+                height: 50
+                text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFF3333
             on_press:
@@ -130,6 +130,7 @@ lvgl:
                   y: 0
                   width: 232
                   height: 28
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -140,7 +141,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Włącz / Wyłącz"
+                        text: "WŁĄCZ / WYŁĄCZ"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
@@ -169,6 +170,7 @@ lvgl:
                   y: 52
                   width: 112
                   height: 32
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -197,6 +199,7 @@ lvgl:
                   y: 52
                   width: 112
                   height: 32
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -205,7 +208,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Biały"
+                        text: "BIAŁY"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
@@ -225,6 +228,7 @@ lvgl:
                   y: 88
                   width: 112
                   height: 32
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -233,7 +237,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Wschód"
+                        text: "WSCHÓD"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
@@ -253,6 +257,7 @@ lvgl:
                   y: 88
                   width: 112
                   height: 32
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -261,7 +266,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Zachód"
+                        text: "ZACHÓD"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
@@ -281,6 +286,7 @@ lvgl:
                   y: 124
                   width: 112
                   height: 32
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -289,7 +295,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Tęcza"
+                        text: "TĘCZA"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
@@ -309,6 +315,7 @@ lvgl:
                   y: 124
                   width: 112
                   height: 32
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -317,7 +324,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Ognisko"
+                        text: "OGNISKO"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
@@ -359,6 +366,7 @@ lvgl:
             y: 90
             width: 216
             height: 50
+            pad_all: 0
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
@@ -368,20 +376,19 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
+                align: LEFT_MID
                   id: lbl_erni_lampa_icon
                   text: "\U000F0E4F"
-                  x: 8
-                  y: 15
                   text_font: icon_font_btn
                   text_color: 0xFF3333
               - label:
                   id: lbl_erni_lampa
-                  text: "Lampa: niedostępna"
-                  x: 0
-                  y: 16
-                  width: 216
-                  height: 20
-                  text_align: CENTER
+                  text: "LAMPA: NIEDOSTĘPNA"
+                x: 32
+                y: 0
+                width: 176
+                height: 50
+                text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFF3333
             on_press:
@@ -461,6 +468,7 @@ lvgl:
                   y: 0
                   width: 232
                   height: 28
+                  pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -471,7 +479,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
-                        text: "Włącz / Wyłącz"
+                        text: "WŁĄCZ / WYŁĄCZ"
                         text_font: font_ui_14
                         text_align: CENTER
                   on_click:
