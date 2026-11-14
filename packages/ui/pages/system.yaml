@@ -538,10 +538,14 @@ lvgl:
                         id: page_test_github
                         animation: MOVE_LEFT
                         time: 300ms
+                    - online_image.set_url:
+                        id: img_test_github_online
+                        update: true
+                        url: "https://raw.githubusercontent.com/MarLip1981/Jarvis/main/Iron%20man%20Phone%20Wallpapers.jpeg"
                     - script.execute: confirm_click
 
     # ------------------------------------------------------
-    # Test wyswietlania obrazu pobranego z GitHuba podczas kompilacji
+    # Test pobierania obrazu z GitHuba podczas pracy urzadzenia (online_image)
     # ------------------------------------------------------
     - id: page_test_github
       bg_color: 0x000000
@@ -560,7 +564,7 @@ lvgl:
             id: test_github_image_widget
             x: 0
             y: -20
-            src: img_ironman
+            src: img_test_github_online
         - label:
             text: "TEST"
             align: BOTTOM_MID
