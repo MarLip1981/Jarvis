@@ -51,10 +51,16 @@ image:
     buffer_size: 8192
     on_download_finished:
       then:
+        - logger.log:
+            level: INFO
+            format: "JARVIS RADIO: okladka pobrana i zdekodowana poprawnie"
         - lvgl.widget.hide: obj_radio_cover_placeholder
         - lvgl.widget.show: img_radio_cover_widget
     on_error:
       then:
+        - logger.log:
+            level: ERROR
+            format: "JARVIS RADIO: blad pobierania lub dekodowania okladki"
         - lvgl.widget.show: obj_radio_cover_placeholder
         - lvgl.widget.hide: img_radio_cover_widget
 font:
