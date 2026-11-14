@@ -47,9 +47,9 @@ lvgl:
                   id: lbl_sypialnia_lampa
                   text: "LAMPA: NIEDOSTĘPNA"
                   x: 32
-                  y: 0
+                  y: 15
                   width: 176
-                  height: 50
+                  height: 20
                   text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFF3333
@@ -385,9 +385,9 @@ lvgl:
                   id: lbl_erni_lampa
                   text: "LAMPA: NIEDOSTĘPNA"
                   x: 32
-                  y: 0
+                  y: 15
                   width: 176
-                  height: 50
+                  height: 20
                   text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFF3333
