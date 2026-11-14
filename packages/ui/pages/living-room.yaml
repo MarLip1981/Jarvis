@@ -39,7 +39,7 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   id: lbl_salon_glowna_icon
                   text: "\U000F0E4F"
                   text_font: icon_font_btn
@@ -47,11 +47,11 @@ lvgl:
               - label:
                   id: lbl_salon_glowna_text
                   text: "LAMPA: NIEDOSTĘPNA"
-                x: 32
-                y: 0
-                width: 180
-                height: 50
-                text_align: CENTER
+                  x: 32
+                  y: 0
+                  width: 180
+                  height: 50
+                  text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFF3333
             on_press:
@@ -420,16 +420,16 @@ lvgl:
               bg_color: 0x31546B
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   text: "\U000F0425"
                   text_font: icon_font_btn
               - label:
                   text: "ZASILANIE"
-                x: 32
-                y: 0
-                width: 80
-                height: 50
-                text_align: CENTER
+                  x: 32
+                  y: 0
+                  width: 80
+                  height: 50
+                  text_align: CENTER
                   text_font: font_ui_14
             on_click:
               - if:
