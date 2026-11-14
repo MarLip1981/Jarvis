@@ -134,7 +134,7 @@ font:
     size: 20
     glyphs:
       - "\U000F0E4F" # zarowka niedostepna / przekreslona
-      - "\U000F0E50" # zarowka wylaczona / wyszarzona
+      - "\U000F0336" # zarowka wylaczona / kontur
       - "\U000F06E8" # zarowka wlaczona / rozswietlona
       - "\U000F0335" # zarowka podstawowa (pozostale widoki)
       - "\U000F081B" # drzwi zamkniete
@@ -158,7 +158,7 @@ font:
     bpp: 4
     glyphs:
       - "\U000F0E4F" # niedostepna
-      - "\U000F0E50" # wylaczona
+      - "\U000F0336" # wylaczona / kontur
       - "\U000F06E8" # wlaczona
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
