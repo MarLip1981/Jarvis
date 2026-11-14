@@ -102,14 +102,14 @@ lvgl:
               - label:
                   id: lbl_pulpit_lamps_icon
                   text: "\U000F0E50"
-                  x: 2
-                  y: 1
+                  x: 4
+                  y: 2
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
                   text: "ŚWIATŁA:"
-                  x: 30
-                  y: 3
+                  x: 32
+                  y: 5
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   text_align: CENTER
@@ -117,7 +117,7 @@ lvgl:
                   id: lbl_pulpit_lamps
                   text: "#888888 0#"
                   x: 106
-                  y: 3
+                  y: 5
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
@@ -175,7 +175,7 @@ lvgl:
             id: lbl_drzwi_icon
             text: "\U000F081B"
             x: 8
-            y: 176
+            y: 177
             text_font: icon_font_btn
             text_color: 0x888888
         - label:
@@ -192,7 +192,7 @@ lvgl:
             id: lbl_pulpit_brama_icon
             text: "\U000F0299"
             x: 8
-            y: 202
+            y: 203
             text_font: icon_font_btn
             text_color: 0x888888
         - label:
