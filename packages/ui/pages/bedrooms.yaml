@@ -46,9 +46,9 @@ lvgl:
               - label:
                   id: lbl_sypialnia_lampa
                   text: "Lampa: ..."
-                  x: 42
+                  x: 0
                   y: 16
-                  width: 164
+                  width: 216
                   height: 20
                   text_align: CENTER
                   text_font: font_ui_14
@@ -99,9 +99,23 @@ lvgl:
             y: 30
             text_font: font_ui_18
             text_color: 0xFFFFFF
+        - label:
+            id: lbl_sypialnia_lamp_state_icon
+            text: "\U000F0E4F"
+            align: TOP_MID
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0xFF3333
+        - label:
+            id: lbl_sypialnia_lamp_state
+            text: "Lampa: niedostępna"
+            align: TOP_MID
+            y: 98
+            text_font: font_ui_14
+            text_color: 0xFF3333
         - obj:
             x: 2
-            y: 68
+            y: 118
             width: 236
             height: 184
             bg_opa: TRANSP
@@ -356,9 +370,9 @@ lvgl:
               - label:
                   id: lbl_erni_lampa
                   text: "Lampa: ..."
-                  x: 42
+                  x: 0
                   y: 16
-                  width: 164
+                  width: 216
                   height: 20
                   text_align: CENTER
                   text_font: font_ui_14
@@ -409,11 +423,25 @@ lvgl:
             y: 30
             text_font: font_ui_18
             text_color: 0xFFFFFF
+        - label:
+            id: lbl_erni_lamp_state_icon
+            text: "\U000F0E4F"
+            align: TOP_MID
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0xFF3333
+        - label:
+            id: lbl_erni_lamp_state
+            text: "Lampa: niedostępna"
+            align: TOP_MID
+            y: 98
+            text_font: font_ui_14
+            text_color: 0xFF3333
         - obj:
             x: 2
-            y: 68
+            y: 118
             width: 236
-            height: 214
+            height: 196
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -457,7 +485,7 @@ lvgl:
                   x: 20
                   y: 56
                   width: 30
-                  height: 130
+                  height: 100
                   min_value: 1
                   max_value: 100
                   value: 50
@@ -487,7 +515,7 @@ lvgl:
                   x: 160
                   y: 56
                   width: 30
-                  height: 130
+                  height: 100
                   min_value: 2000
                   max_value: 6500
                   value: 4000
@@ -510,7 +538,7 @@ lvgl:
                   text: "--"
                   align: TOP_LEFT
                   x: 15
-                  y: 188
+                  y: 160
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
@@ -518,7 +546,7 @@ lvgl:
                   text: "--"
                   align: TOP_LEFT
                   x: 148
-                  y: 188
+                  y: 160
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
 
