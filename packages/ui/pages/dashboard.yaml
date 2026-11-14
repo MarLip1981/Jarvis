@@ -60,7 +60,7 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   id: lbl_pulpit_radio_icon
                   text: "\U000F0439"
                   text_font: icon_font_btn
@@ -68,14 +68,14 @@ lvgl:
               - label:
                   id: lbl_pulpit_radio
                   text: "RADIO:   --  * --"
-                x: 32
-                y: 0
-                width: 180
-                height: 22
+                  x: 32
+                  y: 0
+                  width: 180
+                  height: 22
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   long_mode: SCROLL_CIRCULAR
-                text_align: CENTER
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -143,22 +143,22 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   id: lbl_piec_icon
                   text: "\U000F0238"
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
-                height: 24
+                  height: 24
                   id: lbl_pulpit_piec
                   text: "PIEC:   ..."
-                x: 32
-                y: 0
+                  x: 32
+                  y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
-                width: 180
-                text_align: CENTER
+                  width: 180
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -346,19 +346,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                height: 44
+                  height: 44
                   text: "SALON - LAMPA"
-                x: 32
-                y: 0
+                  x: 32
+                  y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                width: 180
-                text_align: CENTER
+                  width: 180
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -384,19 +384,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                height: 44
+                  height: 44
                   text: "SYPIALNIA - LAMPA"
-                x: 32
-                y: 0
+                  x: 32
+                  y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                width: 180
-                text_align: CENTER
+                  width: 180
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
@@ -422,19 +422,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                align: LEFT_MID
+                  align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
-                height: 44
+                  height: 44
                   text: "ERNIE - LAMPA"
-                x: 32
-                y: 0
+                  x: 32
+                  y: 0
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                width: 180
-                text_align: CENTER
+                  width: 180
+                  text_align: CENTER
             on_click:
               - if:
                   condition:
