@@ -20,6 +20,8 @@ class JarvisSD : public Component {
   size_t free_heap_after() const { return free_heap_after_; }
   size_t largest_block_before() const { return largest_block_before_; }
   size_t largest_block_after() const { return largest_block_after_; }
+  size_t free_heap_after_unmount() const { return free_heap_after_unmount_; }
+  size_t largest_block_after_unmount() const { return largest_block_after_unmount_; }
 
  protected:
   uint8_t cs_pin_{5};
