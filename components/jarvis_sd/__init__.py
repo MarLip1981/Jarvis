@@ -33,7 +33,8 @@ async def to_code(config):
     cg.add(var.set_frequency(config[CONF_FREQUENCY]))
 
     # ESPHome 2026.11 selectively excludes unused ESP-IDF components.
-    # Re-enable the native SPI, SD/SDSPI and FATFS components used below.
+    # Re-enable the native SPI, SDSPI, SD/MMC and FATFS components used below.
     include_builtin_idf_component("esp_driver_spi")
+    include_builtin_idf_component("esp_driver_sdspi")
     include_builtin_idf_component("sdmmc")
     include_builtin_idf_component("fatfs")
