@@ -1,4 +1,5 @@
 #include "jarvis_sd.h"
+#include <cstring>
 #include "esphome/core/log.h"
 
 namespace esphome {
