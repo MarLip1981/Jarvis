@@ -3,7 +3,7 @@ external_components:
   - source:
       type: git
       url: https://github.com/MarLip1981/Jarvis
-      ref: d844a42456538600e40a56812ec088c41a752c82
+      ref: 83ca3d34eea0d866ec6e811e8c36f93f636df87d
       path: components
     components: [jarvis_sd]
 
