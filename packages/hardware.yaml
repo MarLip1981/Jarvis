@@ -1,13 +1,3 @@
-# Obsluga karty microSD CYD przez Arduino SD na osobnej magistrali VSPI.
-external_components:
-  - source:
-      type: git
-      url: https://github.com/MarLip1981/Jarvis
-      ref: e920d96cab18f97893c8cf584d8d2021a938e97c
-      path: components
-    refresh: 1min
-    components: [jarvis_sd]
-
 # JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
@@ -16,10 +6,6 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
-    advanced:
-      # Arduino FS wymaga funkcji katalogowych ESP-IDF (m.in. rmdir/mkdir).
-      # ESPHome domyslnie je wylacza, dlatego jawnie pozostawiamy je wlaczone.
-      disable_vfs_support_dir: false
 
 captive_portal:
 
@@ -187,7 +173,6 @@ font:
       - "\U000F116A" # brama otwarta
       - "\U000F0439" # radio
       - "\U000F0A48" # furtka
-      - "\U000F07DC" # karta microSD
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_lamp_state
@@ -226,17 +211,6 @@ spi:
   miso_pin:
     number: GPIO12
     ignore_strapping_warning: true
-
-# Karta microSD CYD: osobny kontroler VSPI przez Arduino SD. Ekran i dotyk bez zmian.
-# Ekran i dotyk pozostaja na dotychczasowej magistrali SPI (GPIO14/13/12).
-# Komponent nie formatuje karty; wykonuje bezpieczny test pliku tekstowego.
-jarvis_sd:
-  id: sd_card
-  cs_pin: GPIO5
-  clk_pin: GPIO18
-  miso_pin: GPIO19
-  mosi_pin: GPIO23
-  frequency: 4000000
 
 # Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
 output:
