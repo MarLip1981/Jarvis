@@ -194,6 +194,25 @@ lvgl:
               return (id(node_status).has_state() && id(node_status).state)
                 ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
         - delay: 900ms
+        # Karta byla potrzebna podczas bootscreenu i calej diagnostyki.
+        # Po odczytaniu wyniku zamykamy SD i zwalniamy magistrale VSPI.
+        - lambda: |-
+            id(sd_card).unmount();
+        - lvgl.label.update:
+            id: lbl_diag_ram_status
+            text: !lambda |-
+              char buf[24];
+              snprintf(buf, sizeof(buf), "F %u>%u KB",
+                (unsigned) (id(sd_card).free_heap_before() / 1024),
+                (unsigned) (id(sd_card).free_heap_after_unmount() / 1024));
+              return std::string(buf);
+            text_color: 0x00FF00
+        - lvgl.label.update:
+            id: lbl_diag_sd_status
+            text: !lambda |-
+              return id(sd_card).was_mounted() ? std::string("OK / OFF") : std::string("BRAK / OFF");
+            text_color: !lambda |-
+              return id(sd_card).was_mounted() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
         - lvgl.obj.update:
             id: top_bar
             hidden: false
