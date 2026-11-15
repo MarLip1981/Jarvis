@@ -1,6 +1,7 @@
 #pragma once
 
 #include "esphome/core/component.h"
+#include <cstddef>
 #include <SPI.h>
 
 namespace esphome {
