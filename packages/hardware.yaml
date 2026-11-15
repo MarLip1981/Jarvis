@@ -3,7 +3,7 @@ external_components:
   - source:
       type: git
       url: https://github.com/MarLip1981/Jarvis
-      ref: 8a306e9ee6fa4ac6020afb8cabdfa3606df5ea63
+      ref: 70972d618a2a32789e12ce42c120814f97cd9b2d
       path: components
     components: [jarvis_sd]
 
@@ -15,6 +15,14 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
+    # ESPHome 2026.9+ domyslnie wylacza nieuzywane komponenty ESP-IDF.
+    # Jawnie wlaczamy zaleznosci natywnego sterownika microSD SDSPI/FATFS.
+    advanced:
+      include_builtin_idf_components:
+        - esp_driver_spi
+        - esp_driver_sdspi
+        - sdmmc
+        - fatfs
 
 captive_portal:
 
