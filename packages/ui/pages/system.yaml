@@ -115,6 +115,14 @@ lvgl:
             id: lbl_diag_buzzer_status
             text: "BRAK"
             text_color: 0x666666
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_sd_status
+            text: !lambda |-
+              return id(sd_card).is_mounted()
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return id(sd_card).is_mounted() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
         - delay: 250ms
         # --- Sekcja sieciowa: wymaga czasu na polaczenie ---
         - lvgl.label.update:
@@ -352,7 +360,7 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x666666
 
-        # --- Połączenie Wi-Fi ---
+        # --- Karta microSD ---
         - label:
             text: "........................................................................"
             x: 15
@@ -361,9 +369,36 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x333333
         - label:
-            text: "Połączenie Wi-Fi"
+            text: "Karta microSD"
             x: 15
             y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: font_ui_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_sd_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: font_ui_14
+            text_color: 0x666666
+
+        # --- Połączenie Wi-Fi ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 287
+            width: 210
+            text_font: font_ui_14
+            text_color: 0x333333
+        - label:
+            text: "Połączenie Wi-Fi"
+            x: 15
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -373,7 +408,7 @@ lvgl:
             text: "..."
             align: TOP_RIGHT
             x: -15
-            y: 177
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -383,14 +418,14 @@ lvgl:
         - label:
             text: "........................................................................"
             x: 15
-            y: 199
+            y: 287
             width: 210
             text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Sygnał Wi-Fi"
             x: 15
-            y: 199
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -400,7 +435,7 @@ lvgl:
             text: "..."
             align: TOP_RIGHT
             x: -15
-            y: 199
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -410,14 +445,14 @@ lvgl:
         - label:
             text: "........................................................................"
             x: 15
-            y: 221
+            y: 287
             width: 210
             text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Adres IP Wi-Fi"
             x: 15
-            y: 221
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -427,7 +462,7 @@ lvgl:
             text: "..."
             align: TOP_RIGHT
             x: -15
-            y: 221
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -437,14 +472,14 @@ lvgl:
         - label:
             text: "........................................................................"
             x: 15
-            y: 243
+            y: 287
             width: 210
             text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Synchronizacja czasu"
             x: 15
-            y: 243
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -454,7 +489,7 @@ lvgl:
             text: "..."
             align: TOP_RIGHT
             x: -15
-            y: 243
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -464,14 +499,14 @@ lvgl:
         - label:
             text: "........................................................................"
             x: 15
-            y: 265
+            y: 287
             width: 210
             text_font: font_ui_14
             text_color: 0x333333
         - label:
             text: "Home Assistant"
             x: 15
-            y: 265
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
@@ -481,7 +516,7 @@ lvgl:
             text: "..."
             align: TOP_RIGHT
             x: -15
-            y: 265
+            y: 287
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
