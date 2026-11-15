@@ -239,6 +239,12 @@ output:
   - platform: ledc
     pin: GPIO27
     id: backlight_pwm
+  # Wbudowany wzmacniacz glosnika CYD 2.4" jest sterowany z GPIO26.
+  # LEDC generuje proste tony diagnostyczne bez dodatkowego modulu audio.
+  - platform: ledc
+    pin: GPIO26
+    id: jarvis_buzzer_output
+    frequency: 1000Hz
   - platform: ledc
     pin:
       number: GPIO4
@@ -267,6 +273,12 @@ light:
     red: led_red
     green: led_green
     blue: led_blue
+
+# Proste sygnaly dzwiekowe na wbudowanym wyjsciu audio CYD.
+rtttl:
+  id: jarvis_rtttl
+  output: jarvis_buzzer_output
+  gain: 50%
 
 # Czujnik swiatla LDR -> auto-jasnosc podswietlenia
 
