@@ -2,6 +2,7 @@
 #include <Arduino.h>
 #include <SD.h>
 #include <cstring>
+#include "esp_heap_caps.h"
 #include "esphome/core/log.h"
 
 namespace esphome {
@@ -10,6 +11,15 @@ namespace jarvis_sd {
 static const char *const TAG = "jarvis_sd";
 static const char *const TEST_PATH = "/JARVIS_SD_TEST.TXT";
 static const char *const TEST_TEXT = "JARVIS SD TEST OK";
+
+static void log_heap_stats(const char *stage) {
+  const size_t free_heap = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+  const size_t largest_block = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
+  const size_t min_free_heap = heap_caps_get_minimum_free_size(MALLOC_CAP_8BIT);
+  ESP_LOGW(TAG, "DIAG RAM [%s]: wolny heap=%u B, najwiekszy blok=%u B, minimum od startu=%u B",
+           stage, static_cast<unsigned>(free_heap), static_cast<unsigned>(largest_block),
+           static_cast<unsigned>(min_free_heap));
+}
 
 void JarvisSD::set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi) {
   cs_pin_ = cs;
@@ -21,6 +31,9 @@ void JarvisSD::set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi) {
 void JarvisSD::set_frequency(uint32_t frequency) { frequency_ = frequency; }
 
 void JarvisSD::setup() {
+  // Pomiar bazowy przed uruchomieniem sterownika karty SD.
+  log_heap_stats("PRZED SD");
+
   // CYD GUITION/Marauder: Arduino SD na osobnej magistrali VSPI.
   // Ekran i dotyk pozostaja na dotychczasowej magistrali ESPHome.
   pinMode(cs_pin_, OUTPUT);
@@ -41,6 +54,7 @@ void JarvisSD::setup() {
   }
 
   mounted_ = true;
+  log_heap_stats("PO SD.begin");
   const uint8_t card_type = SD.cardType();
   const uint64_t card_size = SD.cardSize();
 
@@ -89,6 +103,8 @@ void JarvisSD::setup() {
   } else {
     ESP_LOGE(TAG, "DIAG SD: TEST BLAD - odczytana zawartosc pliku jest niezgodna");
   }
+
+  log_heap_stats("PO TEST SD");
 }
 
 void JarvisSD::dump_config() {
