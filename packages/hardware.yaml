@@ -5,7 +5,6 @@ external_components:
       url: https://github.com/MarLip1981/Jarvis
       ref: test-sd-card
       path: components
-      refresh: 0s
     components: [jarvis_sd]
 
 # JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
