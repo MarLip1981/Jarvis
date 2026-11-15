@@ -3,7 +3,7 @@ external_components:
   - source:
       type: git
       url: https://github.com/MarLip1981/Jarvis
-      ref: 70972d618a2a32789e12ce42c120814f97cd9b2d
+      ref: ce4ba5826e55be8821b73f1e701e9ce3f033c325
       path: components
     components: [jarvis_sd]
 
@@ -190,6 +190,7 @@ font:
       - "\U000F116A" # brama otwarta
       - "\U000F0439" # radio
       - "\U000F0A48" # furtka
+      - "\U000F07DC" # karta microSD
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_lamp_state
