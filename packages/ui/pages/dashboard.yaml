@@ -213,7 +213,7 @@ lvgl:
         # Status microSD: zielony = karta zamontowana, czerwony = brak montowania.
         - label:
             id: lbl_pulpit_sd_icon
-            text: "\\U000F07DC"
+            text: "\U000F07DC"
             x: 210
             y: 213
             text_font: icon_font_btn
