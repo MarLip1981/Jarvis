@@ -1,7 +1,6 @@
 import esphome.codegen as cg
 import esphome.config_validation as cv
 from esphome import pins
-from esphome.components.esp32 import include_builtin_idf_component
 from esphome.const import CONF_ID
 
 DEPENDENCIES = ["esp32"]
@@ -32,9 +31,3 @@ async def to_code(config):
                         config[CONF_MISO_PIN], config[CONF_MOSI_PIN]))
     cg.add(var.set_frequency(config[CONF_FREQUENCY]))
 
-    # ESPHome 2026.11 selectively excludes unused ESP-IDF components.
-    # Re-enable the native SPI, SDSPI, SD/MMC and FATFS components used below.
-    include_builtin_idf_component("esp_driver_spi")
-    include_builtin_idf_component("esp_driver_sdspi")
-    include_builtin_idf_component("sdmmc")
-    include_builtin_idf_component("fatfs")
