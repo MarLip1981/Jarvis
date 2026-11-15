@@ -115,7 +115,14 @@ lvgl:
             id: lbl_diag_buzzer_status
             text: "BRAK"
             text_color: 0x666666
-        - delay: 250ms
+        - delay: 150ms
+        - lvgl.label.update:
+            id: lbl_diag_sd_status
+            text: !lambda |-
+              return id(sd_card).is_mounted()
+                ? std::string("OK") : std::string("BRAK");
+            text_color: !lambda |-
+              return id(sd_card).is_mounted() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
         # --- Sekcja sieciowa: wymaga czasu na polaczenie ---
         - lvgl.label.update:
             id: lbl_diag_wifi_status
@@ -347,6 +354,33 @@ lvgl:
             align: TOP_RIGHT
             x: -15
             y: 155
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: font_ui_14
+            text_color: 0x666666
+
+        # --- Karta microSD ---
+        - label:
+            text: "........................................................................"
+            x: 15
+            y: 177
+            width: 210
+            text_font: font_ui_14
+            text_color: 0x333333
+        - label:
+            text: "Karta microSD"
+            x: 15
+            y: 177
+            bg_color: 0x000000
+            bg_opa: COVER
+            text_font: font_ui_14
+            text_color: 0xCCCCCC
+        - label:
+            id: lbl_diag_sd_status
+            text: "..."
+            align: TOP_RIGHT
+            x: -15
+            y: 177
             bg_color: 0x000000
             bg_opa: COVER
             text_font: font_ui_14
