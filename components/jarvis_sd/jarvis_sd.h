@@ -14,6 +14,8 @@ class JarvisSD : public Component {
   void set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi);
   void set_frequency(uint32_t frequency);
   bool is_mounted() const { return mounted_; }
+  bool was_mounted() const { return was_mounted_; }
+  void unmount();
   size_t free_heap_before() const { return free_heap_before_; }
   size_t free_heap_after() const { return free_heap_after_; }
   size_t largest_block_before() const { return largest_block_before_; }
@@ -31,6 +33,9 @@ class JarvisSD : public Component {
   size_t free_heap_after_{0};
   size_t largest_block_before_{0};
   size_t largest_block_after_{0};
+  size_t free_heap_after_unmount_{0};
+  size_t largest_block_after_unmount_{0};
+  bool was_mounted_{false};
 };
 
 }  // namespace jarvis_sd
