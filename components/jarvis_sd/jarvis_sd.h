@@ -20,7 +20,7 @@ class JarvisSD : public Component {
   uint8_t miso_pin_{19};
   uint8_t mosi_pin_{23};
   uint32_t frequency_{4000000};
-  SPIClass spi_sd_;
+  SPIClass spi_sd_{VSPI};
   bool mounted_{false};
 };
 
