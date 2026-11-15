@@ -1,32 +1,32 @@
-
-# Jednorazowy test montowania, zapisu i odczytu microSD po starcie.
-# Nie formatuje karty i nie dotyka zasobow obrazu/okladek radia.
-on_boot:
-  - priority: -100
-    then:
-      - if:
-          condition:
-            lambda: 'return !id(sd_mmc_card)->is_failed();'
-          then:
-            - sd_mmc_card.write_file:
-                id: sd_mmc_card
-                path: "/JARVIS_SD_TEST.TXT"
-                data: "JARVIS SD TEST OK"
-            - lambda: |-
-                const auto data = id(sd_mmc_card)->read_file("/JARVIS_SD_TEST.TXT");
-                const std::string actual(data.begin(), data.end());
-                if (actual == "JARVIS SD TEST OK") {
-                  ESP_LOGI("JARVIS SD", "TEST OK: karta zamontowana, zapis i odczyt dzialaja (%u B)",
-                           static_cast<unsigned>(data.size()));
-                } else {
-                  ESP_LOGE("JARVIS SD", "TEST BLAD: zapis/odczyt nie zgadza sie (odczytano %u B)",
-                           static_cast<unsigned>(data.size()));
-                }
-          else:
-            - logger.log:
-                level: ERROR
-                tag: "JARVIS SD"
-                format: "TEST BLAD: karta SD nie zostala zamontowana"
+esphome:
+  # Jednorazowy test montowania, zapisu i odczytu microSD po starcie.
+  # Nie formatuje karty i nie dotyka zasobow obrazu/okladek radia.
+  on_boot:
+    - priority: -100
+      then:
+        - if:
+            condition:
+              lambda: 'return !id(sd_mmc_card)->is_failed();'
+            then:
+              - sd_mmc_card.write_file:
+                  id: sd_mmc_card
+                  path: "/JARVIS_SD_TEST.TXT"
+                  data: "JARVIS SD TEST OK"
+              - lambda: |-
+                  const auto data = id(sd_mmc_card)->read_file("/JARVIS_SD_TEST.TXT");
+                  const std::string actual(data.begin(), data.end());
+                  if (actual == "JARVIS SD TEST OK") {
+                    ESP_LOGI("JARVIS SD", "TEST OK: karta zamontowana, zapis i odczyt dzialaja (%u B)",
+                             static_cast<unsigned>(data.size()));
+                  } else {
+                    ESP_LOGE("JARVIS SD", "TEST BLAD: zapis/odczyt nie zgadza sie (odczytano %u B)",
+                             static_cast<unsigned>(data.size()));
+                  }
+            else:
+              - logger.log:
+                  level: ERROR
+                  tag: "JARVIS SD"
+                  format: "TEST BLAD: karta SD nie zostala zamontowana"
 
 # Obsluga karty microSD CYD (test na osobnej galezi).
 external_components:
