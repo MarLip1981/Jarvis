@@ -186,7 +186,7 @@ font:
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
-    size: 32
+    size: 36
     glyphs:
       - "\U000F040C" # play
       - "\U000F0666" # stop
