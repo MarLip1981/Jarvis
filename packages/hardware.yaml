@@ -1,3 +1,12 @@
+# Obsluga natywnego sterownika karty microSD CYD (SDSPI).
+external_components:
+  - source:
+      type: git
+      url: https://github.com/MarLip1981/Jarvis
+      ref: b7627324795a0cb690209532a95c393cfdd192f9
+      path: components
+    components: [jarvis_sd]
+
 # JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
@@ -211,6 +220,17 @@ spi:
   miso_pin:
     number: GPIO12
     ignore_strapping_warning: true
+
+# Karta microSD CYD: osobny kontroler VSPI.
+# Ekran i dotyk pozostaja na dotychczasowej magistrali SPI (GPIO14/13/12).
+# Komponent nie formatuje karty; wykonuje bezpieczny test pliku tekstowego.
+jarvis_sd:
+  id: sd_card
+  cs_pin: GPIO5
+  clk_pin: GPIO18
+  miso_pin: GPIO19
+  mosi_pin: GPIO23
+  frequency: 4000000
 
 # Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
 output:
