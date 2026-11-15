@@ -1,4 +1,0 @@
-# JARVIS — MODUL FUNKCJONALNY microSD
-# Konfiguracja sprzętowa i przypisanie GPIO znajdują się w packages/hardware.yaml.
-# Sterownik testowy wykonuje montaż karty oraz próbę zapisu/odczytu pliku.
-# Ten moduł jest miejscem na późniejsze funkcje operujące na plikach karty.
