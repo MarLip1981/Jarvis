@@ -239,11 +239,14 @@ output:
   - platform: ledc
     pin: GPIO27
     id: backlight_pwm
-  # Wbudowany wzmacniacz glosnika CYD 2.4" jest sterowany z GPIO26.
-  # LEDC generuje proste tony diagnostyczne bez dodatkowego modulu audio.
+  # Buzzer CYD jest aktywny stanem LOW (HIGH = cisza).
+  # Dedykowany kanal 6 nie wspoldzieli timera z podswietleniem ani RGB.
   - platform: ledc
-    pin: GPIO26
+    pin:
+      number: GPIO26
+      inverted: true
     id: jarvis_buzzer_output
+    channel: 6
     frequency: 1000Hz
   - platform: ledc
     pin:
