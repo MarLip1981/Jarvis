@@ -1,0 +1,19 @@
+# JARVIS — MODUL OBSLUGI KARTY microSD (CYD)
+# Osobny kontroler VSPI; ekran i dotyk pozostaja na dotychczasowym SPI.
+# Komponent zrodlowy jest pobierany automatycznie z katalogu components/.
+
+external_components:
+  - source:
+      type: git
+      url: https://github.com/MarLip1981/Jarvis
+      ref: b7627324795a0cb690209532a95c393cfdd192f9
+      path: components
+    components: [jarvis_sd]
+
+jarvis_sd:
+  id: sd_card
+  cs_pin: GPIO5
+  clk_pin: GPIO18
+  miso_pin: GPIO19
+  mosi_pin: GPIO23
+  frequency: 4000000
