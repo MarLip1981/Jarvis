@@ -584,6 +584,10 @@ text_sensor:
                   format: "JARVIS RADIO: otrzymano lokalny adres okladki z Home Assistant"
               - lvgl.widget.show: obj_radio_cover_placeholder
               - lvgl.widget.hide: img_radio_cover_widget
+              - lambda: |-
+                  ESP_LOGI("JARVIS RADIO", "RAM przed zadaniem pobrania: wolny heap=%u B, najwiekszy blok=%u B",
+                           static_cast<unsigned>(ESP.getFreeHeap()),
+                           static_cast<unsigned>(ESP.getMaxAllocHeap()));
               - online_image.set_url:
                   id: img_radio_cover
                   update: true
