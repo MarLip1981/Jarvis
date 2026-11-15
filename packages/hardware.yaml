@@ -1,9 +1,9 @@
-# Obsluga karty microSD CYD przez Arduino SD na VSPI, zgodnie z Marauderem.
+# Obsluga karty microSD CYD przez natywny sterownik ESP-IDF SDSPI.
 external_components:
   - source:
       type: git
       url: https://github.com/MarLip1981/Jarvis
-      ref: 55e47ffd1615966feec96d5d993f8cab3d352265
+      ref: 3433ac039811a3f29b7417ae8632444f8fdb9462
       path: components
     components: [jarvis_sd]
 
@@ -15,6 +15,13 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
+    # Jawnie dolaczamy komponenty ESP-IDF wymagane przez natywne SDSPI/FATFS.
+    advanced:
+      include_builtin_idf_components:
+        - esp_driver_spi
+        - esp_driver_sdspi
+        - sdmmc
+        - fatfs
 
 captive_portal:
 
@@ -222,7 +229,7 @@ spi:
     number: GPIO12
     ignore_strapping_warning: true
 
-# Karta microSD CYD: osobny kontroler VSPI.
+# Karta microSD CYD: osobny kontroler VSPI (SPI3_HOST), obsluga natywnym SDSPI ESP-IDF.
 # Ekran i dotyk pozostaja na dotychczasowej magistrali SPI (GPIO14/13/12).
 # Komponent nie formatuje karty; wykonuje bezpieczny test pliku tekstowego.
 jarvis_sd:
