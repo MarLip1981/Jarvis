@@ -69,9 +69,11 @@ image:
     # Nowe zdarzenia pozwalaja odroznic brak odpowiedzi serwera od bledu dekodera.
     on_download_started:
       then:
-        - logger.log:
-            level: INFO
-            format: "JARVIS RADIO: serwer rozpoczal wysylanie okladki"
+        - lambda: |-
+            ESP_LOGI("JARVIS RADIO", "RAM po inicjalizacji dekodera, przed danymi: wolny heap=%u B, najwiekszy blok=%u B",
+                     static_cast<unsigned>(ESP.getFreeHeap()),
+                     static_cast<unsigned>(ESP.getMaxAllocHeap()));
+            ESP_LOGI("JARVIS RADIO", "Serwer rozpoczal wysylanie okladki");
     on_download_progress:
       then:
         - lambda: |-
@@ -79,13 +81,17 @@ image:
             if (std::isfinite(progress)) {
               const int bucket = static_cast<int>(progress / 25.0f) * 25;
               if (bucket != last_reported || progress >= 100.0f) {
-                ESP_LOGI("JARVIS RADIO", "Pobieranie okladki: %.0f%% (%u B)",
-                         progress, static_cast<unsigned>(bytes_read));
+                ESP_LOGI("JARVIS RADIO", "Pobieranie okladki: %.0f%% (%u B), wolny heap=%u B, najwiekszy blok=%u B",
+                         progress, static_cast<unsigned>(bytes_read),
+                         static_cast<unsigned>(ESP.getFreeHeap()),
+                         static_cast<unsigned>(ESP.getMaxAllocHeap()));
                 last_reported = bucket;
               }
             } else {
-              ESP_LOGI("JARVIS RADIO", "Pobieranie okladki: %u B (serwer nie podal rozmiaru)",
-                       static_cast<unsigned>(bytes_read));
+              ESP_LOGI("JARVIS RADIO", "Pobieranie okladki: %u B, wolny heap=%u B, najwiekszy blok=%u B (brak Content-Length)",
+                       static_cast<unsigned>(bytes_read),
+                       static_cast<unsigned>(ESP.getFreeHeap()),
+                       static_cast<unsigned>(ESP.getMaxAllocHeap()));
             }
     on_download_finished:
       then:
