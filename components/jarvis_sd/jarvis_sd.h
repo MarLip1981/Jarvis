@@ -1,10 +1,7 @@
 #pragma once
 
 #include "esphome/core/component.h"
-#include "driver/spi_master.h"
-#include "driver/sdspi_host.h"
-#include "esp_vfs_fat.h"
-#include "sdmmc_cmd.h"
+#include <SPI.h>
 
 namespace esphome {
 namespace jarvis_sd {
@@ -23,9 +20,8 @@ class JarvisSD : public Component {
   uint8_t miso_pin_{19};
   uint8_t mosi_pin_{23};
   uint32_t frequency_{4000000};
-  sdmmc_card_t *card_{nullptr};
+  SPIClass spi_sd_{VSPI};
   bool mounted_{false};
-  esp_err_t mount_error_{ESP_FAIL};
 };
 
 }  // namespace jarvis_sd
