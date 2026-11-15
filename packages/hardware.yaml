@@ -16,6 +16,10 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
+    advanced:
+      # Arduino FS wymaga funkcji katalogowych ESP-IDF (m.in. rmdir/mkdir).
+      # ESPHome domyslnie je wylacza, dlatego jawnie pozostawiamy je wlaczone.
+      disable_vfs_support_dir: false
 
 captive_portal:
 
