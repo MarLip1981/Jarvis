@@ -25,9 +25,13 @@ CONFIG_SCHEMA = cv.Schema({
 
 
 async def to_code(config):
+    # ESPHome 2026.2+ nie kompiluje bibliotek Arduino domyslnie.
+    # Komponent uzywa bezposrednio SPI.h oraz SD.h, wiec wlaczamy obie.
+    cg.add_library("SPI", None)
+    cg.add_library("SD", None)
+
     var = cg.new_Pvariable(config[CONF_ID])
     await cg.register_component(var, config)
     cg.add(var.set_pins(config[CONF_CS_PIN], config[CONF_CLK_PIN],
                         config[CONF_MISO_PIN], config[CONF_MOSI_PIN]))
     cg.add(var.set_frequency(config[CONF_FREQUENCY]))
-
