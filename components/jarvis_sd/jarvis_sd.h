@@ -15,6 +15,7 @@ class JarvisSD : public Component {
   void dump_config() override;
   void set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi);
   void set_frequency(uint32_t frequency);
+  bool is_mounted() const { return mounted_; }
 
  protected:
   uint8_t cs_pin_{5};
