@@ -584,6 +584,12 @@ text_sensor:
                   format: "JARVIS RADIO: otrzymano lokalny adres okladki z Home Assistant"
               - lvgl.widget.show: obj_radio_cover_placeholder
               - lvgl.widget.hide: img_radio_cover_widget
+              # Staly bufor RGB565 120x120 w .bss omija duza alokacje heap przy dekodowaniu.
+              - lambda: |-
+                  static uint8_t radio_cover_buffer[120 * 120 * 2];
+                  if (!id(img_radio_cover).set_external_buffer(radio_cover_buffer, 120, 120)) {
+                    ESP_LOGE("JARVIS RADIO", "Nie udalo sie przekazac statycznego bufora okladki");
+                  }
               - online_image.set_url:
                   id: img_radio_cover
                   update: true
