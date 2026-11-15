@@ -27,6 +27,8 @@ void JarvisSD::set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi) {
 void JarvisSD::set_frequency(uint32_t frequency) { frequency_ = frequency; }
 
 void JarvisSD::setup() {
+  free_heap_before_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+  largest_block_before_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
   log_heap_stats("przed montowaniem SD");
 
   // Karta korzysta z osobnej magistrali VSPI; ekran i dotyk pozostaja bez zmian.
@@ -34,15 +36,20 @@ void JarvisSD::setup() {
   digitalWrite(cs_pin_, HIGH);
   spi_sd_.begin(clk_pin_, miso_pin_, mosi_pin_, cs_pin_);
 
-  if (!SD.begin(cs_pin_, spi_sd_, frequency_)) {
+  // Wystarczy jeden deskryptor pliku; domyslne SD.begin() rezerwuje piec.
+  if (!SD.begin(cs_pin_, spi_sd_, frequency_, "/sd", 1, false)) {
     mounted_ = false;
     ESP_LOGE(TAG, "Nie udalo sie zamontowac karty microSD");
+    free_heap_after_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+    largest_block_after_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
     log_heap_stats("po nieudanym montowaniu SD");
     return;
   }
 
   mounted_ = true;
-  ESP_LOGI(TAG, "Karta microSD zamontowana (tryb bez zapisu)");
+  free_heap_after_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+  largest_block_after_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
+  ESP_LOGI(TAG, "Karta microSD zamontowana (jeden plik, bez formatowania)");
   log_heap_stats("po zamontowaniu SD");
 }
 
