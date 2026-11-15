@@ -53,8 +53,27 @@ void JarvisSD::setup() {
   log_heap_stats("po zamontowaniu SD");
 }
 
+void JarvisSD::unmount() {
+  if (mounted_) {
+    // Zamykamy system plikow dopiero po zakonczeniu diagnostyki.
+    SD.end();
+    mounted_ = false;
+    ESP_LOGI(TAG, "Karta microSD odmontowana");
+  } else {
+    ESP_LOGW(TAG, "Odmontowanie SD: karta nie byla zamontowana");
+  }
+
+  // Zwalniamy rowniez magistrale VSPI uzywana wylacznie przez karte.
+  spi_sd_.end();
+  digitalWrite(cs_pin_, HIGH);
+  was_mounted_ = was_mounted_ || free_heap_after_ > 0;
+  free_heap_after_unmount_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
+  largest_block_after_unmount_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
+  log_heap_stats("po odmontowaniu SD");
+}
+
 void JarvisSD::dump_config() {
-  ESP_LOGCONFIG(TAG, "Jarvis microSD (Arduino SD / VSPI, mount-only)");
+  ESP_LOGCONFIG(TAG, "Jarvis microSD (Arduino SD / VSPI, mount/unmount)");
   ESP_LOGCONFIG(TAG, "  CS: GPIO%u", cs_pin_);
   ESP_LOGCONFIG(TAG, "  SCK: GPIO%u", clk_pin_);
   ESP_LOGCONFIG(TAG, "  MISO: GPIO%u", miso_pin_);
