@@ -1,4 +1,6 @@
 #include "jarvis_sd.h"
+#include <Arduino.h>
+#include <SD.h>
 #include <cstdio>
 #include <cstring>
 #include "esphome/core/log.h"
