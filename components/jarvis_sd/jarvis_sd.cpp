@@ -47,6 +47,7 @@ void JarvisSD::setup() {
   }
 
   mounted_ = true;
+  was_mounted_ = true;
   free_heap_after_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
   largest_block_after_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
   ESP_LOGI(TAG, "Karta microSD zamontowana (dwa pliki, bez formatowania)");
@@ -66,7 +67,6 @@ void JarvisSD::unmount() {
   // Zwalniamy rowniez magistrale VSPI uzywana wylacznie przez karte.
   spi_sd_.end();
   digitalWrite(cs_pin_, HIGH);
-  was_mounted_ = was_mounted_ || free_heap_after_ > 0;
   free_heap_after_unmount_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
   largest_block_after_unmount_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
   log_heap_stats("po odmontowaniu SD");
