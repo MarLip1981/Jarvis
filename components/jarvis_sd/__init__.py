@@ -28,6 +28,9 @@ async def to_code(config):
     # ESPHome 2026.2+ nie kompiluje bibliotek Arduino domyslnie.
     # Komponent uzywa bezposrednio SPI.h oraz SD.h, wiec wlaczamy obie.
     cg.add_library("SPI", None)
+    # Arduino SD.h wymaga rowniez biblioteki bazowej FS.h.
+    # W ESPHome 2026.2+ FS i SD sa selektywnie wylaczane niezaleznie.
+    cg.add_library("FS", None)
     cg.add_library("SD", None)
 
     var = cg.new_Pvariable(config[CONF_ID])
