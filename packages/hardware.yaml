@@ -5,6 +5,7 @@ external_components:
       url: https://github.com/MarLip1981/Jarvis
       ref: 149b538f02224c9449bea131578640e97c2dead8
       path: components
+    refresh: 1min
     components: [jarvis_sd]
 
 # JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
