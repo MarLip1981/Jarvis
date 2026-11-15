@@ -1,3 +1,41 @@
+
+# Jednorazowy test montowania, zapisu i odczytu microSD po starcie.
+# Nie formatuje karty i nie dotyka zasobow obrazu/okladek radia.
+on_boot:
+  - priority: -100
+    then:
+      - if:
+          condition:
+            lambda: 'return !id(sd_mmc_card)->is_failed();'
+          then:
+            - sd_mmc_card.write_file:
+                id: sd_mmc_card
+                path: "/JARVIS_SD_TEST.TXT"
+                data: "JARVIS SD TEST OK"
+            - lambda: |-
+                const auto data = id(sd_mmc_card)->read_file("/JARVIS_SD_TEST.TXT");
+                const std::string actual(data.begin(), data.end());
+                if (actual == "JARVIS SD TEST OK") {
+                  ESP_LOGI("JARVIS SD", "TEST OK: karta zamontowana, zapis i odczyt dzialaja (%u B)",
+                           static_cast<unsigned>(data.size()));
+                } else {
+                  ESP_LOGE("JARVIS SD", "TEST BLAD: zapis/odczyt nie zgadza sie (odczytano %u B)",
+                           static_cast<unsigned>(data.size()));
+                }
+          else:
+            - logger.log:
+                level: ERROR
+                tag: "JARVIS SD"
+                format: "TEST BLAD: karta SD nie zostala zamontowana"
+
+# Obsluga karty microSD CYD (test na osobnej galezi).
+external_components:
+  - source:
+      type: git
+      url: https://github.com/n-serrette/esphome_sd_card
+      ref: 889073e052275aeb9e826b697efe3bbbe09f935d
+    components: [sd_mmc_card]
+
 # JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
@@ -211,6 +249,31 @@ spi:
   miso_pin:
     number: GPIO12
     ignore_strapping_warning: true
+
+# microSD w CYD: osobny zestaw pinow SDMMC w trybie 1-bit.
+# Nie koliduje z magistrala SPI ekranu/dotyku (GPIO14/13/12).
+# Formatowanie po bledzie montowania jest celowo wylaczone.
+sd_mmc_card:
+  id: sd_mmc_card
+  mode_1bit: true
+  format_if_mount_failed: false
+  clk_pin: GPIO18
+  cmd_pin: GPIO23
+  data0_pin: GPIO19
+
+text_sensor:
+  - platform: sd_mmc_card
+    sd_card_type:
+      id: sd_card_type
+      name: "Jarvis - typ karty SD"
+      entity_category: diagnostic
+
+sensor:
+  - platform: sd_mmc_card
+    type: free_space
+    id: sd_free_space
+    name: "Jarvis - wolne miejsce SD"
+    entity_category: diagnostic
 
 # Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
 output:
