@@ -31,11 +31,20 @@ void JarvisSD::setup() {
   bus_config.quadhd_io_num = -1;
   bus_config.max_transfer_sz = 4096;
 
+  ESP_LOGI(TAG, "Inicjalizacja osobnej magistrali SD: SPI3_HOST, SCK=%u MISO=%u MOSI=%u",
+           clk_pin_, miso_pin_, mosi_pin_);
   esp_err_t err = spi_bus_initialize(SPI3_HOST, &bus_config, SPI_DMA_CH_AUTO);
-  if (err != ESP_OK && err != ESP_ERR_INVALID_STATE) {
+  if (err == ESP_ERR_INVALID_STATE) {
+    // Magistrala istnieje juz w systemie. Zostawiamy ja, ale jawnie raportujemy
+    // ten stan zamiast traktowac go jak pelny sukces inicjalizacji.
+    ESP_LOGW(TAG, "SPI3_HOST jest juz zainicjalizowany; kontynuuje na istniejacej magistrali");
+  } else if (err != ESP_OK) {
     mount_error_ = err;
-    ESP_LOGE(TAG, "Nie mozna uruchomic magistrali VSPI: %s", esp_err_to_name(err));
+    ESP_LOGE(TAG, "ETAP 1/2: inicjalizacja SPI3 nie powiodla sie: %s (%d)",
+             esp_err_to_name(err), static_cast<int>(err));
     return;
+  } else {
+    ESP_LOGI(TAG, "ETAP 1/2: magistrala SPI3 uruchomiona poprawnie");
   }
 
   sdmmc_host_t host = SDSPI_HOST_DEFAULT();
@@ -51,12 +60,16 @@ void JarvisSD::setup() {
   mount_config.max_files = 4;
   mount_config.allocation_unit_size = 16 * 1024;
 
+  ESP_LOGI(TAG, "ETAP 2/2: start SDSPI/FATFS, CS=GPIO%u, host=SPI3, max=%u kHz",
+           cs_pin_, host.max_freq_khz);
   mount_error_ = esp_vfs_fat_sdspi_mount(MOUNT_POINT, &host, &slot_config,
                                          &mount_config, &card_);
   if (mount_error_ != ESP_OK) {
-    ESP_LOGE(TAG, "Nie udalo sie zamontowac microSD: %s", esp_err_to_name(mount_error_));
+    ESP_LOGE(TAG, "ETAP 2/2: SDSPI/FATFS nie powiodlo sie: %s (%d)",
+             esp_err_to_name(mount_error_), static_cast<int>(mount_error_));
     return;
   }
+  ESP_LOGI(TAG, "ETAP 2/2: karta rozpoznana i system FAT zamontowany");
 
   mounted_ = true;
   ESP_LOGI(TAG, "Karta microSD zamontowana przez natywne ESP-IDF SDSPI (%u Hz)",
