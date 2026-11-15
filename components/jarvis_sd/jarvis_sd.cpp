@@ -1,5 +1,6 @@
 #include "jarvis_sd.h"
-#include <cstdio>
+#include <Arduino.h>
+#include <SD.h>
 #include <cstring>
 #include "esphome/core/log.h"
 
@@ -7,8 +8,7 @@ namespace esphome {
 namespace jarvis_sd {
 
 static const char *const TAG = "jarvis_sd";
-static const char *const MOUNT_POINT = "/sdcard";
-static const char *const TEST_PATH = "/sdcard/JARVIS_SD_TEST.TXT";
+static const char *const TEST_PATH = "/JARVIS_SD_TEST.TXT";
 static const char *const TEST_TEXT = "JARVIS SD TEST OK";
 
 void JarvisSD::set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi) {
@@ -21,83 +21,67 @@ void JarvisSD::set_pins(uint8_t cs, uint8_t clk, uint8_t miso, uint8_t mosi) {
 void JarvisSD::set_frequency(uint32_t frequency) { frequency_ = frequency; }
 
 void JarvisSD::setup() {
-  // Natywny sterownik ESP-IDF SDSPI. Karta ma osobna magistrale VSPI
-  // (SPI3_HOST); ekran i dotyk pozostaja na dotychczasowej magistrali.
-  spi_bus_config_t bus_config = {};
-  bus_config.mosi_io_num = mosi_pin_;
-  bus_config.miso_io_num = miso_pin_;
-  bus_config.sclk_io_num = clk_pin_;
-  bus_config.quadwp_io_num = -1;
-  bus_config.quadhd_io_num = -1;
-  bus_config.max_transfer_sz = 4096;
+  // CYD GUITION/Marauder: Arduino SD na osobnej magistrali VSPI.
+  // Ekran i dotyk pozostaja na dotychczasowej magistrali ESPHome.
+  pinMode(cs_pin_, OUTPUT);
+  digitalWrite(cs_pin_, HIGH);
+  delay(10);
 
-  ESP_LOGW(TAG, "DIAG SD: inicjalizacja SPI3_HOST, SCK=%u MISO=%u MOSI=%u",
-           clk_pin_, miso_pin_, mosi_pin_);
-  esp_err_t err = spi_bus_initialize(SPI3_HOST, &bus_config, SPI_DMA_CH_AUTO);
-  if (err == ESP_ERR_INVALID_STATE) {
-    ESP_LOGW(TAG, "DIAG SD: SPI3_HOST jest juz zainicjalizowany; sprobuje uzyc istniejacej magistrali");
-  } else if (err != ESP_OK) {
-    mount_error_ = err;
-    ESP_LOGE(TAG, "DIAG SD: inicjalizacja SPI3 nie powiodla sie: %s (%d)",
-             esp_err_to_name(err), static_cast<int>(err));
-    return;
-  } else {
-    ESP_LOGW(TAG, "DIAG SD: magistrala SPI3 uruchomiona");
-  }
+  ESP_LOGW(TAG, "DIAG SD: Arduino SD/VSPI, CS=GPIO%u SCK=%u MISO=%u MOSI=%u",
+           cs_pin_, clk_pin_, miso_pin_, mosi_pin_);
 
-  sdmmc_host_t host = SDSPI_HOST_DEFAULT();
-  host.slot = SPI3_HOST;
-  host.max_freq_khz = frequency_ / 1000;
+  spi_sd_.begin(clk_pin_, miso_pin_, mosi_pin_, cs_pin_);
+  delay(10);
 
-  sdspi_device_config_t slot_config = SDSPI_DEVICE_CONFIG_DEFAULT();
-  slot_config.host_id = SPI3_HOST;
-  slot_config.gpio_cs = static_cast<gpio_num_t>(cs_pin_);
-
-  esp_vfs_fat_mount_config_t mount_config = {};
-  mount_config.format_if_mount_failed = false;
-  mount_config.max_files = 4;
-  mount_config.allocation_unit_size = 16 * 1024;
-
-  ESP_LOGW(TAG, "DIAG SD: montowanie SDSPI/FATFS, CS=GPIO%u, max=%u kHz",
-           cs_pin_, host.max_freq_khz);
-  mount_error_ = esp_vfs_fat_sdspi_mount(MOUNT_POINT, &host, &slot_config,
-                                         &mount_config, &card_);
-  if (mount_error_ != ESP_OK) {
-    ESP_LOGE(TAG, "DIAG SD: montowanie SDSPI/FATFS nie powiodlo sie: %s (%d)",
-             esp_err_to_name(mount_error_), static_cast<int>(mount_error_));
+  if (!SD.begin(cs_pin_, spi_sd_, frequency_)) {
+    ESP_LOGE(TAG, "DIAG SD: SD.begin nie powiodlo sie (CS=GPIO%u, %u Hz)",
+             cs_pin_, frequency_);
+    mounted_ = false;
     return;
   }
 
   mounted_ = true;
-  ESP_LOGW(TAG, "DIAG SD: karta rozpoznana i system FAT zamontowany");
-  ESP_LOGI(TAG, "Karta microSD zamontowana przez ESP-IDF SDSPI (%u Hz)", frequency_);
+  const uint8_t card_type = SD.cardType();
+  const uint64_t card_size = SD.cardSize();
 
-  // Test dotyka wylacznie dedykowanego pliku Jarvisa; karta nie jest formatowana.
-  std::remove(TEST_PATH);
-  FILE *out = std::fopen(TEST_PATH, "w");
-  if (out == nullptr) {
+  if (card_type == CARD_NONE || card_size == 0) {
+    ESP_LOGE(TAG, "DIAG SD: SD.begin zwrocilo sukces, ale karta nie podaje typu/pojemnosci");
+    mounted_ = false;
+    SD.end();
+    return;
+  }
+
+  ESP_LOGW(TAG, "DIAG SD: karta rozpoznana; typ=%u, pojemnosc=%llu MB",
+           card_type, static_cast<unsigned long long>(card_size / (1024ULL * 1024ULL)));
+
+  // Test dotyka tylko dedykowanego pliku Jarvisa. Nie formatujemy karty.
+  SD.remove(TEST_PATH);
+  File out = SD.open(TEST_PATH, FILE_WRITE);
+  if (!out) {
     ESP_LOGE(TAG, "DIAG SD: nie mozna utworzyc pliku testowego");
     return;
   }
 
   const size_t expected = std::strlen(TEST_TEXT);
-  const size_t written = std::fwrite(TEST_TEXT, 1, expected, out);
-  const int close_result = std::fclose(out);
-  if (written != expected || close_result != 0) {
+  const size_t written = out.write(reinterpret_cast<const uint8_t *>(TEST_TEXT), expected);
+  out.flush();
+  out.close();
+
+  if (written != expected) {
     ESP_LOGE(TAG, "DIAG SD: zapis niekompletny (%u/%u bajtow)",
              static_cast<unsigned>(written), static_cast<unsigned>(expected));
     return;
   }
 
-  FILE *in = std::fopen(TEST_PATH, "r");
-  if (in == nullptr) {
-    ESP_LOGE(TAG, "DIAG SD: nie mozna otworzyc pliku do odczytu");
+  File in = SD.open(TEST_PATH, FILE_READ);
+  if (!in) {
+    ESP_LOGE(TAG, "DIAG SD: nie mozna otworzyc pliku testowego do odczytu");
     return;
   }
 
   char actual[sizeof(TEST_TEXT)] = {};
-  const size_t read_count = std::fread(actual, 1, sizeof(actual) - 1, in);
-  std::fclose(in);
+  const size_t read_count = in.readBytes(actual, sizeof(actual) - 1);
+  in.close();
 
   if (read_count == expected && std::strcmp(actual, TEST_TEXT) == 0) {
     ESP_LOGW(TAG, "DIAG SD: TEST OK - zapis i odczyt dzialaja (%u B)",
@@ -108,16 +92,13 @@ void JarvisSD::setup() {
 }
 
 void JarvisSD::dump_config() {
-  ESP_LOGCONFIG(TAG, "Jarvis microSD (ESP-IDF SDSPI / SPI3_HOST)");
+  ESP_LOGCONFIG(TAG, "Jarvis microSD (Arduino SD / VSPI)");
   ESP_LOGCONFIG(TAG, "  CS: GPIO%u", cs_pin_);
   ESP_LOGCONFIG(TAG, "  SCK: GPIO%u", clk_pin_);
   ESP_LOGCONFIG(TAG, "  MISO: GPIO%u", miso_pin_);
   ESP_LOGCONFIG(TAG, "  MOSI: GPIO%u", mosi_pin_);
   ESP_LOGCONFIG(TAG, "  Frequency: %u Hz", frequency_);
   ESP_LOGCONFIG(TAG, "  Mounted: %s", YESNO(mounted_));
-  if (!mounted_ && mount_error_ != ESP_FAIL) {
-    ESP_LOGCONFIG(TAG, "  Error: %s", esp_err_to_name(mount_error_));
-  }
 }
 
 }  // namespace jarvis_sd
