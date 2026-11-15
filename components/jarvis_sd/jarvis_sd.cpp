@@ -36,8 +36,8 @@ void JarvisSD::setup() {
   digitalWrite(cs_pin_, HIGH);
   spi_sd_.begin(clk_pin_, miso_pin_, mosi_pin_, cs_pin_);
 
-  // Wystarczy jeden deskryptor pliku; domyslne SD.begin() rezerwuje piec.
-  if (!SD.begin(cs_pin_, spi_sd_, frequency_, "/sd", 1, false)) {
+  // Dwa deskryptory wystarcza na rownoczesny plik audio i grafike; domyslnie jest piec.
+  if (!SD.begin(cs_pin_, spi_sd_, frequency_, "/sd", 2, false)) {
     mounted_ = false;
     ESP_LOGE(TAG, "Nie udalo sie zamontowac karty microSD");
     free_heap_after_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
@@ -49,7 +49,7 @@ void JarvisSD::setup() {
   mounted_ = true;
   free_heap_after_ = heap_caps_get_free_size(MALLOC_CAP_8BIT);
   largest_block_after_ = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
-  ESP_LOGI(TAG, "Karta microSD zamontowana (jeden plik, bez formatowania)");
+  ESP_LOGI(TAG, "Karta microSD zamontowana (dwa pliki, bez formatowania)");
   log_heap_stats("po zamontowaniu SD");
 }
 
