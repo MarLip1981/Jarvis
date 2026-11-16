@@ -215,9 +215,10 @@ sensor:
     attenuation: 12db
     filters:
       - lambda: |-
-          // odwracamy i skalujemy orientacyjnie do 0.1 - 1.0
+          // Odwracamy sygnal LDR i utrzymujemy minimum 25% jasnosci,
+          // aby ekran pozostawal czytelny rowniez w ciemnym pomieszczeniu.
           float v = 1.0 - x;
-          if (v < 0.1) v = 0.1;
+          if (v < 0.25) v = 0.25;
           if (v > 1.0) v = 1.0;
           return v;
     on_value:
