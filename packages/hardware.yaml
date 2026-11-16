@@ -70,20 +70,11 @@ image:
     on_download_started:
       then:
         - lambda: |-
-            // Rezerwujemy zewnetrzny bufor przed nadejsciem danych JPEG.
-            // Dekoder nie bedzie pozniej prosil heap o jeden blok 28 800 B.
-            alignas(4) static uint8_t radio_cover_buffer[120 * 120 * 2];
-            if (id(img_radio_cover).set_external_buffer(radio_cover_buffer, 120, 120)) {
-              ESP_LOGI("JARVIS RADIO", "Bufor okladki 120x120 RGB565 przypisany statycznie; heap=%u B, najwiekszy blok=%u B",
-                       static_cast<unsigned>(ESP.getFreeHeap()),
-                       static_cast<unsigned>(ESP.getMaxAllocHeap()));
-            } else {
-              ESP_LOGE("JARVIS RADIO", "Nie udalo sie przypisac statycznego bufora okladki");
-            }
-            ESP_LOGI("JARVIS RADIO", "RAM po inicjalizacji dekodera, przed danymi: wolny heap=%u B, najwiekszy blok=%u B",
+            // Tutaj dekoder jest juz uruchomiony. Bufor zewnetrzny
+            // przekazujemy w packages/entities.yaml PRZED online_image.set_url.
+            ESP_LOGI("JARVIS RADIO", "Pobieranie rozpoczęte; heap=%u B, najwiekszy blok=%u B",
                      static_cast<unsigned>(ESP.getFreeHeap()),
                      static_cast<unsigned>(ESP.getMaxAllocHeap()));
-            ESP_LOGI("JARVIS RADIO", "Serwer rozpoczal wysylanie okladki");
     on_download_progress:
       then:
         - lambda: |-
