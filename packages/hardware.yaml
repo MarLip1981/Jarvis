@@ -282,7 +282,7 @@ rtttl:
 # Czujnik swiatla LDR -> auto-jasnosc podswietlenia
 
 display:
-  - platform: ili9xxx
+  - platform: mipi_spi
     model: ST7796
     id: my_display
     # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik TFT.
@@ -293,10 +293,12 @@ display:
     dc_pin:
       number: GPIO2
       ignore_strapping_warning: true
+    # Panel Jarvisa pracuje w dotychczasowej rozdzielczości 240x320.
     dimensions: 240x320
     invert_colors: false
-    color_order: RGB
+    color_order: rgb
     transform:
+      swap_xy: false
       mirror_x: false
       mirror_y: false
     update_interval: never   # LVGL rysuje samo, gdy trzeba
