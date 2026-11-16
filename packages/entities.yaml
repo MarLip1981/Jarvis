@@ -589,6 +589,15 @@ text_sensor:
                   ESP_LOGI("JARVIS RADIO", "RAM przed zadaniem pobrania: wolny heap=%u B, najwiekszy blok=%u B",
                            static_cast<unsigned>(ESP.getFreeHeap()),
                            static_cast<unsigned>(ESP.getMaxAllocHeap()));
+              # Bufor musi byc przekazany PRZED set_url(update: true),
+              # bo online_image wywoluje begin_decode() jeszcze przed on_download_started.
+              - lambda: |-
+                  alignas(4) static uint8_t radio_cover_buffer[120 * 120 * 2];
+                  if (!id(img_radio_cover).set_external_buffer(radio_cover_buffer, 120, 120)) {
+                    ESP_LOGE("JARVIS RADIO", "BLAD: nie udalo sie przekazac bufora 120x120 przed dekodowaniem");
+                  } else {
+                    ESP_LOGI("JARVIS RADIO", "OK: bufor okładki 120x120 RGB565 przekazany PRZED dekodowaniem");
+                  }
               - online_image.set_url:
                   id: img_radio_cover
                   update: true
