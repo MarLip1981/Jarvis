@@ -22,6 +22,9 @@ interval:
                   - globals.set:
                       id: timer_alarm_active
                       value: "true"
+                  - globals.set:
+                      id: timer_alarm_started_ms
+                      value: !lambda 'return (esphome::millis)();'
                   - light.turn_on:
                       id: tft_backlight
                       brightness: 100%
@@ -37,6 +40,46 @@ interval:
                   - script.execute: timer_refresh
                   - script.execute: timer_alarm_sound
                 else:
+                  # Ostatnie 10 sekund: wybudź ekran i pokaż pełny minutnik tylko raz.
+                  - if:
+                      condition:
+                        lambda: |-
+                          const uint32_t now = (esphome::millis)();
+                          const uint32_t left = (id(timer_end_ms) > now)
+                            ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+                          return left <= 10 && !id(timer_auto_page_opened);
+                      then:
+                        - globals.set:
+                            id: timer_auto_page_opened
+                            value: "true"
+                        - light.turn_on:
+                            id: tft_backlight
+                            brightness: 100%
+                        - globals.set:
+                            id: screen_dimmed
+                            value: "false"
+                        - globals.set:
+                            id: screen_off
+                            value: "false"
+                        - lvgl.page.show:
+                            id: page_timer
+                            animation: NONE
+                  # Ostatnie 5 sekund: jeden krótki sygnał na każdą sekundę.
+                  - if:
+                      condition:
+                        lambda: |-
+                          const uint32_t now = (esphome::millis)();
+                          const uint32_t left = (id(timer_end_ms) > now)
+                            ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+                          return left > 0 && left <= 5 && left != id(timer_last_beep_s);
+                      then:
+                        - globals.set:
+                            id: timer_last_beep_s
+                            value: !lambda |-
+                              const uint32_t now = (esphome::millis)();
+                              return (id(timer_end_ms) > now)
+                                ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+                        - rtttl.play: "timer:d=16,o=6,b=240:c"
                   - script.execute: timer_refresh
   # Lokalna animacja: pozycja z HA jest celem, a ESP32 gladko przesuwa skrzydlo.
   # Sygnalizator: domyslnie swieci przy otwartej bramie i podczas otwierania,
