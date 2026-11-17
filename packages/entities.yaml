@@ -156,7 +156,7 @@ sensor:
 
   - platform: homeassistant
     id: erni_brightness_attr
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     attribute: brightness
     on_value:
       then:
@@ -181,7 +181,7 @@ sensor:
 
   - platform: homeassistant
     id: erni_colortemp_attr
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     attribute: color_temp_kelvin
     on_value:
       then:
@@ -203,6 +203,85 @@ sensor:
               - lvgl.label.update:
                   id: lbl_erni_colortemp_val
                   text: "--"
+ 
+  # Zewnętrzne oświetlenie — wartości początkowe suwaków pobierane z HA.
+  - platform: homeassistant
+    id: adresowka_brightness_attr
+    entity_id: light.adresowka
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_adresowka_brightness
+                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+              - lvgl.label.update:
+                  id: lbl_adresowka_brightness_val
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    return std::string(buf);
+  - platform: homeassistant
+    id: adresowka_colortemp_attr
+    entity_id: light.adresowka
+    attribute: color_temp_kelvin
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_adresowka_colortemp
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_adresowka_colortemp_val
+                  text: !lambda |-
+                    char buf[10];
+                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    return std::string(buf);
+  - platform: homeassistant
+    id: schodki_brightness_attr
+    entity_id: light.wejscie_schodki
+    attribute: brightness
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda: 'return !std::isnan(x);'
+            then:
+              - lvgl.slider.update:
+                  id: slider_schodki_brightness
+                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+              - lvgl.label.update:
+                  id: lbl_schodki_brightness_val
+                  text: !lambda |-
+                    char buf[8];
+                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    return std::string(buf);
+  - platform: homeassistant
+    id: schodki_colortemp_attr
+    entity_id: light.wejscie_schodki
+    attribute: color_temp_kelvin
+    on_value:
+      then:
+        - if:
+            condition:
+              lambda:
+                return !std::isnan(x);
+            then:
+              - lvgl.slider.update:
+                  id: slider_schodki_colortemp
+                  value: !lambda 'return (int) x;'
+              - lvgl.label.update:
+                  id: lbl_schodki_colortemp_val
+                  text: !lambda |-
+                    char buf[10];
+                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    return std::string(buf);
 
   - platform: internal_temperature
     id: cpu_temp_sensor
@@ -449,7 +528,7 @@ binary_sensor:
 
   - platform: homeassistant
     id: state_erni_lampa
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     on_state:
       then:
         - script.execute: ha_rx_flash
@@ -524,7 +603,7 @@ text_sensor:
 
   - platform: homeassistant
     id: state_erni_lampa_raw
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     internal: true
 
   - platform: homeassistant
@@ -986,7 +1065,7 @@ switch:
 
   - platform: homeassistant
     id: erni_lampa
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
 
 # ---------------------------------------------------------
 # LVGL
