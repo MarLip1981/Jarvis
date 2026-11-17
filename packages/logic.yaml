@@ -97,6 +97,10 @@ globals:
     type: uint32_t
     restore_value: false
     initial_value: "300"
+  - id: timer_selected_s
+    type: uint32_t
+    restore_value: false
+    initial_value: "300"
   - id: timer_end_ms
     type: uint32_t
     restore_value: false
