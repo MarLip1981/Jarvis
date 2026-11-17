@@ -187,34 +187,6 @@ lvgl:
             text_color: 0xFFFFFF
             recolor: true
 
-        - button:
-            id: btn_pulpit_timer
-            x: 200
-            y: 182
-            width: 28
-            height: 24
-            bg_opa: TRANSP
-            border_width: 0
-            shadow_width: 0
-            pad_all: 0
-            widgets:
-              - label:
-                  text: "\U000F0020"
-                  align: CENTER
-                  text_font: icon_font_btn
-                  text_color: 0x00AEEF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - lvgl.page.show:
-                        id: page_timer
-                        animation: MOVE_LEFT
-                        time: 250ms
-                    - script.execute: timer_refresh
-                    - script.execute: confirm_click
-
         # Brama - bialy tytul, kolor zmienia tylko status.
         - label:
             id: lbl_pulpit_brama_icon
