@@ -887,7 +887,7 @@ text_sensor:
             text: !lambda |-
               if (x.find("Otwieranie") != std::string::npos || x.find("Zamykanie") != std::string::npos)
                 return std::string("STOP");
-              if (x == "Otwarta") return std::string("ZAMKNIJ");
+              if (x == "Otwarta") return std::string("OTWARTA");
               if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0)
                 return std::string("OTWÓRZ");
               return std::string("STERUJ");
