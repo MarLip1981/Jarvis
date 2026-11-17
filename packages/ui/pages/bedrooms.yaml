@@ -516,7 +516,7 @@ lvgl:
                             - homeassistant.action:
                                 action: light.turn_on
                                 data:
-                                  entity_id: light.sypialnia
+                                  entity_id: light.mlody_lampka_nocna
                                 data_template:
                                   brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_erni_brightness)));'
                             - script.execute: confirm_click
@@ -546,7 +546,7 @@ lvgl:
                             - homeassistant.action:
                                 action: light.turn_on
                                 data:
-                                  entity_id: light.sypialnia
+                                  entity_id: light.mlody_lampka_nocna
                                 data_template:
                                   color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_erni_colortemp)));'
                             - script.execute: confirm_click
