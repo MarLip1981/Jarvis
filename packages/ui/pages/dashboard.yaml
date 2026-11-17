@@ -394,7 +394,9 @@ lvgl:
                   condition:
                     lambda: 'return !id(timer_running) && !id(timer_alarm_active) && id(timer_remaining_s) > 60;'
                   then:
-                    - lambda: id(timer_remaining_s) -= 60;
+                    - lambda: |-
+                        id(timer_remaining_s) -= 60;
+                        id(timer_selected_s) -= 60;
                     - script.execute: timer_refresh
         - button:
             x: 130
@@ -416,7 +418,9 @@ lvgl:
                   condition:
                     lambda: 'return !id(timer_running) && !id(timer_alarm_active) && id(timer_remaining_s) < 5940;'
                   then:
-                    - lambda: id(timer_remaining_s) += 60;
+                    - lambda: |-
+                        id(timer_remaining_s) += 60;
+                        id(timer_selected_s) += 60;
                     - script.execute: timer_refresh
         - button:
             id: btn_timer_start
@@ -507,7 +511,7 @@ lvgl:
                     - rtttl.stop
                     - globals.set:
                         id: timer_remaining_s
-                        value: "300"
+                        value: !lambda "return id(timer_selected_s);"
                     - script.execute: timer_refresh
         - button:
             id: btn_timer_stop_alarm
