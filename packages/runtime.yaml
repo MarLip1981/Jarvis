@@ -3,6 +3,41 @@
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
 interval:
+  - interval: 1s
+    then:
+      - if:
+          condition:
+            lambda: 'return id(timer_running);'
+          then:
+            - if:
+                condition:
+                  lambda: 'return (int32_t)((esphome::millis)() - id(timer_end_ms)) >= 0;'
+                then:
+                  - globals.set:
+                      id: timer_remaining_s
+                      value: "0"
+                  - globals.set:
+                      id: timer_running
+                      value: "false"
+                  - globals.set:
+                      id: timer_alarm_active
+                      value: "true"
+                  - light.turn_on:
+                      id: tft_backlight
+                      brightness: 100%
+                  - globals.set:
+                      id: screen_dimmed
+                      value: "false"
+                  - globals.set:
+                      id: screen_off
+                      value: "false"
+                  - lvgl.page.show:
+                      id: page_timer
+                      animation: NONE
+                  - script.execute: timer_refresh
+                  - script.execute: timer_alarm_sound
+                else:
+                  - script.execute: timer_refresh
   # Lokalna animacja: pozycja z HA jest celem, a ESP32 gladko przesuwa skrzydlo.
   # Sygnalizator: domyslnie swieci przy otwartej bramie i podczas otwierania,
   # miga podczas zamykania (tryb AUTO jak w karcie HA).
