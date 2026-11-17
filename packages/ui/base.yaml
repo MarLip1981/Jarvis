@@ -121,7 +121,7 @@ lvgl:
               pad_all: 0
               widgets:
                 - label:
-                    text: "\\U000F0020"
+                    text: "\U000F0020"
                     align: CENTER
                     text_font: icon_font_btn
                     text_color: 0x00AEEF
@@ -260,7 +260,7 @@ lvgl:
           hidden: true
           widgets:
             - label:
-                text: "\\U000F0020"
+                text: "\U000F0020"
                 x: 9
                 align: LEFT_MID
                 text_font: icon_font_btn
