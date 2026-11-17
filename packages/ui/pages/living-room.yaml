@@ -445,10 +445,19 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
-                  - homeassistant.action:
-                      action: media_player.toggle
-                      data:
-                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - if:
+                      condition:
+                        lambda: 'return id(tv_state).has_state() && id(tv_state).state == "off";'
+                      then:
+                        - homeassistant.action:
+                            action: remote.turn_on
+                            data:
+                              entity_id: remote.tv_samsung_7_series_49
+                      else:
+                        - homeassistant.action:
+                            action: remote.turn_off
+                            data:
+                              entity_id: remote.tv_samsung_7_series_49
                   - script.execute: confirm_click
         - button:
             x: 20
