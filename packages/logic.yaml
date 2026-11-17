@@ -204,6 +204,8 @@ script:
               snprintf(buf, sizeof(buf), "MINUTNIK  %02u:%02u", (unsigned)(seconds / 60), (unsigned)(seconds % 60));
             }
             return std::string(buf);
+          text_color: !lambda |-
+            return id(timer_alarm_active) ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFFFFF);
       - lvgl.obj.update:
           id: btn_timer_status
           hidden: !lambda 'return id(timer_running) || id(timer_alarm_active);'
