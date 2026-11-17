@@ -934,33 +934,6 @@ lvgl:
                     - script.execute: confirm_click
         - button:
             x: 8
-            y: 174
-            width: 224
-            height: 24
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 4
-            pad_all: 0
-            widgets:
-              - label:
-                  text: "SCHODKI — SYNCHRONIZACJA"
-                  align: CENTER
-                  text_font: font_ui_12
-                  text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.wejscie_schodki
-                    - script.execute: confirm_click
-
-        - button:
-            x: 8
             y: 204
             width: 224
             height: 26
