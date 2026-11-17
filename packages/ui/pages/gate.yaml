@@ -248,7 +248,18 @@ lvgl:
                     - script.execute: confirm_click
               - if:
                   condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && ((esphome::millis)() - id(btn_press_ms)) < 1500 && id(brama_main_button_entity).has_state() && !id(brama_main_button_entity).state.empty();'
+                    lambda: |-
+                      const bool closed = id(brama_ha_status).has_state() &&
+                        (id(brama_ha_status).state.rfind("Zamknięta", 0) == 0 ||
+                         id(brama_ha_status).state.rfind("Zamknieta", 0) == 0);
+                      const bool moving = id(brama_ha_status).has_state() &&
+                        (id(brama_ha_status).state.find("Otwieranie") != std::string::npos ||
+                         id(brama_ha_status).state.find("Zamykanie") != std::string::npos);
+                      return !id(screen_was_asleep) && !id(touch_gesture_blocked) &&
+                        ((esphome::millis)() - id(btn_press_ms)) >= 600 &&
+                        ((esphome::millis)() - id(btn_press_ms)) < 1500 &&
+                        (closed || moving) && id(brama_main_button_entity).has_state() &&
+                        !id(brama_main_button_entity).state.empty();
                   then:
                     - homeassistant.action:
                         action: button.press
