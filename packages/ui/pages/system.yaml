@@ -121,7 +121,7 @@ lvgl:
         - delay: 800ms
         - lvgl.label.update:
             id: lbl_diag_buzzer_status
-            text: "WYWOŁANO"
+            text: "OK"
             text_color: 0x00FF00
         - delay: 150ms
         - lvgl.label.update:
