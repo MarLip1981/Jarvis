@@ -190,6 +190,27 @@ script:
             snprintf(buf, sizeof(buf), "%02u:%02u", (unsigned)(seconds / 60), (unsigned)(seconds % 60));
             return std::string(buf);
       - lvgl.label.update:
+          id: lbl_timer_floating_countdown
+          text: !lambda |-
+            uint32_t seconds = id(timer_remaining_s);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              seconds = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+            }
+            char buf[32];
+            if (id(timer_alarm_active)) {
+              snprintf(buf, sizeof(buf), "MINUTNIK  KONIEC!");
+            } else {
+              snprintf(buf, sizeof(buf), "MINUTNIK  %02u:%02u", (unsigned)(seconds / 60), (unsigned)(seconds % 60));
+            }
+            return std::string(buf);
+      - lvgl.obj.update:
+          id: btn_timer_status
+          hidden: !lambda 'return id(timer_running) || id(timer_alarm_active);'
+      - lvgl.obj.update:
+          id: btn_timer_floating
+          hidden: !lambda 'return !id(timer_running) && !id(timer_alarm_active);'
+      - lvgl.label.update:
           id: lbl_timer_status
           text: !lambda |-
             if (id(timer_alarm_active)) return std::string("CZAS MINĄŁ!");
