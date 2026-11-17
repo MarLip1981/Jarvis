@@ -309,6 +309,38 @@ lvgl:
                     - script.execute: confirm_click
 
 
+        # Bezpośredni dostęp do minutnika z pulpitu — niezależnie od zegara w pasku.
+        - button:
+            id: btn_pulpit_timer
+            x: 10
+            y: 282
+            width: 220
+            height: 30
+            bg_color: 0x12303B
+            border_width: 1
+            border_color: 0x00AEEF
+            radius: 5
+            shadow_width: 0
+            pad_all: 0
+            widgets:
+              - label:
+                  text: "\\U000F0020  MINUTNIK"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_timer
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: timer_refresh
+                    - script.execute: confirm_click
+
+
 
     # ------------------------------------------------------
     # Lista aktualnie wlaczonych lamp.
