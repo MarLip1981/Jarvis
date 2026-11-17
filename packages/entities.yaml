@@ -270,8 +270,7 @@ sensor:
       then:
         - if:
             condition:
-              lambda:
-                return !std::isnan(x);
+              lambda: 'return !std::isnan(x);'
             then:
               - lvgl.slider.update:
                   id: slider_schodki_colortemp
@@ -892,6 +891,9 @@ text_sensor:
               if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0)
                 return std::string("OTWÓRZ");
               return std::string("STERUJ");
+        - lvgl.obj.update:
+            id: btn_brama_karta_close
+            hidden: !lambda 'return x != "Otwarta";'
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
