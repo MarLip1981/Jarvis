@@ -188,27 +188,51 @@ lvgl:
             recolor: true
 
         # Brama - bialy tytul, kolor zmienia tylko status.
-        - label:
-            id: lbl_pulpit_brama_icon
-            text: "\U000F0299"
-            x: 4
-            y: 210
-            text_font: icon_font_btn
-            text_color: 0x888888
-        - label:
-            id: lbl_pulpit_brama_title
-            text: "Brama:"
-            x: 32
-            y: 213
-            text_font: font_ui_14
-            text_color: 0xFFFFFF
-        - label:
-            id: lbl_pulpit_brama_status
-            text: "--"
-            x: 100
-            y: 213
-            text_font: font_ui_14
-            text_color: 0x888888
+        - button:
+            id: btn_pulpit_brama_status
+            x: 2
+            y: 204
+            width: 236
+            height: 30
+            bg_opa: TRANSP
+            border_width: 0
+            shadow_width: 0
+            pad_all: 0
+            widgets:
+              - label:
+                  id: lbl_pulpit_brama_icon
+                  text: "\U000F0299"
+                  x: 2
+                  align: LEFT_MID
+                  text_font: icon_font_btn
+                  text_color: 0x888888
+              - label:
+                  id: lbl_pulpit_brama_title
+                  text: "Brama:"
+                  x: 30
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_pulpit_brama_status
+                  text: "--"
+                  x: 98
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0x888888
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: brama_page_active
+                        value: "true"
+                    - lvgl.page.show:
+                        id: page_brama
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
 
         # Dwa niezalezne przyciski pilota. Sterowanie dopiero po przytrzymaniu.
         - button:
