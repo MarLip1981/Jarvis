@@ -20,7 +20,7 @@ lvgl:
             text_font: font_ui_40
             text_color: 0x00AEEF
         - label:
-            text: "v0.01 alfa"
+            text: "v2.0"
             align: CENTER
             y: 35
             text_font: font_ui_14
