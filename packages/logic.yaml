@@ -113,6 +113,18 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  - id: timer_alarm_started_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: timer_last_beep_s
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: timer_auto_page_opened
+    type: bool
+    restore_value: false
+    initial_value: "false"
   - id: radio_is_playing
     type: bool
     restore_value: false
@@ -232,15 +244,22 @@ script:
           id: btn_timer_stop_alarm
           hidden: !lambda 'return !id(timer_alarm_active);'
 
+  # Alarm powtarza sygnał maksymalnie przez 60 sekund.
+  # Wcześniejsze ręczne wyciszenie kończy pętlę natychmiast po bieżącym cyklu.
   - id: timer_alarm_sound
     mode: restart
     then:
       - while:
           condition:
-            lambda: 'return id(timer_alarm_active);'
+            lambda: 'return id(timer_alarm_active) && ((esphome::millis)() - id(timer_alarm_started_ms)) < 60000UL;'
           then:
             - rtttl.play: "jarvis:d=8,o=6,b=150:c,e,g,c7"
             - delay: 1800ms
+      - globals.set:
+          id: timer_alarm_active
+          value: "false"
+      - rtttl.stop
+      - script.execute: timer_refresh
 
   - id: timer_stop_alarm
     then:
