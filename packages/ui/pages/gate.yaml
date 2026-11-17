@@ -212,7 +212,7 @@ lvgl:
             id: btn_brama_karta_main
             x: 12
             y: 290
-            width: 104
+            width: 68
             height: 26
             pad_all: 0
             bg_color: 0x18232B
@@ -258,10 +258,42 @@ lvgl:
                           target_button: !lambda 'return id(brama_main_button_entity).state;'
                     - script.execute: confirm_click
         - button:
-            id: btn_brama_karta_pedestrian
-            x: 124
+            id: btn_brama_karta_close
+            x: 86
             y: 290
-            width: 104
+            width: 68
+            height: 26
+            pad_all: 0
+            hidden: true
+            bg_color: 0x6B1717
+            border_width: 1
+            border_color: 0xCC3333
+            radius: 5
+            shadow_width: 0
+            widgets:
+              - label:
+                  text: "ZAMKNIJ"
+                  align: CENTER
+                  text_font: font_ui_12
+                  text_color: 0xFFFFFF
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && id(brama_ha_status).has_state() && id(brama_ha_status).state == "Otwarta" && id(brama_main_button_entity).has_state() && !id(brama_main_button_entity).state.empty();'
+                  then:
+                    - homeassistant.action:
+                        action: button.press
+                        data_template:
+                          entity_id: "{{ target_button }}"
+                        variables:
+                          target_button: !lambda 'return id(brama_main_button_entity).state;'
+                    - script.execute: confirm_click
+        - button:
+            id: btn_brama_karta_pedestrian
+            x: 160
+            y: 290
+            width: 68
             height: 26
             pad_all: 0
             bg_color: 0x18232B
