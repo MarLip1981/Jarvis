@@ -421,6 +421,12 @@ lvgl:
                     - globals.set:
                         id: timer_running
                         value: "true"
+                    - globals.set:
+                        id: timer_last_beep_s
+                        value: "0"
+                    - globals.set:
+                        id: timer_auto_page_opened
+                        value: "false"
                     - script.execute: timer_refresh
                     - script.execute: confirm_click
         - button:
@@ -479,6 +485,12 @@ lvgl:
                         value: "false"
                     - globals.set:
                         id: timer_alarm_active
+                        value: "false"
+                    - globals.set:
+                        id: timer_last_beep_s
+                        value: "0"
+                    - globals.set:
+                        id: timer_auto_page_opened
                         value: "false"
                     - rtttl.stop
                     - globals.set:
