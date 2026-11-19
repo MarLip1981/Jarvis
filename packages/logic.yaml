@@ -285,9 +285,13 @@ script:
       - rtttl.stop
       # Alarm ma pierwszenstwo nad innymi sygnalami LED.
       # Po jego zatrzymaniu gasimy czerwony sygnal od razu.
-      - light.turn_off:
-          id: status_led
-          transition_length: 0s
+      - if:
+          condition:
+            lambda: 'return !id(identify_active) && !id(easter_active);'
+          then:
+            - light.turn_off:
+                id: status_led
+                transition_length: 0s
       - script.execute: timer_refresh
 
   - id: easter_egg_ironman
