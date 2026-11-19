@@ -8,12 +8,12 @@ lvgl:
       bg_color: 0x000000
       on_swipe_left:
         - lvgl.page.show:
-            id: page_pulpit
+            id: page_zewnetrzne
             animation: MOVE_LEFT
             time: 300ms
       on_swipe_right:
         - lvgl.page.show:
-            id: page_zewnetrzne
+            id: page_pulpit
             animation: MOVE_RIGHT
             time: 300ms
       widgets:
@@ -397,24 +397,19 @@ lvgl:
       on_swipe_right:
         - lvgl.page.show:
             id: page_piec
-            animation: MOVE_LEFT
-            time: 250ms
-      on_swipe_left:
-        - lvgl.page.show:
-            id: page_piec
-            animation: MOVE_LEFT
+            animation: MOVE_RIGHT
             time: 250ms
       widgets:
         - label:
             text: "OŚWIETLENIE ZEWNĘTRZNE"
             align: TOP_MID
-            y: 18
+            y: 32
             text_font: font_ui_14
             text_color: 0xFFFFFF
 
         - button:
             x: 8
-            y: 42
+            y: 52
             width: 224
             height: 26
             bg_color: 0x18232B
@@ -424,7 +419,8 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  text: "ADRESÓWKA  WŁ. / WYŁ."
+                  id: lbl_adresowka_state
+                  text: "ADRESÓWKA: ..."
                   align: CENTER
                   text_font: font_ui_12
                   text_color: 0xFFFFFF
@@ -441,20 +437,20 @@ lvgl:
         - label:
             text: "Jasność"
             x: 8
-            y: 73
+            y: 82
             text_font: font_ui_12
             text_color: 0xCCCCCC
         - label:
             id: lbl_adresowka_brightness_val
             text: "--"
             x: 184
-            y: 73
+            y: 82
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - slider:
             id: slider_adresowka_brightness
             x: 8
-            y: 91
+            y: 100
             width: 224
             height: 12
             min_value: 1
@@ -476,20 +472,20 @@ lvgl:
         - label:
             text: "Temperatura barwowa"
             x: 8
-            y: 107
+            y: 116
             text_font: font_ui_12
             text_color: 0xCCCCCC
         - label:
             id: lbl_adresowka_colortemp_val
             text: "--"
             x: 184
-            y: 107
+            y: 116
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - slider:
             id: slider_adresowka_colortemp
             x: 8
-            y: 125
+            y: 134
             width: 224
             height: 12
             min_value: 2000
@@ -511,7 +507,7 @@ lvgl:
 
         - button:
             x: 8
-            y: 145
+            y: 152
             width: 108
             height: 25
             bg_color: 0x4A1B1B
@@ -521,7 +517,8 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  text: "TRYB SOS"
+                  id: lbl_adresowka_sos_state
+                  text: "SOS: ..."
                   align: CENTER
                   text_font: font_ui_12
                   text_color: 0xFFFFFF
@@ -537,7 +534,7 @@ lvgl:
                     - script.execute: confirm_click
         - button:
             x: 124
-            y: 145
+            y: 152
             width: 108
             height: 25
             bg_color: 0x18232B
@@ -547,7 +544,8 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  text: "AUTOMATYKA"
+                  id: lbl_adresowka_auto_state
+                  text: "AUTO: ..."
                   align: CENTER
                   text_font: font_ui_12
                   text_color: 0xFFFFFF
@@ -563,7 +561,7 @@ lvgl:
                     - script.execute: confirm_click
         - button:
             x: 8
-            y: 204
+            y: 190
             width: 224
             height: 26
             bg_color: 0x18232B
@@ -573,7 +571,8 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  text: "WEJŚCIE / SCHODKI  WŁ. / WYŁ."
+                  id: lbl_schodki_state
+                  text: "WEJŚCIE / SCHODKI: ..."
                   align: CENTER
                   text_font: font_ui_12
                   text_color: 0xFFFFFF
@@ -590,20 +589,20 @@ lvgl:
         - label:
             text: "Jasność"
             x: 8
-            y: 235
+            y: 220
             text_font: font_ui_12
             text_color: 0xCCCCCC
         - label:
             id: lbl_schodki_brightness_val
             text: "--"
             x: 184
-            y: 235
+            y: 220
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - slider:
             id: slider_schodki_brightness
             x: 8
-            y: 251
+            y: 238
             width: 224
             height: 12
             min_value: 1
@@ -625,20 +624,20 @@ lvgl:
         - label:
             text: "Temperatura barwowa"
             x: 8
-            y: 267
+            y: 254
             text_font: font_ui_12
             text_color: 0xCCCCCC
         - label:
             id: lbl_schodki_colortemp_val
             text: "--"
             x: 184
-            y: 267
+            y: 254
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - slider:
             id: slider_schodki_colortemp
             x: 8
-            y: 283
+            y: 272
             width: 224
             height: 12
             min_value: 2000
