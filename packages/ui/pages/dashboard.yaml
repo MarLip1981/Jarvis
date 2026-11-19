@@ -348,7 +348,7 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  text: "\\U000F0020  MINUTNIK"
+                  text: "\U000F0020  MINUTNIK"
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
@@ -357,10 +357,14 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
+                    - globals.set:
+                        id: timer_page_active
+                        value: "true"
                     - lvgl.page.show:
                         id: page_timer
                         animation: MOVE_LEFT
                         time: 250ms
+                    - lvgl.widget.hide: btn_timer_floating
                     - script.execute: timer_refresh
                     - script.execute: confirm_click
 
@@ -372,15 +376,23 @@ lvgl:
     - id: page_timer
       bg_color: 0x000000
       on_swipe_right:
+        - globals.set:
+            id: timer_page_active
+            value: "false"
         - lvgl.page.show:
             id: page_pulpit
             animation: MOVE_RIGHT
             time: 250ms
+        - script.execute: timer_refresh
       on_swipe_left:
+        - globals.set:
+            id: timer_page_active
+            value: "false"
         - lvgl.page.show:
             id: page_pulpit
             animation: MOVE_RIGHT
             time: 250ms
+        - script.execute: timer_refresh
       widgets:
         - label:
             text: "MINUTNIK"
