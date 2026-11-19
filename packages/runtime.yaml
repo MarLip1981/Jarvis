@@ -34,9 +34,13 @@ interval:
                   - globals.set:
                       id: screen_off
                       value: "false"
+                  - globals.set:
+                      id: timer_page_active
+                      value: "true"
                   - lvgl.page.show:
                       id: page_timer
                       animation: NONE
+                  - lvgl.widget.hide: btn_timer_floating
                   - script.execute: timer_refresh
                   - script.execute: timer_alarm_sound
                 else:
@@ -61,9 +65,13 @@ interval:
                         - globals.set:
                             id: screen_off
                             value: "false"
+                        - globals.set:
+                            id: timer_page_active
+                            value: "true"
                         - lvgl.page.show:
                             id: page_timer
                             animation: NONE
+                        - lvgl.widget.hide: btn_timer_floating
                   # Ostatnie 5 sekund: jeden krótki sygnał na każdą sekundę.
                   - if:
                       condition:
@@ -79,8 +87,41 @@ interval:
                               const uint32_t now = (esphome::millis)();
                               return (id(timer_end_ms) > now)
                                 ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+                        - light.turn_on:
+                            id: status_led
+                            red: 1.0
+                            green: 0.32
+                            blue: 0.0
+                            brightness: 100%
+                            transition_length: 0s
                         - rtttl.play: "timer:d=16,o=6,b=240:c"
+                        - delay: 120ms
+                        - light.turn_off:
+                            id: status_led
+                            transition_length: 0s
                   - script.execute: timer_refresh
+  # Miganie statusowej diody podczas alarmu minutnika.
+  - interval: 250ms
+    then:
+      - if:
+          condition:
+            lambda: 'return id(timer_alarm_active);'
+          then:
+            - if:
+                condition:
+                  lambda: 'return (((esphome::millis)() / 250) % 2) == 0;'
+              then:
+                - light.turn_on:
+                    id: status_led
+                    red: 1.0
+                    green: 0.0
+                    blue: 0.0
+                    brightness: 100%
+                    transition_length: 0s
+              else:
+                - light.turn_off:
+                    id: status_led
+                    transition_length: 0s
   # Lokalna animacja: pozycja z HA jest celem, a ESP32 gladko przesuwa skrzydlo.
   # Sygnalizator: domyslnie swieci przy otwartej bramie i podczas otwierania,
   # miga podczas zamykania (tryb AUTO jak w karcie HA).
