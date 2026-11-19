@@ -100,7 +100,8 @@ interval:
                             id: status_led
                             transition_length: 0s
                   - script.execute: timer_refresh
-  # Miganie statusowej diody podczas alarmu minutnika.
+  # ESPHome 2026.11: jawnie zagniezdzony blok if/then alarmu.
+# Miganie statusowej diody podczas alarmu minutnika.
   - interval: 250ms
     then:
       - if:
