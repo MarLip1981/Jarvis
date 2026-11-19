@@ -577,7 +577,7 @@ lvgl:
                   then:
                     - script.execute: timer_stop_alarm
 
- Wybor lampy otwiera
+    # Wybor lampy otwiera
     # odpowiadajaca jej strone pomieszczenia.
     # ------------------------------------------------------
     - id: page_lampy
