@@ -9,7 +9,7 @@ lvgl:
       on_swipe_left:
         - lvgl.page.show:
             id: page_zewnetrzne
-            animation: MOVE_LEFT
+            animation: MOVE_RIGHT
             time: 300ms
       on_swipe_right:
         - lvgl.page.show:
@@ -395,7 +395,7 @@ lvgl:
       on_swipe_right:
         - lvgl.page.show:
             id: page_piec
-            animation: MOVE_RIGHT
+            animation: MOVE_LEFT
             time: 250ms
       widgets:
         - label:
@@ -524,18 +524,18 @@ lvgl:
             x: 8
             y: 52
             width: 224
-            height: 26
+            height: 32
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
-            radius: 5
+            radius: 6
             pad_all: 0
             widgets:
               - label:
                   id: lbl_adresowka_state
                   text: "ADRESÓWKA: ..."
                   align: CENTER
-                  text_font: font_ui_12
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -548,24 +548,24 @@ lvgl:
                           entity_id: light.adresowka
                     - script.execute: confirm_click
         - label:
-            text: "Jasność"
+            text: "JASNOŚĆ"
             x: 8
-            y: 82
-            text_font: font_ui_12
+            y: 91
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_adresowka_brightness_val
             text: "--"
             x: 184
-            y: 82
-            text_font: font_ui_12
+            y: 91
+            text_font: font_ui_14
             text_color: 0xFFFFFF
         - slider:
             id: slider_adresowka_brightness
             x: 8
-            y: 100
+            y: 112
             width: 224
-            height: 12
+            height: 16
             min_value: 1
             max_value: 100
             value: 50
@@ -583,24 +583,24 @@ lvgl:
                             brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_adresowka_brightness)));'
                       - script.execute: confirm_click
         - label:
-            text: "Temperatura barwowa"
+            text: "TEMPERATURA BARWOWA"
             x: 8
-            y: 116
-            text_font: font_ui_12
+            y: 146
+            text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
             id: lbl_adresowka_colortemp_val
             text: "--"
             x: 184
-            y: 116
-            text_font: font_ui_12
+            y: 146
+            text_font: font_ui_14
             text_color: 0xFFFFFF
         - slider:
             id: slider_adresowka_colortemp
             x: 8
-            y: 134
+            y: 167
             width: 224
-            height: 12
+            height: 16
             min_value: 2000
             max_value: 6500
             value: 4000
@@ -620,20 +620,20 @@ lvgl:
 
         - button:
             x: 8
-            y: 152
-            width: 108
-            height: 25
+            y: 202
+            width: 224
+            height: 42
             bg_color: 0x4A1B1B
             border_width: 1
             border_color: 0xAA4444
-            radius: 4
+            radius: 6
             pad_all: 0
             widgets:
               - label:
                   id: lbl_adresowka_sos_state
-                  text: "SOS: ..."
+                  text: "TRYB SOS: ..."
                   align: CENTER
-                  text_font: font_ui_12
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -646,21 +646,21 @@ lvgl:
                           entity_id: input_boolean.tryb_sos_adresowki
                     - script.execute: confirm_click
         - button:
-            x: 124
-            y: 152
-            width: 108
-            height: 25
+            x: 8
+            y: 253
+            width: 224
+            height: 42
             bg_color: 0x18232B
             border_width: 1
             border_color: 0x45515C
-            radius: 4
+            radius: 6
             pad_all: 0
             widgets:
               - label:
                   id: lbl_adresowka_auto_state
-                  text: "AUTO: ..."
+                  text: "AUTOMATYKA: ..."
                   align: CENTER
-                  text_font: font_ui_12
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
