@@ -511,10 +511,15 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
             on_click:
-              - lvgl.page.show:
-                  id: page_zewnetrzne
-                  animation: MOVE_RIGHT
-                  time: 250ms
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_zewnetrzne
+                        animation: MOVE_RIGHT
+                        time: 250ms
+                    - script.execute: confirm_click
         - button:
             x: 8
             y: 52
@@ -699,10 +704,15 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
             on_click:
-              - lvgl.page.show:
-                  id: page_zewnetrzne
-                  animation: MOVE_RIGHT
-                  time: 250ms
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_zewnetrzne
+                        animation: MOVE_RIGHT
+                        time: 250ms
+                    - script.execute: confirm_click
         - button:
             x: 8
             y: 52
@@ -832,10 +842,15 @@ lvgl:
                   align: CENTER
                   text_font: font_ui_14
             on_click:
-              - lvgl.page.show:
-                  id: page_zewnetrzne
-                  animation: MOVE_RIGHT
-                  time: 250ms
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - lvgl.page.show:
+                        id: page_zewnetrzne
+                        animation: MOVE_RIGHT
+                        time: 250ms
+                    - script.execute: confirm_click
         - button:
             x: 8
             y: 86
