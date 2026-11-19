@@ -726,7 +726,7 @@ text_sensor:
   # Mały URL 200x200 z encji AtlasCube TEST 0.5.8 (stan encji; duży wariant pozostaje po stronie HA).
   - platform: homeassistant
     id: radio_cover_url
-    entity_id: sensor.atlascube_radio_cover_url
+    entity_id: sensor.atlascube_radio_cover_url_test
     internal: true
     on_value:
       then:
