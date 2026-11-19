@@ -348,8 +348,15 @@ lvgl:
             pad_all: 0
             widgets:
               - label:
-                  text: "\U000F0020  MINUTNIK"
+                  text: "\U000F0020"
                   align: CENTER
+                  x: -48
+                  text_font: icon_font_btn
+                  text_color: 0xFFFFFF
+              - label:
+                  text: "MINUTNIK"
+                  align: CENTER
+                  x: 10
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
@@ -551,6 +558,14 @@ lvgl:
                     - globals.set:
                         id: timer_running
                         value: "false"
+                    # Reset podczas alarmu rowniez musi zgasic czerwona diode.
+                    - if:
+                        condition:
+                          lambda: 'return id(timer_alarm_active);'
+                        then:
+                          - light.turn_off:
+                              id: status_led
+                              transition_length: 0s
                     - globals.set:
                         id: timer_alarm_active
                         value: "false"
