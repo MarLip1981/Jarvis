@@ -130,10 +130,14 @@ lvgl:
                     condition:
                       lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && !id(timer_running) && !id(timer_alarm_active);'
                     then:
+                      - globals.set:
+                          id: timer_page_active
+                          value: "true"
                       - lvgl.page.show:
                           id: page_timer
                           animation: MOVE_LEFT
                           time: 250ms
+                      - lvgl.widget.hide: btn_timer_floating
                       - script.execute: timer_refresh
                       - script.execute: confirm_click
 
@@ -277,10 +281,14 @@ lvgl:
                 condition:
                   lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                 then:
+                  - globals.set:
+                      id: timer_page_active
+                      value: "true"
                   - lvgl.page.show:
                       id: page_timer
                       animation: MOVE_LEFT
                       time: 250ms
+                  - lvgl.widget.hide: btn_timer_floating
                   - script.execute: timer_refresh
                   - script.execute: confirm_click
       - label:
