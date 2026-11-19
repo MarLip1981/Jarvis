@@ -561,7 +561,7 @@ lvgl:
                     # Reset podczas alarmu rowniez musi zgasic czerwona diode.
                     - if:
                         condition:
-                          lambda: 'return id(timer_alarm_active);'
+                          lambda: 'return id(timer_alarm_active) && !id(identify_active) && !id(easter_active);'
                         then:
                           - light.turn_off:
                               id: status_led
