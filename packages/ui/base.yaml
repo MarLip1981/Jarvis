@@ -270,7 +270,7 @@ lvgl:
                 text: "MINUTNIK  05:00"
                 x: 38
                 align: LEFT_MID
-                text_font: font_ui_16
+                text_font: font_ui_14
                 text_color: 0xFFFFFF
           on_click:
             - if:
