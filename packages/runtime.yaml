@@ -100,29 +100,29 @@ interval:
                             id: status_led
                             transition_length: 0s
                   - script.execute: timer_refresh
-  # ESPHome 2026.11: jawnie zagniezdzony blok if/then alarmu.
-# Miganie statusowej diody podczas alarmu minutnika.
+  # Miganie statusowej diody podczas alarmu minutnika.
   - interval: 250ms
     then:
+      # Faza wlaczona: czerwona dioda.
       - if:
           condition:
-            lambda: 'return id(timer_alarm_active);'
+            lambda: 'return id(timer_alarm_active) && (((esphome::millis)() / 250) % 2) == 0;'
           then:
-            - if:
-                condition:
-                  lambda: 'return (((esphome::millis)() / 250) % 2) == 0;'
-              then:
-                - light.turn_on:
-                    id: status_led
-                    red: 1.0
-                    green: 0.0
-                    blue: 0.0
-                    brightness: 100%
-                    transition_length: 0s
-              else:
-                - light.turn_off:
-                    id: status_led
-                    transition_length: 0s
+            - light.turn_on:
+                id: status_led
+                red: 1.0
+                green: 0.0
+                blue: 0.0
+                brightness: 100%
+                transition_length: 0s
+      # Faza wylaczona: zgas diode.
+      - if:
+          condition:
+            lambda: 'return id(timer_alarm_active) && (((esphome::millis)() / 250) % 2) != 0;'
+          then:
+            - light.turn_off:
+                id: status_led
+                transition_length: 0s
   # Lokalna animacja: pozycja z HA jest celem, a ESP32 gladko przesuwa skrzydlo.
   # Sygnalizator: domyslnie swieci przy otwartej bramie i podczas otwierania,
   # miga podczas zamykania (tryb AUTO jak w karcie HA).
