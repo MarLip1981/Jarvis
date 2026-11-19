@@ -125,6 +125,10 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  - id: timer_page_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
   - id: radio_is_playing
     type: bool
     restore_value: false
@@ -190,6 +194,16 @@ script:
   # czerwono-zlotem w rytm LED, potem pokazuje "reaktor" i napis. ---
   - id: timer_refresh
     then:
+      - lvgl.page.update:
+          id: page_timer
+          bg_color: !lambda |-
+            if (id(timer_alarm_active)) return lv_color_hex(0x5A0000);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              const uint32_t left = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+              if (left > 0 && left <= 5) return lv_color_hex(0x5A2D00);
+            }
+            return lv_color_hex(0x000000);
       - lvgl.label.update:
           id: lbl_timer_countdown
           text: !lambda |-
@@ -217,13 +231,19 @@ script:
             }
             return std::string(buf);
           text_color: !lambda |-
-            return id(timer_alarm_active) ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFFFFF);
+            if (id(timer_alarm_active)) return lv_color_hex(0xFF3333);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              const uint32_t left = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+              if (left > 0 && left <= 5) return lv_color_hex(0xFF9900);
+            }
+            return lv_color_hex(0xFFFFFF);
       - lvgl.obj.update:
           id: btn_timer_status
           hidden: !lambda 'return id(timer_running) || id(timer_alarm_active);'
       - lvgl.obj.update:
           id: btn_timer_floating
-          hidden: !lambda 'return !id(timer_running) && !id(timer_alarm_active);'
+          hidden: !lambda 'return (!id(timer_running) && !id(timer_alarm_active)) || id(timer_page_active);'
       - lvgl.label.update:
           id: lbl_timer_status
           text: !lambda |-
@@ -244,20 +264,16 @@ script:
           id: btn_timer_stop_alarm
           hidden: !lambda 'return !id(timer_alarm_active);'
 
-  # Alarm powtarza sygnał maksymalnie przez 60 sekund.
-  # Wcześniejsze ręczne wyciszenie kończy pętlę natychmiast po bieżącym cyklu.
+  # Alarm trwa bez limitu czasu — kończy go wyłącznie przycisk WYCISZ/RESET.
   - id: timer_alarm_sound
     mode: restart
     then:
       - while:
           condition:
-            lambda: 'return id(timer_alarm_active) && ((esphome::millis)() - id(timer_alarm_started_ms)) < 60000UL;'
+            lambda: 'return id(timer_alarm_active);'
           then:
             - rtttl.play: "jarvis:d=8,o=6,b=150:c,e,g,c7"
             - delay: 1800ms
-      - globals.set:
-          id: timer_alarm_active
-          value: "false"
       - rtttl.stop
       - script.execute: timer_refresh
 
