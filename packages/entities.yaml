@@ -605,6 +605,59 @@ text_sensor:
     entity_id: light.mlody_lampka_nocna
     internal: true
 
+  # Bieżące stany zewnętrznego oświetlenia i przełączników.
+  - platform: homeassistant
+    id: adresowka_state
+    entity_id: light.adresowka
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_adresowka_state
+            text: !lambda |-
+              if (x == "on") return std::string("ADRESÓWKA: WŁĄCZONA");
+              if (x == "off") return std::string("ADRESÓWKA: WYŁĄCZONA");
+              return std::string("ADRESÓWKA: BRAK DANYCH");
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
+
+  - platform: homeassistant
+    id: adresowka_sos_state
+    entity_id: input_boolean.tryb_sos_adresowki
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_adresowka_sos_state
+            text: !lambda |-
+              if (x == "on") return std::string("SOS: AKTYWNY");
+              if (x == "off") return std::string("SOS: WYŁĄCZONY");
+              return std::string("SOS: BRAK DANYCH");
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xAAAAAA);'
+
+  - platform: homeassistant
+    id: adresowka_auto_state
+    entity_id: automation.adresowka_pelny_system_sterowania
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_adresowka_auto_state
+            text: !lambda |-
+              if (x == "on") return std::string("AUTO: WŁĄCZONA");
+              if (x == "off") return std::string("AUTO: WYŁĄCZONA");
+              return std::string("AUTO: BRAK DANYCH");
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
+
+  - platform: homeassistant
+    id: schodki_state
+    entity_id: light.wejscie_schodki
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_schodki_state
+            text: !lambda |-
+              if (x == "on") return std::string("WEJŚCIE / SCHODKI: WŁĄCZONE");
+              if (x == "off") return std::string("WEJŚCIE / SCHODKI: WYŁĄCZONE");
+              return std::string("WEJŚCIE / SCHODKI: BRAK DANYCH");
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
+
   - platform: homeassistant
     id: radio_stacja
     entity_id: sensor.atlascube_radio_stacja_radiowa
