@@ -283,6 +283,11 @@ script:
           id: timer_alarm_active
           value: "false"
       - rtttl.stop
+      # Alarm ma pierwszenstwo nad innymi sygnalami LED.
+      # Po jego zatrzymaniu gasimy czerwony sygnal od razu.
+      - light.turn_off:
+          id: status_led
+          transition_length: 0s
       - script.execute: timer_refresh
 
   - id: easter_egg_ironman
