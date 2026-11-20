@@ -6,30 +6,6 @@ esphome:
   on_boot:
     priority: -100
     then:
-      # Diagnostyka przyczyny poprzedniego resetu i pamięci — tylko log, bez zmiany działania UI.
-      - lambda: |-
-          const esp_reset_reason_t reason = esp_reset_reason();
-          const char *reason_name = "inne/nieznane";
-          switch (reason) {
-            case ESP_RST_UNKNOWN: reason_name = "nieznana"; break;
-            case ESP_RST_POWERON: reason_name = "zasilanie"; break;
-            case ESP_RST_SW: reason_name = "programowy"; break;
-            case ESP_RST_PANIC: reason_name = "PANIC/crash"; break;
-            case ESP_RST_INT_WDT: reason_name = "interrupt watchdog"; break;
-            case ESP_RST_TASK_WDT: reason_name = "task watchdog"; break;
-            case ESP_RST_WDT: reason_name = "watchdog"; break;
-            case ESP_RST_DEEPSLEEP: reason_name = "wybudzenie"; break;
-            case ESP_RST_BROWNOUT: reason_name = "BROWNOUT/spadek zasilania"; break;
-            case ESP_RST_SDIO: reason_name = "SDIO"; break;
-            default: break;
-          }
-          ESP_LOGI("JARVIS BOOT", "Przyczyna poprzedniego resetu: %s (kod=%d)",
-                   reason_name, static_cast<int>(reason));
-          ESP_LOGI("JARVIS BOOT", "Pamiec po starcie: wolny heap=%u B, minimum heap od startu=%u B, najwiekszy blok=%u B, uptime=%u ms",
-                   static_cast<unsigned>(ESP.getFreeHeap()),
-                   static_cast<unsigned>(ESP.getMinFreeHeap()),
-                   static_cast<unsigned>(ESP.getMaxAllocHeap()),
-                   static_cast<unsigned>(millis()));
       - light.turn_on:
           id: tft_backlight
           brightness: 100%
