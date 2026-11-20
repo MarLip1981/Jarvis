@@ -648,7 +648,7 @@ text_sensor:
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_adresowka_toggle_text
-            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("STEROWANIE"));'
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("NIEDOSTĘPNA"));'
   - platform: homeassistant
     id: adresowka_sos_state
     entity_id: input_boolean.tryb_sos_adresowki
@@ -1179,6 +1179,60 @@ text_sensor:
     id: brama_lamp_mode
     entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: lamp_mode
+
+
+  # Tekstowy odczyt stanu lamp z HA: zapewnia aktualizację opisów i przycisków
+  # bez polegania na konwersji encji light do binary_sensor.
+  - platform: homeassistant
+    id: salon_lamp_state_text
+    entity_id: light.salon_lampka
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_salon_lamp_state
+            text: !lambda 'return x == "on" ? std::string("Lampa: WŁĄCZONA") : (x == "off" ? std::string("Lampa: wyłączona") : std::string("Lampa: brak danych"));'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_salon_lamp_state_icon
+            text: !lambda 'return x == "on" ? std::string("\\U000F06E8") : std::string("\\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_salon_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("NIEDOSTĘPNA"));'
+
+  - platform: homeassistant
+    id: erni_lamp_state_text
+    entity_id: light.mlody_lampka_nocna
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_erni_lamp_state
+            text: !lambda 'return x == "on" ? std::string("Lampa: WŁĄCZONA") : (x == "off" ? std::string("Lampa: wyłączona") : std::string("Lampa: brak danych"));'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_erni_lamp_state_icon
+            text: !lambda 'return x == "on" ? std::string("\\U000F06E8") : std::string("\\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_erni_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("NIEDOSTĘPNA"));'
+
+  - platform: homeassistant
+    id: studio_lamp_state_text
+    entity_id: light.studio
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_sypialnia_lamp_state
+            text: !lambda 'return x == "on" ? std::string("Lampa: WŁĄCZONA") : (x == "off" ? std::string("Lampa: wyłączona") : std::string("Lampa: brak danych"));'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_sypialnia_lamp_state_icon
+            text: !lambda 'return x == "on" ? std::string("\\U000F06E8") : std::string("\\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_sypialnia_lamp_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("NIEDOSTĘPNA"));'
 
 button:
   - platform: template
