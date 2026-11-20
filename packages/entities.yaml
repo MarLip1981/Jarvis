@@ -798,12 +798,12 @@ text_sensor:
               # bo online_image wywoluje begin_decode() jeszcze przed on_download_started.
               - lambda: |-
                   alignas(4) static uint8_t radio_cover_buffer[120 * 120 * 2];
-                  auto &img = id(img_radio_cover);
+                  auto *img = id(img_radio_cover);
                   // Konczy ewentualne trwajace dekodowanie poprzedniej okladki
                   // i zwalnia (bez free) poprzednio przekazany bufor.
-                  img.release();
+                  img->release();
                   memset(radio_cover_buffer, 0, sizeof(radio_cover_buffer));
-                  if (!img.set_external_buffer(radio_cover_buffer, 120, 120)) {
+                  if (!img->set_external_buffer(radio_cover_buffer, 120, 120)) {
                     ESP_LOGE("JARVIS RADIO", "BLAD: nie udalo sie przekazac bufora 120x120 przed dekodowaniem");
                   } else {
                     ESP_LOGI("JARVIS RADIO", "OK: bufor okładki 120x120 RGB565 przekazany PRZED dekodowaniem");
