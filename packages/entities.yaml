@@ -637,9 +637,9 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_adresowka_state
             text: !lambda |-
-              if (x == "on") return std::string("ADRESÓWKA: WŁĄCZONA");
-              if (x == "off") return std::string("ADRESÓWKA: WYŁĄCZONA");
-              return std::string("ADRESÓWKA: BRAK DANYCH");
+              if (x == "on") return std::string("Lampa: WŁĄCZONA");
+              if (x == "off") return std::string("Lampa: wyłączona");
+              return std::string("Lampa: brak danych");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_adresowka_state_icon
@@ -682,9 +682,9 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_schodki_state
             text: !lambda |-
-              if (x == "on") return std::string("WEJŚCIE / SCHODKI: WŁĄCZONE");
-              if (x == "off") return std::string("WEJŚCIE / SCHODKI: WYŁĄCZONE");
-              return std::string("WEJŚCIE / SCHODKI: BRAK DANYCH");
+              if (x == "on") return std::string("Lampa: WŁĄCZONA");
+              if (x == "off") return std::string("Lampa: wyłączona");
+              return std::string("Lampa: brak danych");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_schodki_state_icon
