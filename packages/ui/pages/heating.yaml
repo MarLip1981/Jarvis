@@ -831,9 +831,9 @@ lvgl:
             text_color: 0xFFFFFF
         - obj:
             x: 4
-            y: 62
+            y: 60
             width: 232
-            height: 112
+            height: 120
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -851,21 +851,21 @@ lvgl:
                   id: lbl_wjazd_icon
                   text: "\U000F0336"
                   align: TOP_MID
-                  y: 25
+                  y: 30
                   text_font: icon_font_lamp_state
                   text_color: 0x888888
               - label:
                   id: lbl_wjazd_state
                   text: "BRAK DANYCH"
                   align: TOP_MID
-                  y: 54
+                  y: 64
                   text_font: font_ui_12
                   text_color: 0xFF3333
               - button:
                   x: 0
-                  y: 76
+                  y: 90
                   width: 224
-                  height: 28
+                  height: 26
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
@@ -889,9 +889,9 @@ lvgl:
                           - script.execute: confirm_click
         - obj:
             x: 4
-            y: 184
+            y: 190
             width: 232
-            height: 112
+            height: 120
             bg_opa: TRANSP
             border_width: 2
             border_color: 0x333333
@@ -909,21 +909,21 @@ lvgl:
                   id: lbl_podworko_icon
                   text: "\U000F0336"
                   align: TOP_MID
-                  y: 25
+                  y: 30
                   text_font: icon_font_lamp_state
                   text_color: 0x888888
               - label:
                   id: lbl_podworko_state
                   text: "BRAK DANYCH"
                   align: TOP_MID
-                  y: 54
+                  y: 64
                   text_font: font_ui_12
                   text_color: 0xFF3333
               - button:
                   x: 0
-                  y: 76
+                  y: 90
                   width: 224
-                  height: 28
+                  height: 26
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
