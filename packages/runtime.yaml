@@ -134,7 +134,7 @@ interval:
           id: gate_beacon
           bg_opa: !lambda |-
             if (!id(brama_ha_status).has_state()) return LV_OPA_TRANSP;
-            const std::string s = id(brama_ha_status).state;
+            const std::string &s = id(brama_ha_status).state;
             const bool open = s == "Otwarta";
             const bool opening = s.find("Otwieranie") != std::string::npos ||
                                  s.find("Furtka") != std::string::npos;
