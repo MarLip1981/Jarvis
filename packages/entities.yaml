@@ -1194,7 +1194,7 @@ text_sensor:
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_salon_lamp_state_icon
-            text: !lambda 'return x == "on" ? std::string("\\U000F06E8") : std::string("\\U000F0336");'
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_salon_toggle_text
@@ -1211,7 +1211,7 @@ text_sensor:
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_erni_lamp_state_icon
-            text: !lambda 'return x == "on" ? std::string("\\U000F06E8") : std::string("\\U000F0336");'
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_erni_toggle_text
@@ -1228,7 +1228,7 @@ text_sensor:
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_sypialnia_lamp_state_icon
-            text: !lambda 'return x == "on" ? std::string("\\U000F06E8") : std::string("\\U000F0336");'
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
         - lvgl.label.update:
             id: lbl_sypialnia_lamp_toggle_text
