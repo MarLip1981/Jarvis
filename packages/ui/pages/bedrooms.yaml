@@ -142,6 +142,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
+                        id: lbl_sypialnia_lamp_toggle_text
                         text: "WŁĄCZ / WYŁĄCZ"
                         text_font: font_ui_14
                         text_align: CENTER
@@ -481,6 +482,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
+                        id: lbl_erni_toggle_text
                         text: "WŁĄCZ / WYŁĄCZ"
                         text_font: font_ui_14
                         text_align: CENTER
