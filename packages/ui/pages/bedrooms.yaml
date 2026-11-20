@@ -497,15 +497,15 @@ lvgl:
                   id: lbl_erni_brightness
                   text: "Jasność"
                   x: 5
-                  y: 34
+                  y: 32
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_erni_brightness
-                  x: 20
-                  y: 56
-                  width: 30
-                  height: 100
+                  x: 5
+                  y: 54
+                  width: 222
+                  height: 16
                   min_value: 1
                   max_value: 100
                   value: 50
@@ -526,16 +526,16 @@ lvgl:
               - label:
                   id: lbl_erni_colortemp
                   text: "Barwa"
-                  x: 125
-                  y: 34
+                  x: 5
+                  y: 82
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_erni_colortemp
-                  x: 160
-                  y: 56
-                  width: 30
-                  height: 100
+                  x: 5
+                  y: 104
+                  width: 222
+                  height: 16
                   min_value: 2000
                   max_value: 6500
                   value: 4000
@@ -557,16 +557,16 @@ lvgl:
                   id: lbl_erni_brightness_val
                   text: "--"
                   align: TOP_LEFT
-                  x: 15
-                  y: 160
+                  x: 184
+                  y: 32
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
               - label:
                   id: lbl_erni_colortemp_val
                   text: "--"
                   align: TOP_LEFT
-                  x: 148
-                  y: 160
+                  x: 184
+                  y: 82
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
 
