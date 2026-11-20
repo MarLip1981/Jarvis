@@ -482,8 +482,13 @@ binary_sensor:
             id: lbl_salon_glowna_text
             text: !lambda 'return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");'
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
-
-
+        - lvgl.label.update:
+            id: lbl_salon_lamp_state_icon
+            text: !lambda 'return x ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
+        - lvgl.label.update:
+            id: lbl_salon_toggle_text
+            text: !lambda 'return x ? std::string("WYŁĄCZ") : std::string("WŁĄCZ");'
   - platform: gpio
     # GPIO0 jest pinem BOOT ESP32. Przycisk działa jako zwykłe wejście po starcie,
     # ale jego przytrzymanie podczas resetu może uruchomić tryb bootloadera.
@@ -544,8 +549,17 @@ binary_sensor:
             text: !lambda |-
               return x ? std::string("\U000F06E8") : std::string("\U000F0336");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
-
-
+        - lvgl.label.update:
+            id: lbl_erni_lamp_state_icon
+            text: !lambda 'return x ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
+        - lvgl.label.update:
+            id: lbl_erni_lamp_state
+            text: !lambda 'return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xAAAAAA);'
+        - lvgl.label.update:
+            id: lbl_erni_toggle_text
+            text: !lambda 'return x ? std::string("WYŁĄCZ") : std::string("WŁĄCZ");'
   - platform: homeassistant
     id: state_sypialnia_lampa
     entity_id: light.studio
@@ -565,8 +579,17 @@ binary_sensor:
             text: !lambda |-
               return x ? std::string("\U000F06E8") : std::string("\U000F0336");
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
-
-
+        - lvgl.label.update:
+            id: lbl_sypialnia_lamp_state_icon
+            text: !lambda 'return x ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
+        - lvgl.label.update:
+            id: lbl_sypialnia_lamp_state
+            text: !lambda 'return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");'
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xAAAAAA);'
+        - lvgl.label.update:
+            id: lbl_sypialnia_lamp_toggle_text
+            text: !lambda 'return x ? std::string("WYŁĄCZ") : std::string("WŁĄCZ");'
   - platform: homeassistant
     id: state_drzwi
     entity_id: binary_sensor.intelignty_czujnik_otwarcia_melink_drzwi
@@ -618,7 +641,13 @@ text_sensor:
               if (x == "off") return std::string("ADRESÓWKA: WYŁĄCZONA");
               return std::string("ADRESÓWKA: BRAK DANYCH");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
-
+        - lvgl.label.update:
+            id: lbl_adresowka_state_icon
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_adresowka_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("STEROWANIE"));'
   - platform: homeassistant
     id: adresowka_sos_state
     entity_id: input_boolean.tryb_sos_adresowki
@@ -657,8 +686,13 @@ text_sensor:
               if (x == "off") return std::string("WEJŚCIE / SCHODKI: WYŁĄCZONE");
               return std::string("WEJŚCIE / SCHODKI: BRAK DANYCH");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
-
-
+        - lvgl.label.update:
+            id: lbl_schodki_state_icon
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_schodki_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("STEROWANIE"));'
   - platform: homeassistant
     id: wjazd_state
     entity_id: light.oswietlenie_zewnetrzne_wjazd
@@ -667,11 +701,17 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_wjazd_state
             text: !lambda |-
-              if (x == "on") return std::string("WJAZD: WŁĄCZONY");
-              if (x == "off") return std::string("WJAZD: WYŁĄCZONY");
-              return std::string("WJAZD: BRAK DANYCH");
+              if (x == "on") return std::string("WŁĄCZONA");
+              if (x == "off") return std::string("WYŁĄCZONA");
+              return std::string("BRAK DANYCH");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
-
+        - lvgl.label.update:
+            id: lbl_wjazd_icon
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_wjazd_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("STEROWANIE"));'
   - platform: homeassistant
     id: podworko_state
     entity_id: light.oswietlenie_zewnetrzne_podworko
@@ -680,11 +720,17 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_podworko_state
             text: !lambda |-
-              if (x == "on") return std::string("PODWÓRKO: WŁĄCZONE");
-              if (x == "off") return std::string("PODWÓRKO: WYŁĄCZONE");
-              return std::string("PODWÓRKO: BRAK DANYCH");
+              if (x == "on") return std::string("WŁĄCZONE");
+              if (x == "off") return std::string("WYŁĄCZONE");
+              return std::string("BRAK DANYCH");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0x00DD66) : (x == "off" ? lv_color_hex(0xAAAAAA) : lv_color_hex(0xFF3333));'
-
+        - lvgl.label.update:
+            id: lbl_podworko_icon
+            text: !lambda 'return x == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");'
+            text_color: !lambda 'return x == "on" ? lv_color_hex(0x00FF00) : (x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333));'
+        - lvgl.label.update:
+            id: lbl_podworko_toggle_text
+            text: !lambda 'return x == "on" ? std::string("WYŁĄCZ") : (x == "off" ? std::string("WŁĄCZ") : std::string("STEROWANIE"));'
   - platform: homeassistant
     id: radio_stacja
     entity_id: sensor.atlascube_radio_stacja_radiowa
