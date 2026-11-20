@@ -435,27 +435,3 @@ interval:
           text_color: !lambda |-
             if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
             return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
-      - lvgl.label.update:
-          id: lbl_salon_toggle_text
-          text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("NIEDOSTĘPNA");
-            return id(state_salon_lampka_raw).state == "on" ? std::string("WYŁĄCZ") : std::string("WŁĄCZ");
-          text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return lv_color_hex(0xFFFFFF);
-      - lvgl.label.update:
-          id: lbl_erni_toggle_text
-          text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("NIEDOSTĘPNA");
-            return id(state_erni_lampa_raw).state == "on" ? std::string("WYŁĄCZ") : std::string("WŁĄCZ");
-          text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return lv_color_hex(0xFFFFFF);
-      - lvgl.label.update:
-          id: lbl_sypialnia_lamp_toggle_text
-          text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("NIEDOSTĘPNA");
-            return id(state_sypialnia_lampa_raw).state == "on" ? std::string("WYŁĄCZ") : std::string("WŁĄCZ");
-          text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return lv_color_hex(0xFFFFFF);
