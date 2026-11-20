@@ -64,7 +64,9 @@ image:
     type: RGB565
     resize: 120x120
     update_interval: never
-    buffer_size: 8192
+    # AtlasCube dostarcza male JPEG 200x200; 4 KB wystarcza na naglowki,
+    # a mniejszy bufor zostawia wiecej wewnetrznego RAM dla dekodera JPEG.
+    buffer_size: 4096
     # ESPHome 2026.11: JPEG jest dekodowany w trakcie pobierania.
     # Nowe zdarzenia pozwalaja odroznic brak odpowiedzi serwera od bledu dekodera.
     on_download_started:
