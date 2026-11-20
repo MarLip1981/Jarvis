@@ -473,6 +473,7 @@ binary_sensor:
             id: lbl_salon_lamp_state
             text: !lambda |-
               return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
+            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xAAAAAA);'
         - lvgl.label.update:
             id: lbl_salon_glowna_icon
             text: !lambda |-
