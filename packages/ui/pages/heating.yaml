@@ -493,187 +493,188 @@ lvgl:
             text: "ADRESÓWKA"
             align: TOP_MID
             y: 30
-            text_font: font_ui_14
+            text_font: font_ui_18
             text_color: 0xFFFFFF
-        - button:
-            x: 8
-            y: 5
-            width: 42
-            height: 22
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 4
-            pad_all: 0
+        - label:
+            id: lbl_adresowka_state_icon
+            text: "\U000F0336"
+            align: TOP_MID
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0x888888
+        - label:
+            id: lbl_adresowka_state
+            text: "Lampa: BRAK DANYCH"
+            align: TOP_MID
+            y: 98
+            text_font: font_ui_14
+            text_color: 0xFF3333
+        - obj:
+            x: 2
+            y: 118
+            width: 236
+            height: 196
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
             widgets:
+              - button:
+                  x: 0
+                  y: 0
+                  width: 232
+                  height: 28
+                  pad_all: 0
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x31546B
+                  widgets:
+                    - label:
+                        id: lbl_adresowka_toggle_text
+                        align: CENTER
+                        text: "WŁĄCZ / WYŁĄCZ"
+                        text_font: font_ui_14
+                        text_align: CENTER
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.adresowka
+                          - script.execute: confirm_click
               - label:
-                  text: "‹"
-                  align: CENTER
+                  text: "Jasność"
+                  x: 5
+                  y: 34
                   text_font: font_ui_14
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - lvgl.page.show:
-                        id: page_zewnetrzne
-                        animation: MOVE_RIGHT
-                        time: 250ms
-                    - script.execute: confirm_click
-        - button:
-            x: 8
-            y: 52
-            width: 224
-            height: 32
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 6
-            pad_all: 0
-            widgets:
+                  text_color: 0xCCCCCC
               - label:
-                  id: lbl_adresowka_state
-                  text: "ADRESÓWKA: ..."
-                  align: CENTER
+                  id: lbl_adresowka_brightness_val
+                  text: "--"
+                  x: 184
+                  y: 34
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.adresowka
-                    - script.execute: confirm_click
-        - label:
-            text: "JASNOŚĆ"
-            x: 8
-            y: 91
-            text_font: font_ui_14
-            text_color: 0xCCCCCC
-        - label:
-            id: lbl_adresowka_brightness_val
-            text: "--"
-            x: 184
-            y: 91
-            text_font: font_ui_14
-            text_color: 0xFFFFFF
-        - slider:
-            id: slider_adresowka_brightness
-            x: 8
-            y: 112
-            width: 224
-            height: 16
-            min_value: 1
-            max_value: 100
-            value: 50
-            on_release:
-              then:
-                - if:
-                    condition:
-                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+              - slider:
+                  id: slider_adresowka_brightness
+                  x: 5
+                  y: 52
+                  width: 222
+                  height: 14
+                  min_value: 1
+                  max_value: 100
+                  value: 50
+                  on_release:
                     then:
-                      - homeassistant.action:
-                          action: light.turn_on
-                          data:
-                            entity_id: light.adresowka
-                          data_template:
-                            brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_adresowka_brightness)));'
-                      - script.execute: confirm_click
-        - label:
-            text: "TEMPERATURA BARWOWA"
-            x: 8
-            y: 146
-            text_font: font_ui_14
-            text_color: 0xCCCCCC
-        - label:
-            id: lbl_adresowka_colortemp_val
-            text: "--"
-            x: 184
-            y: 146
-            text_font: font_ui_14
-            text_color: 0xFFFFFF
-        - slider:
-            id: slider_adresowka_colortemp
-            x: 8
-            y: 167
-            width: 224
-            height: 16
-            min_value: 2000
-            max_value: 6500
-            value: 4000
-            on_release:
-              then:
-                - if:
-                    condition:
-                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.adresowka
+                                data_template:
+                                  brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_adresowka_brightness)));'
+                            - script.execute: confirm_click
+              - label:
+                  text: "Temperatura barwowa"
+                  x: 5
+                  y: 72
+                  text_font: font_ui_14
+                  text_color: 0xCCCCCC
+              - label:
+                  id: lbl_adresowka_colortemp_val
+                  text: "--"
+                  x: 184
+                  y: 72
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+              - slider:
+                  id: slider_adresowka_colortemp
+                  x: 5
+                  y: 90
+                  width: 222
+                  height: 14
+                  min_value: 2000
+                  max_value: 6500
+                  value: 4000
+                  on_release:
                     then:
-                      - homeassistant.action:
-                          action: light.turn_on
-                          data:
-                            entity_id: light.adresowka
-                          data_template:
-                            color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_adresowka_colortemp)));'
-                      - script.execute: confirm_click
-
-        - button:
-            x: 8
-            y: 202
-            width: 224
-            height: 42
-            bg_color: 0x4A1B1B
-            border_width: 1
-            border_color: 0xAA4444
-            radius: 6
-            pad_all: 0
-            widgets:
-              - label:
-                  id: lbl_adresowka_sos_state
-                  text: "TRYB SOS: ..."
-                  align: CENTER
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: input_boolean.toggle
-                        data:
-                          entity_id: input_boolean.tryb_sos_adresowki
-                    - script.execute: confirm_click
-        - button:
-            x: 8
-            y: 253
-            width: 224
-            height: 42
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 6
-            pad_all: 0
-            widgets:
-              - label:
-                  id: lbl_adresowka_auto_state
-                  text: "AUTOMATYKA: ..."
-                  align: CENTER
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: automation.toggle
-                        data:
-                          entity_id: automation.adresowka_pelny_system_sterowania
-                    - script.execute: confirm_click
-
-    # Osobna podstrona: wejscie i schodki.
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.adresowka
+                                data_template:
+                                  color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_adresowka_colortemp)));'
+                            - script.execute: confirm_click
+              - button:
+                  x: 0
+                  y: 116
+                  width: 232
+                  height: 32
+                  bg_color: 0x4A1B1B
+                  border_width: 1
+                  border_color: 0xAA4444
+                  radius: 6
+                  pad_all: 0
+                  widgets:
+                    - label:
+                        id: lbl_adresowka_sos_state
+                        text: "TRYB SOS: ..."
+                        align: CENTER
+                        text_font: font_ui_14
+                        text_color: 0xFFFFFF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: input_boolean.toggle
+                              data:
+                                entity_id: input_boolean.tryb_sos_adresowki
+                          - script.execute: confirm_click
+              - button:
+                  x: 0
+                  y: 154
+                  width: 232
+                  height: 32
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 6
+                  pad_all: 0
+                  widgets:
+                    - label:
+                        id: lbl_adresowka_auto_state
+                        text: "AUTOMATYKA: ..."
+                        align: CENTER
+                        text_font: font_ui_14
+                        text_color: 0xFFFFFF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: automation.toggle
+                              data:
+                                entity_id: automation.adresowka_pelny_system_sterowania
+                          - script.execute: confirm_click
     - id: page_schodki
       bg_color: 0x000000
       on_swipe_right:
@@ -686,132 +687,134 @@ lvgl:
             text: "WEJŚCIE / SCHODKI"
             align: TOP_MID
             y: 30
+            text_font: font_ui_18
+            text_color: 0xFFFFFF
+        - label:
+            id: lbl_schodki_state_icon
+            text: "\U000F0336"
+            align: TOP_MID
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0x888888
+        - label:
+            id: lbl_schodki_state
+            text: "Lampa: BRAK DANYCH"
+            align: TOP_MID
+            y: 98
             text_font: font_ui_14
-            text_color: 0xFFFFFF
-        - button:
-            x: 8
-            y: 5
-            width: 42
-            height: 22
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 4
-            pad_all: 0
+            text_color: 0xFF3333
+        - obj:
+            x: 2
+            y: 118
+            width: 236
+            height: 196
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
             widgets:
+              - button:
+                  x: 0
+                  y: 0
+                  width: 232
+                  height: 28
+                  pad_all: 0
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  shadow_width: 0
+                  pressed:
+                    bg_color: 0x31546B
+                  widgets:
+                    - label:
+                        id: lbl_schodki_toggle_text
+                        align: CENTER
+                        text: "WŁĄCZ / WYŁĄCZ"
+                        text_font: font_ui_14
+                        text_align: CENTER
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.wejscie_schodki
+                          - script.execute: confirm_click
               - label:
-                  text: "‹"
-                  align: CENTER
+                  text: "Jasność"
+                  x: 5
+                  y: 34
                   text_font: font_ui_14
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - lvgl.page.show:
-                        id: page_zewnetrzne
-                        animation: MOVE_RIGHT
-                        time: 250ms
-                    - script.execute: confirm_click
-        - button:
-            x: 8
-            y: 52
-            width: 224
-            height: 26
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 5
-            pad_all: 0
-            widgets:
+                  text_color: 0xCCCCCC
               - label:
-                  id: lbl_schodki_state
-                  text: "WEJŚCIE / SCHODKI: ..."
-                  align: CENTER
-                  text_font: font_ui_12
+                  id: lbl_schodki_brightness_val
+                  text: "--"
+                  x: 184
+                  y: 34
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.wejscie_schodki
-                    - script.execute: confirm_click
-        - label:
-            text: "Jasność"
-            x: 8
-            y: 82
-            text_font: font_ui_12
-            text_color: 0xCCCCCC
-        - label:
-            id: lbl_schodki_brightness_val
-            text: "--"
-            x: 184
-            y: 82
-            text_font: font_ui_12
-            text_color: 0xFFFFFF
-        - slider:
-            id: slider_schodki_brightness
-            x: 8
-            y: 100
-            width: 224
-            height: 12
-            min_value: 1
-            max_value: 100
-            value: 50
-            on_release:
-              then:
-                - if:
-                    condition:
-                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+              - slider:
+                  id: slider_schodki_brightness
+                  x: 5
+                  y: 52
+                  width: 222
+                  height: 14
+                  min_value: 1
+                  max_value: 100
+                  value: 50
+                  on_release:
                     then:
-                      - homeassistant.action:
-                          action: light.turn_on
-                          data:
-                            entity_id: light.wejscie_schodki
-                          data_template:
-                            brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_schodki_brightness)));'
-                      - script.execute: confirm_click
-        - label:
-            text: "Temperatura barwowa"
-            x: 8
-            y: 116
-            text_font: font_ui_12
-            text_color: 0xCCCCCC
-        - label:
-            id: lbl_schodki_colortemp_val
-            text: "--"
-            x: 184
-            y: 116
-            text_font: font_ui_12
-            text_color: 0xFFFFFF
-        - slider:
-            id: slider_schodki_colortemp
-            x: 8
-            y: 134
-            width: 224
-            height: 12
-            min_value: 2000
-            max_value: 6500
-            value: 4000
-            on_release:
-              then:
-                - if:
-                    condition:
-                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.wejscie_schodki
+                                data_template:
+                                  brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_schodki_brightness)));'
+                            - script.execute: confirm_click
+              - label:
+                  text: "Temperatura barwowa"
+                  x: 5
+                  y: 72
+                  text_font: font_ui_14
+                  text_color: 0xCCCCCC
+              - label:
+                  id: lbl_schodki_colortemp_val
+                  text: "--"
+                  x: 184
+                  y: 72
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+              - slider:
+                  id: slider_schodki_colortemp
+                  x: 5
+                  y: 90
+                  width: 222
+                  height: 14
+                  min_value: 2000
+                  max_value: 6500
+                  value: 4000
+                  on_release:
                     then:
-                      - homeassistant.action:
-                          action: light.turn_on
-                          data:
-                            entity_id: light.wejscie_schodki
-                          data_template:
-                            color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_schodki_colortemp)));'
-                      - script.execute: confirm_click
-
-    # Osobna podstrona: dwa niezalezne przekazniki sterownika ESP32 Relay x2.
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          then:
+                            - homeassistant.action:
+                                action: light.turn_on
+                                data:
+                                  entity_id: light.wejscie_schodki
+                                data_template:
+                                  color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_schodki_colortemp)));'
+                            - script.execute: confirm_click
     - id: page_podworko
       bg_color: 0x000000
       on_swipe_right:
@@ -824,88 +827,121 @@ lvgl:
             text: "PODWÓRKO"
             align: TOP_MID
             y: 30
-            text_font: font_ui_14
+            text_font: font_ui_18
             text_color: 0xFFFFFF
-        - button:
-            x: 8
-            y: 5
-            width: 42
-            height: 22
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 4
-            pad_all: 0
+        - obj:
+            x: 4
+            y: 62
+            width: 232
+            height: 112
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
             widgets:
               - label:
-                  text: "‹"
-                  align: CENTER
+                  text: "WJAZD"
+                  align: TOP_MID
+                  y: 4
                   text_font: font_ui_14
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - lvgl.page.show:
-                        id: page_zewnetrzne
-                        animation: MOVE_RIGHT
-                        time: 250ms
-                    - script.execute: confirm_click
-        - button:
-            x: 8
-            y: 86
-            width: 224
-            height: 48
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 6
-            pad_all: 0
-            widgets:
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_wjazd_icon
+                  text: "\U000F0336"
+                  align: TOP_MID
+                  y: 25
+                  text_font: icon_font_lamp_state
+                  text_color: 0x888888
               - label:
                   id: lbl_wjazd_state
-                  text: "WJAZD: ..."
-                  align: CENTER
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.oswietlenie_zewnetrzne_wjazd
-                    - script.execute: confirm_click
-        - button:
-            x: 8
-            y: 154
-            width: 224
-            height: 48
-            bg_color: 0x18232B
-            border_width: 1
-            border_color: 0x45515C
-            radius: 6
-            pad_all: 0
+                  text: "BRAK DANYCH"
+                  align: TOP_MID
+                  y: 54
+                  text_font: font_ui_12
+                  text_color: 0xFF3333
+              - button:
+                  x: 0
+                  y: 76
+                  width: 224
+                  height: 28
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  pad_all: 0
+                  widgets:
+                    - label:
+                        id: lbl_wjazd_toggle_text
+                        align: CENTER
+                        text: "WŁĄCZ / WYŁĄCZ"
+                        text_font: font_ui_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.oswietlenie_zewnetrzne_wjazd
+                          - script.execute: confirm_click
+        - obj:
+            x: 4
+            y: 184
+            width: 232
+            height: 112
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
             widgets:
               - label:
-                  id: lbl_podworko_state
-                  text: "PODWÓRKO: ..."
-                  align: CENTER
+                  text: "PODWÓRKO"
+                  align: TOP_MID
+                  y: 4
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-            on_click:
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                  then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.oswietlenie_zewnetrzne_podworko
-                    - script.execute: confirm_click
-
-# ---------------------------------------------------------
-# Zegar w gornym pasku - aktualizacja co sekunde
-# ---------------------------------------------------------
+              - label:
+                  id: lbl_podworko_icon
+                  text: "\U000F0336"
+                  align: TOP_MID
+                  y: 25
+                  text_font: icon_font_lamp_state
+                  text_color: 0x888888
+              - label:
+                  id: lbl_podworko_state
+                  text: "BRAK DANYCH"
+                  align: TOP_MID
+                  y: 54
+                  text_font: font_ui_12
+                  text_color: 0xFF3333
+              - button:
+                  x: 0
+                  y: 76
+                  width: 224
+                  height: 28
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0x45515C
+                  radius: 5
+                  pad_all: 0
+                  widgets:
+                    - label:
+                        id: lbl_podworko_toggle_text
+                        align: CENTER
+                        text: "WŁĄCZ / WYŁĄCZ"
+                        text_font: font_ui_14
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.oswietlenie_zewnetrzne_podworko
+                          - script.execute: confirm_click
