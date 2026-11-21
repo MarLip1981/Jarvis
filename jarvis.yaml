@@ -35,7 +35,7 @@ api:
 packages:
   jarvis_remote:
     url: https://github.com/MarLip1981/Jarvis
-    ref: main
+    ref: test-main-ui
     # Krótki interwał odświeżania zapobiega kompilacji ze starej kopii
     # z cache ESPHome po zmianach w repozytorium.
     refresh: 1min
