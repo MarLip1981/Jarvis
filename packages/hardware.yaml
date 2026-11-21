@@ -58,8 +58,7 @@ image:
     on_download_started:
       then:
         - lambda: |-
-            // Tutaj dekoder jest juz uruchomiony. Bufor zewnetrzny
-            // przekazujemy w packages/entities.yaml PRZED online_image.set_url.
+            // ESPHome zarzadza buforem dekodera; to zdarzenie sluzy do diagnostyki pobierania.
             ESP_LOGI("JARVIS RADIO", "Pobieranie rozpoczęte; heap=%u B, najwiekszy blok=%u B",
                      static_cast<unsigned>(ESP.getFreeHeap()),
                      static_cast<unsigned>(ESP.getMaxAllocHeap()));
