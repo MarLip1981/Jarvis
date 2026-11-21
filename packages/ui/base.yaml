@@ -108,6 +108,38 @@ lvgl:
               y: -3
               text_font: font_ui_18
               text_color: 0xFFFFFF
+          # Gdy minutnik jest bezczynny, zegarek w pasku otwiera jego stronę.
+          - button:
+              id: btn_timer_status
+              x: 66
+              y: -5
+              width: 20
+              height: 30
+              bg_opa: TRANSP
+              border_width: 0
+              shadow_width: 0
+              pad_all: 0
+              widgets:
+                - label:
+                    text: "\U000F0020"
+                    align: CENTER
+                    text_font: icon_font_btn
+                    text_color: 0x00AEEF
+              on_click:
+                - if:
+                    condition:
+                      lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && !id(timer_running) && !id(timer_alarm_active);'
+                    then:
+                      - globals.set:
+                          id: timer_page_active
+                          value: "true"
+                      - lvgl.page.show:
+                          id: page_timer
+                          animation: MOVE_LEFT
+                          time: 250ms
+                      - lvgl.widget.hide: btn_timer_floating
+                      - script.execute: timer_refresh
+                      - script.execute: confirm_click
 
           # --- Ikona HA - prawdziwy glif z Material Design Icons,
           # taki sam jak na czujniku gazu. Dodatkowo: 5x szybkie
@@ -214,6 +246,51 @@ lvgl:
               bg_opa: COVER
               border_width: 0
               radius: 0
+      # Dolny pasek jest na top_layer, więc pozostaje widoczny na każdej stronie.
+      # Pokazuje się wyłącznie podczas odliczania lub alarmu; kliknięcie otwiera minutnik.
+      - button:
+          id: btn_timer_floating
+          x: 0
+          y: 290
+          width: 240
+          height: 30
+          bg_color: 0x12303B
+          bg_opa: COVER
+          border_width: 1
+          border_color: 0x00AEEF
+          radius: 0
+          shadow_width: 0
+          pad_all: 0
+          hidden: true
+          widgets:
+            - label:
+                text: "\U000F0020"
+                x: 9
+                align: LEFT_MID
+                text_font: icon_font_btn
+                text_color: 0x00D5FF
+            - label:
+                id: lbl_timer_floating_countdown
+                text: "MINUTNIK  05:00"
+                x: 38
+                align: LEFT_MID
+                text_font: font_ui_14
+                text_color: 0xFFFFFF
+          on_click:
+            - if:
+                condition:
+                  lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                then:
+                  - globals.set:
+                      id: timer_page_active
+                      value: "true"
+                  - lvgl.page.show:
+                      id: page_timer
+                      animation: MOVE_LEFT
+                      time: 250ms
+                  - lvgl.widget.hide: btn_timer_floating
+                  - script.execute: timer_refresh
+                  - script.execute: confirm_click
       - label:
           id: lbl_easter_countdown
           text: ""
