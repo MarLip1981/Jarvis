@@ -796,9 +796,23 @@ text_sensor:
                            static_cast<unsigned>(ESP.getMaxAllocHeap()));
               - online_image.set_url:
                   id: img_radio_cover
-                  update: true
+                  update: false
                   url: !lambda |-
                     return std::string("http://192.168.1.100:8123") + x;
+              - lambda: |-
+                  alignas(4) static uint8_t radio_cover_buffer[120 * 120 * 2];
+                  auto *img = id(img_radio_cover);
+                  if (img->is_decoding()) {
+                    ESP_LOGW("JARVIS RADIO", "Pominieto nowy URL, bo dekodowanie okladki nadal trwa");
+                    return;
+                  }
+                  memset(radio_cover_buffer, 0, sizeof(radio_cover_buffer));
+                  if (!img->set_external_buffer(radio_cover_buffer, 120, 120)) {
+                    ESP_LOGE("JARVIS RADIO", "BLAD: nie udalo sie przekazac statycznego bufora 120x120");
+                    return;
+                  }
+                  ESP_LOGI("JARVIS RADIO", "Statyczny bufor RGB565 120x120 przekazany dekoderowi");
+              - component.update: img_radio_cover
 
   - platform: homeassistant
     id: radio_stan
