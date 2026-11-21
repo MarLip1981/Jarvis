@@ -191,12 +191,6 @@ lvgl:
                 (unsigned) (ESP.getMaxAllocHeap() / 1024));
               return std::string(buf);
             text_color: 0x00FF00
-        - lvgl.label.update:
-            id: lbl_diag_sd_status
-            text: !lambda |-
-              return id(sd_card).was_mounted() ? std::string("OK / OFF") : std::string("BRAK / OFF");
-            text_color: !lambda |-
-              return id(sd_card).was_mounted() ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);
         - lvgl.obj.update:
             id: top_bar
             hidden: false
