@@ -93,6 +93,42 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  - id: timer_remaining_s
+    type: uint32_t
+    restore_value: false
+    initial_value: "300"
+  - id: timer_selected_s
+    type: uint32_t
+    restore_value: false
+    initial_value: "300"
+  - id: timer_end_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: timer_running
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: timer_alarm_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: timer_alarm_started_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: timer_last_beep_s
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
+  - id: timer_auto_page_opened
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: timer_page_active
+    type: bool
+    restore_value: false
+    initial_value: "false"
   - id: radio_is_playing
     type: bool
     restore_value: false
@@ -156,6 +192,95 @@ script:
 
   # --- Easter egg: 5x szybkie dotkniecie ikonki HA. Ekran mruga
   # czerwono-zlotem w rytm LED, potem pokazuje "reaktor" i napis. ---
+  - id: timer_refresh
+    then:
+      - lvgl.page.update:
+          id: page_timer
+          bg_color: !lambda |-
+            if (id(timer_alarm_active)) return lv_color_hex(0x5A0000);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              const uint32_t left = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+              if (left > 0 && left <= 5) return lv_color_hex(0x5A2D00);
+            }
+            return lv_color_hex(0x000000);
+      - lvgl.label.update:
+          id: lbl_timer_countdown
+          text: !lambda |-
+            uint32_t seconds = id(timer_remaining_s);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              seconds = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+            }
+            char buf[8];
+            snprintf(buf, sizeof(buf), "%02u:%02u", (unsigned)(seconds / 60), (unsigned)(seconds % 60));
+            return std::string(buf);
+      - lvgl.label.update:
+          id: lbl_timer_floating_countdown
+          text: !lambda |-
+            uint32_t seconds = id(timer_remaining_s);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              seconds = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+            }
+            char buf[32];
+            if (id(timer_alarm_active)) {
+              snprintf(buf, sizeof(buf), "MINUTNIK  KONIEC!");
+            } else {
+              snprintf(buf, sizeof(buf), "MINUTNIK  %02u:%02u", (unsigned)(seconds / 60), (unsigned)(seconds % 60));
+            }
+            return std::string(buf);
+          text_color: !lambda |-
+            if (id(timer_alarm_active)) return lv_color_hex(0xFF3333);
+            if (id(timer_running)) {
+              const uint32_t now = (esphome::millis)();
+              const uint32_t left = id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+              if (left > 0 && left <= 5) return lv_color_hex(0xFF9900);
+            }
+            return lv_color_hex(0xFFFFFF);
+      - lvgl.obj.update:
+          id: btn_timer_status
+          hidden: !lambda 'return id(timer_running) || id(timer_alarm_active);'
+      - lvgl.obj.update:
+          id: btn_timer_floating
+          hidden: !lambda 'return (!id(timer_running) && !id(timer_alarm_active)) || id(timer_page_active);'
+      - lvgl.label.update:
+          id: lbl_timer_status
+          text: !lambda |-
+            if (id(timer_alarm_active)) return std::string("CZAS MINĄŁ!");
+            if (id(timer_running)) return std::string("Odliczanie trwa");
+            return std::string("Minutnik gotowy");
+          text_color: !lambda |-
+            if (id(timer_alarm_active)) return lv_color_hex(0xFF3333);
+            if (id(timer_running)) return lv_color_hex(0x00DD66);
+            return lv_color_hex(0x888888);
+      - lvgl.obj.update:
+          id: btn_timer_start
+          hidden: !lambda 'return id(timer_running);'
+      - lvgl.obj.update:
+          id: btn_timer_pause
+          hidden: !lambda 'return !id(timer_running);'
+      - lvgl.obj.update:
+          id: btn_timer_stop_alarm
+          hidden: !lambda 'return !id(timer_alarm_active);'
+
+  # Alarm trwa bez limitu czasu — kończy go wyłącznie przycisk WYCISZ/RESET.
+  - id: timer_stop_alarm
+    then:
+      - globals.set:
+          id: timer_alarm_active
+          value: "false"
+      # Alarm ma pierwszenstwo nad innymi sygnalami LED.
+      # Po jego zatrzymaniu gasimy czerwony sygnal od razu.
+      - if:
+          condition:
+            lambda: 'return !id(identify_active) && !id(easter_active);'
+          then:
+            - light.turn_off:
+                id: status_led
+                transition_length: 0s
+      - script.execute: timer_refresh
+
   - id: easter_egg_ironman
     then:
       - globals.set:
