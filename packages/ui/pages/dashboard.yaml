@@ -188,27 +188,51 @@ lvgl:
             recolor: true
 
         # Brama - bialy tytul, kolor zmienia tylko status.
-        - label:
-            id: lbl_pulpit_brama_icon
-            text: "\U000F0299"
-            x: 4
-            y: 210
-            text_font: icon_font_btn
-            text_color: 0x888888
-        - label:
-            id: lbl_pulpit_brama_title
-            text: "Brama:"
-            x: 32
-            y: 213
-            text_font: font_ui_14
-            text_color: 0xFFFFFF
-        - label:
-            id: lbl_pulpit_brama_status
-            text: "--"
-            x: 100
-            y: 213
-            text_font: font_ui_14
-            text_color: 0x888888
+        - button:
+            id: btn_pulpit_brama_status
+            x: 2
+            y: 204
+            width: 236
+            height: 30
+            bg_opa: TRANSP
+            border_width: 0
+            shadow_width: 0
+            pad_all: 0
+            widgets:
+              - label:
+                  id: lbl_pulpit_brama_icon
+                  text: "\U000F0299"
+                  x: 2
+                  align: LEFT_MID
+                  text_font: icon_font_btn
+                  text_color: 0x888888
+              - label:
+                  id: lbl_pulpit_brama_title
+                  text: "Brama:"
+                  x: 30
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+              - label:
+                  id: lbl_pulpit_brama_status
+                  text: "--"
+                  x: 98
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0x888888
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: brama_page_active
+                        value: "true"
+                    - lvgl.page.show:
+                        id: page_brama
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - script.execute: confirm_click
 
         # Dwa niezalezne przyciski pilota. Sterowanie dopiero po przytrzymaniu.
         - button:
@@ -309,9 +333,277 @@ lvgl:
                     - script.execute: confirm_click
 
 
+        # Bezpośredni dostęp do minutnika z pulpitu — niezależnie od zegara w pasku.
+        - button:
+            id: btn_pulpit_timer
+            x: 10
+            y: 282
+            width: 220
+            height: 30
+            bg_color: 0x12303B
+            border_width: 1
+            border_color: 0x00AEEF
+            radius: 5
+            shadow_width: 0
+            pad_all: 0
+            widgets:
+              - label:
+                  text: "\U000F0020"
+                  align: CENTER
+                  x: -48
+                  text_font: icon_font_btn
+                  text_color: 0xFFFFFF
+              - label:
+                  text: "MINUTNIK"
+                  align: CENTER
+                  x: 10
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: timer_page_active
+                        value: "true"
+                    - lvgl.page.show:
+                        id: page_timer
+                        animation: MOVE_LEFT
+                        time: 250ms
+                    - lvgl.widget.hide: btn_timer_floating
+                    - script.execute: timer_refresh
+                    - script.execute: confirm_click
+
+
 
     # ------------------------------------------------------
-    # Lista aktualnie wlaczonych lamp. Wybor lampy otwiera
+    # Lista aktualnie wlaczonych lamp.
+    # Minutnik — odliczanie działa także po opuszczeniu tej strony.
+    - id: page_timer
+      bg_color: 0x000000
+      on_swipe_right:
+        - globals.set:
+            id: timer_page_active
+            value: "false"
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_RIGHT
+            time: 250ms
+        - script.execute: timer_refresh
+      on_swipe_left:
+        - globals.set:
+            id: timer_page_active
+            value: "false"
+        - lvgl.page.show:
+            id: page_pulpit
+            animation: MOVE_RIGHT
+            time: 250ms
+        - script.execute: timer_refresh
+      widgets:
+        - label:
+            text: "MINUTNIK"
+            align: TOP_MID
+            y: 38
+            text_font: font_ui_18
+            text_color: 0xFFFFFF
+        - label:
+            id: lbl_timer_countdown
+            text: "05:00"
+            align: TOP_MID
+            y: 82
+            text_font: font_ui_40
+            text_color: 0x00AEEF
+        - label:
+            id: lbl_timer_status
+            text: "Minutnik gotowy"
+            align: TOP_MID
+            y: 132
+            text_font: font_ui_14
+            text_color: 0x888888
+        - button:
+            x: 18
+            y: 165
+            width: 92
+            height: 42
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 6
+            widgets:
+              - label:
+                  text: "- 1 MIN"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(timer_running) && !id(timer_alarm_active) && id(timer_remaining_s) > 60;'
+                  then:
+                    - lambda: |-
+                        id(timer_remaining_s) -= 60;
+                        id(timer_selected_s) -= 60;
+                    - script.execute: timer_refresh
+        - button:
+            x: 130
+            y: 165
+            width: 92
+            height: 42
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 6
+            widgets:
+              - label:
+                  text: "+ 1 MIN"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(timer_running) && !id(timer_alarm_active) && id(timer_remaining_s) < 5940;'
+                  then:
+                    - lambda: |-
+                        id(timer_remaining_s) += 60;
+                        id(timer_selected_s) += 60;
+                    - script.execute: timer_refresh
+        - button:
+            id: btn_timer_start
+            x: 18
+            y: 222
+            width: 92
+            height: 42
+            bg_color: 0x006B35
+            border_width: 1
+            border_color: 0x00AA55
+            radius: 6
+            widgets:
+              - label:
+                  text: "START"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && !id(timer_running) && !id(timer_alarm_active);'
+                  then:
+                    - globals.set:
+                        id: timer_end_ms
+                        value: !lambda 'return (esphome::millis)() + id(timer_remaining_s) * 1000UL;'
+                    - globals.set:
+                        id: timer_running
+                        value: "true"
+                    - globals.set:
+                        id: timer_last_beep_s
+                        value: "0"
+                    - globals.set:
+                        id: timer_auto_page_opened
+                        value: "false"
+                    - script.execute: timer_refresh
+                    - script.execute: confirm_click
+        - button:
+            id: btn_timer_pause
+            x: 130
+            y: 222
+            width: 92
+            height: 42
+            hidden: true
+            bg_color: 0x7A4B00
+            border_width: 1
+            border_color: 0xCC8800
+            radius: 6
+            widgets:
+              - label:
+                  text: "PAUZA"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && id(timer_running);'
+                  then:
+                    - globals.set:
+                        id: timer_remaining_s
+                        value: !lambda |-
+                          const uint32_t now = (esphome::millis)();
+                          return id(timer_end_ms) > now ? (id(timer_end_ms) - now + 999) / 1000 : 0;
+                    - globals.set:
+                        id: timer_running
+                        value: "false"
+                    - script.execute: timer_refresh
+        - button:
+            x: 18
+            y: 274
+            width: 92
+            height: 36
+            bg_color: 0x303030
+            border_width: 1
+            border_color: 0x555555
+            radius: 6
+            widgets:
+              - label:
+                  text: "RESET"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: timer_running
+                        value: "false"
+                    # Reset podczas alarmu rowniez musi zgasic czerwona diode.
+                    - if:
+                        condition:
+                          lambda: 'return id(timer_alarm_active) && !id(identify_active) && !id(easter_active);'
+                        then:
+                          - light.turn_off:
+                              id: status_led
+                              transition_length: 0s
+                    - globals.set:
+                        id: timer_alarm_active
+                        value: "false"
+                    - globals.set:
+                        id: timer_last_beep_s
+                        value: "0"
+                    - globals.set:
+                        id: timer_auto_page_opened
+                        value: "false"
+                    - globals.set:
+                        id: timer_remaining_s
+                        value: !lambda "return id(timer_selected_s);"
+                    - script.execute: timer_refresh
+        - button:
+            id: btn_timer_stop_alarm
+            x: 130
+            y: 274
+            width: 92
+            height: 36
+            hidden: true
+            bg_color: 0x990000
+            border_width: 1
+            border_color: 0xFF3333
+            radius: 6
+            widgets:
+              - label:
+                  text: "WYCISZ"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - script.execute: timer_stop_alarm
+
+    # Wybor lampy otwiera
     # odpowiadajaca jej strone pomieszczenia.
     # ------------------------------------------------------
     - id: page_lampy
