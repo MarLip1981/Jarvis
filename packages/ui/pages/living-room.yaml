@@ -205,6 +205,7 @@ lvgl:
                   widgets:
                     - label:
                         align: CENTER
+                        id: lbl_salon_toggle_text
                         text: "WŁĄCZ / WYŁĄCZ"
                         text_font: font_ui_14
                         text_align: CENTER
@@ -222,15 +223,15 @@ lvgl:
                   id: lbl_salon_brightness
                   text: "Jasność"
                   x: 5
-                  y: 34
+                  y: 32
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_salon_brightness
-                  x: 20
-                  y: 56
-                  width: 30
-                  height: 70
+                  x: 5
+                  y: 54
+                  width: 222
+                  height: 16
                   min_value: 1
                   max_value: 100
                   value: 50
@@ -250,24 +251,24 @@ lvgl:
               - label:
                   id: lbl_salon_brightness_val
                   text: "--"
-                  x: 15
-                  y: 132
+                  x: 184
+                  y: 32
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
 
               - label:
                   id: lbl_salon_colortemp
                   text: "Barwa"
-                  x: 125
-                  y: 34
+                  x: 5
+                  y: 82
                   text_font: font_ui_14
                   text_color: 0xCCCCCC
               - slider:
                   id: slider_salon_colortemp
-                  x: 160
-                  y: 56
-                  width: 30
-                  height: 70
+                  x: 5
+                  y: 104
+                  width: 222
+                  height: 16
                   min_value: 2000
                   max_value: 6500
                   value: 4000
@@ -287,8 +288,8 @@ lvgl:
               - label:
                   id: lbl_salon_colortemp_val
                   text: "--"
-                  x: 148
-                  y: 132
+                  x: 184
+                  y: 82
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
 
@@ -446,9 +447,10 @@ lvgl:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
                   - homeassistant.action:
-                      action: media_player.toggle
+                      action: remote.send_command
                       data:
-                        entity_id: media_player.tv_samsung_7_series_49_2
+                        entity_id: remote.tv_samsung_7_series_49
+                        command: KEY_POWER
                   - script.execute: confirm_click
         - button:
             x: 20
