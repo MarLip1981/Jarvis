@@ -1,13 +1,3 @@
-# Minimalna obsluga microSD CYD: tylko montowanie i odczyt pamieci.
-external_components:
-  - source:
-      type: git
-      url: https://github.com/MarLip1981/Jarvis
-      ref: test-sd-card
-      path: components
-    refresh: 1min
-    components: [jarvis_sd]
-
 # JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
@@ -16,12 +6,6 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
-    advanced:
-      # Optymalizacje dla fizycznego ESP32 rev. 3.1.
-      flash_chip: generic
-      minimum_chip_revision: "3.1"
-      # Arduino FS wymaga funkcji katalogowych ESP-IDF (m.in. rmdir/mkdir).
-      disable_vfs_support_dir: false
 
 captive_portal:
 
@@ -220,15 +204,6 @@ spi:
   miso_pin:
     number: GPIO12
     ignore_strapping_warning: true
-
-# microSD na osobnej magistrali VSPI. Bez zapisu, kasowania i testowych plikow.
-jarvis_sd:
-  id: sd_card
-  cs_pin: GPIO5
-  clk_pin: GPIO18
-  miso_pin: GPIO19
-  mosi_pin: GPIO23
-  frequency: 4000000
 
 # Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
 output:
