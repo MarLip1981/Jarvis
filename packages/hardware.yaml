@@ -6,6 +6,10 @@ esp32:
   board: esp32dev
   framework:
     type: arduino
+    advanced:
+      # Optymalizacje dla fizycznego ESP32 rev. 3.1.
+      flash_chip: generic
+      minimum_chip_revision: "3.1"
 
 captive_portal:
 
