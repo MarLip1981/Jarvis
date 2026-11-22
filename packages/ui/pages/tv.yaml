@@ -1,0 +1,135 @@
+# JARVIS 2.0 — STRONA TELEWIZORA
+# Wydzielona z modułu salonu; zachowano identyfikatory i sterowanie.
+
+lvgl:
+  pages:
+    - id: page_tv
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_salon
+            animation: NONE
+            time: 200ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_salon
+            animation: NONE
+            time: 200ms
+      widgets:
+        - label:
+            text: "TELEWIZOR"
+            align: TOP_MID
+            y: 30
+            text_font: font_ui_18
+            text_color: 0xFFFFFF
+        - label:
+            id: lbl_tv_status_icon
+            text: "\U000F0502"
+            align: TOP_MID
+            y: 54
+            text_font: icon_font_lamp_state
+            text_color: 0x888888
+        - label:
+            id: lbl_tv_status
+            text: "Stan: WYŁĄCZONY"
+            align: TOP_MID
+            y: 100
+            text_font: font_ui_14
+            text_color: 0xFFFFFF
+        - button:
+            x: 20
+            y: 128
+            width: 200
+            height: 50
+            pad_all: 0
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
+            pressed:
+              bg_color: 0x31546B
+            widgets:
+              - label:
+                  x: 4
+                  align: LEFT_MID
+                  text: "\U000F0425"
+                  text_font: icon_font_btn
+              - label:
+                  text: "ZASILANIE"
+                  x: 42
+                  y: 15
+                  width: 150
+                  height: 20
+                  text_align: CENTER
+                  text_font: font_ui_14
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                  - homeassistant.action:
+                      action: media_player.toggle
+                      data:
+                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - script.execute: confirm_click
+        - button:
+            x: 20
+            y: 188
+            width: 95
+            height: 50
+            pad_all: 0
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
+            pressed:
+              bg_color: 0x31546B
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "VOL -"
+                  text_font: font_ui_14
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                  - homeassistant.action:
+                      action: media_player.volume_down
+                      data:
+                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - script.execute: confirm_click
+        - button:
+            x: 125
+            y: 188
+            width: 95
+            height: 50
+            pad_all: 0
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
+            pressed:
+              bg_color: 0x31546B
+            widgets:
+              - label:
+                  align: CENTER
+                  text: "VOL +"
+                  text_font: font_ui_14
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                  - homeassistant.action:
+                      action: media_player.volume_up
+                      data:
+                        entity_id: media_player.tv_samsung_7_series_49_2
+                  - script.execute: confirm_click
+
+    # ------------------------------------------------------
