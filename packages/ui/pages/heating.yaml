@@ -9,12 +9,12 @@ lvgl:
       on_swipe_left:
         - lvgl.page.show:
             id: page_pulpit
-            animation: MOVE_LEFT
+            animation: NONE
             time: 300ms
       on_swipe_right:
         - lvgl.page.show:
             id: page_zewnetrzne
-            animation: MOVE_RIGHT
+            animation: NONE
             time: 300ms
       widgets:
         - label:
@@ -396,7 +396,7 @@ lvgl:
       on_swipe_left:
         - lvgl.page.show:
             id: page_piec
-            animation: MOVE_LEFT
+            animation: NONE
             time: 300ms
       widgets:
         - label:
