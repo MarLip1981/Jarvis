@@ -12,7 +12,7 @@ lvgl:
             value: "false"
         - lvgl.page.show:
             id: page_pulpit
-            animation: MOVE_RIGHT
+            animation: NONE
             time: 300ms
       widgets:
         - label:
