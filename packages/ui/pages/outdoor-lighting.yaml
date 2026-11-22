@@ -10,7 +10,7 @@ lvgl:
       bg_color: 0x000000
       on_swipe_left:
         - lvgl.page.show:
-            id: page_piec
+            id: page_pulpit
             animation: NONE
             time: 300ms
       on_swipe_right:
