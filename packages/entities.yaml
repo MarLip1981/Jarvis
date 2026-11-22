@@ -800,7 +800,7 @@ text_sensor:
                         value: "0"
                     - lvgl.page.show:
                         id: page_brama
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 300ms
         - lvgl.label.update:
             id: lbl_brama_status
