@@ -71,11 +71,11 @@ lvgl:
                           - globals.set:
                               id: lamp_selected
                               value: !lambda 'return std::string("salon");'
-                          - script.execute: prepare_lamp_page
-                          - lvgl.page.show:
+                                                    - lvgl.page.show:
                               id: page_lampa_wspolna
                               animation: NONE
                               time: 200ms
+- script.execute: prepare_lamp_page
                           - script.execute: confirm_click
                         else:
                           - homeassistant.action:
