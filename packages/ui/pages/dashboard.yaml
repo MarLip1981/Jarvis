@@ -9,12 +9,12 @@ lvgl:
       on_swipe_left:
         - lvgl.page.show:
             id: page_salon
-            animation: MOVE_LEFT
+            animation: NONE
             time: 300ms
       on_swipe_right:
         - lvgl.page.show:
             id: page_piec
-            animation: MOVE_RIGHT
+            animation: NONE
             time: 300ms
       widgets:
         - label:
@@ -84,7 +84,7 @@ lvgl:
                   then:
                     - lvgl.page.show:
                         id: page_radio
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
         # Podsumowanie oswietlenia - dotkniecie otwiera liste aktualnie wlaczonych lamp.
@@ -129,7 +129,7 @@ lvgl:
                   then:
                     - lvgl.page.show:
                         id: page_lampy
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
         - button:
@@ -168,7 +168,7 @@ lvgl:
                   then:
                     - lvgl.page.show:
                         id: page_piec
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
         - label:
@@ -256,7 +256,7 @@ lvgl:
                           target_button: !lambda 'return id(brama_main_button_entity).state;'
                     - lvgl.page.show:
                         id: page_brama
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 300ms
                     - script.execute: confirm_click
         - button:
@@ -304,7 +304,7 @@ lvgl:
                           target_button: !lambda 'return id(brama_pedestrian_button_entity).state;'
                     - lvgl.page.show:
                         id: page_brama
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 300ms
                     - script.execute: confirm_click
 
@@ -319,12 +319,12 @@ lvgl:
       on_swipe_left:
         - lvgl.page.show:
             id: page_pulpit
-            animation: MOVE_RIGHT
+            animation: NONE
             time: 250ms
       on_swipe_right:
         - lvgl.page.show:
             id: page_pulpit
-            animation: MOVE_RIGHT
+            animation: NONE
             time: 250ms
       widgets:
         - label:
@@ -369,7 +369,7 @@ lvgl:
                   then:
                     - lvgl.page.show:
                         id: page_salon
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
         - button:
@@ -408,7 +408,7 @@ lvgl:
                   then:
                     - lvgl.page.show:
                         id: page_sypialnia
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
         - button:
@@ -447,7 +447,7 @@ lvgl:
                   then:
                     - lvgl.page.show:
                         id: page_erni
-                        animation: MOVE_LEFT
+                        animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
         - label:
