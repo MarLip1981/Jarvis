@@ -221,19 +221,6 @@ script:
                   return std::string(buf);
       - if:
           condition:
-            lambda: 'return id(lamp_selected) == "salon" && std::isfinite(id(salon_colortemp_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_colortemp
-                value: !lambda 'return (int)id(salon_colortemp_attr).state;'
-            - lvgl.label.update:
-                id: lbl_lampa_colortemp_val
-                text: !lambda |-
-                  char buf[12];
-                  snprintf(buf, sizeof(buf), "%d K", (int)id(salon_colortemp_attr).state);
-                  return std::string(buf);
-      - if:
-          condition:
             lambda: 'return id(lamp_selected) == "erni" && std::isfinite(id(erni_brightness_attr).state);'
           then:
             - lvgl.slider.update:
@@ -258,32 +245,7 @@ script:
                   char buf[8];
                   snprintf(buf, sizeof(buf), "%d%%", (int)(id(adresowka_brightness_attr).state / 255.0 * 100.0));
                   return std::string(buf);
-      - if:
-          condition:
-            lambda: 'return id(lamp_selected) == "erni" && std::isfinite(id(erni_colortemp_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_colortemp
-                value: !lambda 'return (int)id(erni_colortemp_attr).state;'
-            - lvgl.label.update:
-                id: lbl_lampa_colortemp_val
-                text: !lambda |-
-                  char buf[12];
-                  snprintf(buf, sizeof(buf), "%d K", (int)id(erni_colortemp_attr).state);
-                  return std::string(buf);
-      - if:
-          condition:
-            lambda: 'return id(lamp_selected) == "adresowka" && std::isfinite(id(adresowka_colortemp_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_colortemp
-                value: !lambda 'return (int)id(adresowka_colortemp_attr).state;'
-            - lvgl.label.update:
-                id: lbl_lampa_colortemp_val
-                text: !lambda |-
-                  char buf[12];
-                  snprintf(buf, sizeof(buf), "%d K", (int)id(adresowka_colortemp_attr).state);
-                  return std::string(buf);
+
   - id: confirm_click
     mode: restart
     then:
