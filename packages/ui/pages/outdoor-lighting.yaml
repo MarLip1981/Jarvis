@@ -3,9 +3,6 @@
 
 lvgl:
   pages:
-    # ------------------------------------------------------
-    # Oswietlenie zewnetrzne
-    # ------------------------------------------------------
     - id: page_zewnetrzne
       bg_color: 0x000000
       on_swipe_left:
@@ -54,32 +51,12 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("adresowka");'
                     - lvgl.page.show:
-                        id: page_adresowka
+                        id: page_lampa_wspolna
                         animation: NONE
-                        time: 250ms
+                        time: 200ms
+                    - script.execute: prepare_lamp_page
                     - script.execute: confirm_click
-
-    # ------------------------------------------------------
-    # Adresowka — ekran docelowy. Sterowanie lampą dołączymy
-    # później przez wspólny schemat strony lamp.
-    # ------------------------------------------------------
-    - id: page_adresowka
-      bg_color: 0x000000
-      on_swipe_left:
-        - lvgl.page.show:
-            id: page_zewnetrzne
-            animation: NONE
-            time: 250ms
-      on_swipe_right:
-        - lvgl.page.show:
-            id: page_zewnetrzne
-            animation: NONE
-            time: 250ms
-      widgets:
-        - label:
-            text: "ADRESÓWKA"
-            align: TOP_MID
-            y: 36
-            text_font: font_ui_24
-            text_color: 0xFFFFFF
