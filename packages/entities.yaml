@@ -371,9 +371,6 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.obj.update:
-            id: btn_lampy_salon
-            hidden: !lambda 'return !x;'
         - lvgl.label.update:
             id: lbl_salon_glowna_icon
             text: !lambda |-
@@ -432,9 +429,6 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.obj.update:
-            id: btn_lampy_erni
-            hidden: !lambda 'return !x;'
         - lvgl.label.update:
             id: lbl_erni_lampa
             text: !lambda |-
@@ -453,9 +447,6 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.obj.update:
-            id: btn_lampy_sypialnia
-            hidden: !lambda 'return !x;'
         - lvgl.label.update:
             id: lbl_sypialnia_lampa
             text: !lambda |-
