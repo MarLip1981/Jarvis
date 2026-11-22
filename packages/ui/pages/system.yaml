@@ -180,7 +180,7 @@ lvgl:
             hidden: false
         - lvgl.page.show:
             id: page_pulpit
-            animation: FADE_IN
+            animation: NONE
             time: 600ms
       widgets:
         - label:
