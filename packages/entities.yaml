@@ -584,11 +584,24 @@ text_sensor:
                   format: "JARVIS RADIO: otrzymano lokalny adres okladki z Home Assistant"
               - lvgl.widget.show: obj_radio_cover_placeholder
               - lvgl.widget.hide: img_radio_cover_widget
-              - online_image.set_url:
-                  id: img_radio_cover
-                  update: true
-                  url: !lambda |-
-                    return std::string("http://192.168.1.100:8123") + x;
+              - lambda: |-
+                  // Staly bufor RGB565: 120 x 120 x 2 B = 28 800 B.
+                  // Pamiec jest rezerwowana statycznie, poza alokatorem heap.
+                  alignas(4) static uint8_t radio_cover_buffer[120 * 120 * 2];
+
+                  // Nie podmieniamy bufora w trakcie trwajacego dekodowania.
+                  if (id(img_radio_cover).is_decoding()) {
+                    ESP_LOGW("JARVIS RADIO", "Pominieto URL: poprzednia okladka jest jeszcze dekodowana");
+                    return;
+                  }
+
+                  if (!id(img_radio_cover).set_external_buffer(radio_cover_buffer, 120, 120)) {
+                    ESP_LOGE("JARVIS RADIO", "Nie udalo sie podlaczyc stalego bufora 120x120 RGB565");
+                    return;
+                  }
+
+                  id(img_radio_cover).set_url(std::string("http://192.168.1.100:8123") + x);
+                  id(img_radio_cover).update();
 
   - platform: homeassistant
     id: radio_stan
