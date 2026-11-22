@@ -110,13 +110,6 @@ font:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
-    id: font_radio_12
-    size: 14
-    bpp: 4
-    glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
-
-  - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_12
     size: 14
     bpp: 4
