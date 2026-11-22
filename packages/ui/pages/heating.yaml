@@ -50,7 +50,7 @@ lvgl:
 # Zegar w gornym pasku - aktualizacja co sekunde
 # ---------------------------------------------------------
 
-- id: page_piec
+    - id: page_piec
       bg_color: 0x000000
       on_swipe_left:
         - lvgl.page.show:
