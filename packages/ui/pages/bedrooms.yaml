@@ -627,6 +627,46 @@ lvgl:
                                 entity_id: input_select.animacja_swiatla_studio
                                 option: "Ognisko"
                           - script.execute: confirm_click
+        # SOS Adresowki — widoczne tylko dla wybranej Adresowki.
+        - obj:
+            id: obj_lampa_sos
+            x: 2
+            y: 224
+            width: 236
+            height: 44
+            bg_opa: TRANSP
+            border_width: 0
+            pad_all: 0
+            hidden: true
+            widgets:
+              - button:
+                  x: 0
+                  y: 0
+                  width: 236
+                  height: 40
+                  pad_all: 0
+                  bg_color: 0x18232B
+                  border_width: 1
+                  border_color: 0xA33A3A
+                  radius: 5
+                  shadow_width: 0
+                  widgets:
+                    - label:
+                        id: lbl_adresowka_sos
+                        align: CENTER
+                        text: "SOS: BRAK STANU"
+                        text_font: font_ui_14
+                        text_color: 0xFFFFFF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: input_boolean.toggle
+                              data:
+                                entity_id: input_boolean.tryb_sos_adresowki
+                          - script.execute: confirm_click
     - id: page_erni
       bg_color: 0x000000
       on_swipe_left:
