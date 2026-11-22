@@ -218,7 +218,7 @@ script:
       - component.update: ambient_light_raw
       - lvgl.page.show:
           id: page_pulpit
-          animation: FADE_IN
+          animation: NONE
           time: 400ms
 
   # --- "Znajdz JARVIS" - wywolywane przyciskiem z Home Assistant.
