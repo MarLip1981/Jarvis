@@ -12,7 +12,6 @@ esp32:
   framework:
     type: arduino
 
-captive_portal:
 
 logger:
 
