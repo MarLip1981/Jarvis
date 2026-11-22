@@ -81,7 +81,7 @@ interval:
                 value: "0"
             - lvgl.page.show:
                 id: page_pulpit
-                animation: MOVE_RIGHT
+                animation: NONE
                 time: 300ms
   - interval: 1s
     then:
