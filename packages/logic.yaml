@@ -125,8 +125,7 @@ script:
             snprintf(buf, sizeof(buf), "%s°C  %s%%  Zewnątrz %s°C", t_in, hum, t_out);
             return std::string(buf);
 
-  # Wskaźnik wysyłania: potwierdza akcję wywołaną z interfejsu.
-  # Tryb restart utrzymuje sygnał przez pełne 400 ms od ostatniej akcji.
+  # Przygotowuje wspolna strone lampy wedlug wybranego pomieszczenia.
   - id: prepare_lamp_page
     mode: restart
     then:

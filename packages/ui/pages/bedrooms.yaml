@@ -81,9 +81,8 @@ lvgl:
                           - script.execute: confirm_click
 
     # ------------------------------------------------------
-    # Sypialnia > Lampa - sceny (przytrzymanie przycisku na
-    # glownej stronie Sypialni). Wyjscie: swipe w KAZDA strone
-    # wraca na Sypialnia.
+    # Wspolna strona sterowania lampami salonu, sypialni i Erniego.
+    # Pokazuje tylko funkcje obslugiwane przez aktualnie wybrana lampe.
     # ------------------------------------------------------
     - id: page_lampa_wspolna
       bg_color: 0x000000
