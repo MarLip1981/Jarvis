@@ -90,9 +90,6 @@ sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - globals.set:
-            id: cache_piec_target
-            value: !lambda 'return x;'
         - lvgl.label.update:
             id: lbl_piec_target
             text: !lambda |-
@@ -652,21 +649,6 @@ text_sensor:
               return x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0x00FF00);
 
   - platform: homeassistant
-    id: piec_mode_state
-    entity_id: sensor.dom_circuit_0_state
-    on_value:
-      then:
-        - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_piec_mode
-            text: !lambda |-
-              return (x == "HEATING")
-                ? std::string("#FFAA00 GRZEJE#")
-                : (x == "STANDBY")
-                  ? std::string("#00FF00 CZUWA#")
-                  : std::string("#888888 --");
-
-  - platform: homeassistant
     id: piec_hvac_mode
     entity_id: climate.dom_zone_ogrzewanie_circuit_0_climate
     on_value:
@@ -744,6 +726,14 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
+        - lvgl.label.update:
+            id: lbl_piec_mode
+            text: !lambda |-
+              return (x == "HEATING")
+                ? std::string("#FFAA00 GRZEJE#")
+                : (x == "STANDBY")
+                  ? std::string("#00FF00 CZUWA#")
+                  : std::string("#888888 --");
         - lvgl.label.update:
             id: lbl_pulpit_piec
             text: !lambda |-
