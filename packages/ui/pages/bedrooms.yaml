@@ -69,7 +69,7 @@ lvgl:
                         then:
                           - globals.set:
                               id: lamp_selected
-                              value: "studio"
+                              value: !lambda 'return std::string("studio");'
                           - script.execute: prepare_lamp_page
                           - lvgl.page.show:
                               id: page_lampa_wspolna
@@ -648,7 +648,7 @@ lvgl:
                         then:
                           - globals.set:
                               id: lamp_selected
-                              value: "erni"
+                              value: !lambda 'return std::string("erni");'
                           - script.execute: prepare_lamp_page
                           - lvgl.page.show:
                               id: page_lampa_wspolna
