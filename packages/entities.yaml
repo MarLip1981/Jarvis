@@ -557,6 +557,14 @@ text_sensor:
     internal: true
 
   - platform: homeassistant
+    id: state_adresowka_sos_raw
+    entity_id: input_boolean.tryb_sos_adresowki
+    on_value:
+      then:
+        - script.execute: prepare_lamp_page
+    internal: true
+
+  - platform: homeassistant
     id: radio_stacja
     entity_id: sensor.atlascube_radio_stacja_radiowa
     on_value:
