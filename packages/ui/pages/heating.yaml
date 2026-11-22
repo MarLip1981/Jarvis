@@ -14,6 +14,11 @@ lvgl:
             id: page_piec
             animation: NONE
             time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_piec
+            animation: NONE
+            time: 300ms
       widgets:
         - label:
             text: "OŚWIETLENIE"
