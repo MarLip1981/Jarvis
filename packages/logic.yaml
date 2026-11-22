@@ -196,6 +196,16 @@ script:
       - lvgl.obj.update:
           id: obj_lampa_scenes
           hidden: !lambda 'return id(lamp_selected) != "studio";'
+      - lvgl.obj.update:
+          id: obj_lampa_sos
+          hidden: !lambda 'return id(lamp_selected) != "adresowka";'
+      - lvgl.label.update:
+          id: lbl_adresowka_sos
+          text: !lambda |-
+            if (!id(state_adresowka_sos_raw).has_state()) return std::string("SOS: BRAK STANU");
+            if (id(state_adresowka_sos_raw).state == "on") return std::string("WYŁĄCZ SOS");
+            if (id(state_adresowka_sos_raw).state == "off") return std::string("WŁĄCZ SOS");
+            return std::string("SOS: BRAK STANU");
       - if:
           condition:
             lambda: 'return id(lamp_selected) == "salon" && std::isfinite(id(salon_brightness_attr).state);'
