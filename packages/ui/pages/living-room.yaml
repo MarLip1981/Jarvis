@@ -70,7 +70,7 @@ lvgl:
                         then:
                           - globals.set:
                               id: lamp_selected
-                              value: "salon"
+                              value: !lambda 'return std::string("salon");'
                           - script.execute: prepare_lamp_page
                           - lvgl.page.show:
                               id: page_lampa_wspolna
