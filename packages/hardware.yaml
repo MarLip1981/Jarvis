@@ -155,12 +155,14 @@ font:
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_ha
     size: 22
+    bpp: 4
     glyphs:
       - "\U000F07D0" # home-assistant
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_bar
     size: 26
+    bpp: 4
     glyphs:
       - "\U000F0360" # strzalka w gore
       - "\U000F035D" # strzalka w dol
@@ -168,6 +170,7 @@ font:
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_btn
     size: 20
+    bpp: 4
     glyphs:
       - "\U000F0E4F" # zarowka niedostepna / przekreslona
       - "\U000F0336" # zarowka wylaczona / kontur
@@ -201,6 +204,7 @@ font:
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
     size: 36
+    bpp: 4
     glyphs:
       - "\U000F040C" # play
       - "\U000F0666" # stop
@@ -211,6 +215,7 @@ font:
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_title
     size: 64
+    bpp: 4
     glyphs:
       - "\U000F10CB" # alien
 
