@@ -73,10 +73,6 @@ globals:
     type: float
     restore_value: false
     initial_value: "NAN"
-  - id: cache_piec_target
-    type: float
-    restore_value: false
-    initial_value: "NAN"
   - id: btn_press_ms
     type: uint32_t
     restore_value: false
