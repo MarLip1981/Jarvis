@@ -141,26 +141,26 @@ lvgl:
             id: lbl_lampa_title
             text: "LAMPA"
             align: TOP_MID
-            y: 10
+            y: 32
             text_font: font_ui_18
             text_color: 0xFFFFFF
         - label:
             id: lbl_lampa_icon
             text: "\U000F0E4F"
             align: TOP_MID
-            y: 34
+            y: 54
             text_font: icon_font_lamp_state
             text_color: 0xFF3333
         - label:
             id: lbl_lampa_status
             text: "Lampa: niedostępna"
             align: TOP_MID
-            y: 68
+            y: 80
             text_font: font_ui_14
             text_color: 0xFF3333
         - button:
             x: 8
-            y: 91
+            y: 101
             width: 224
             height: 28
             pad_all: 0
@@ -202,7 +202,7 @@ lvgl:
         - obj:
             id: obj_lampa_adjustments
             x: 2
-            y: 124
+            y: 132
             width: 236
             height: 68
             bg_opa: TRANSP
@@ -311,7 +311,7 @@ lvgl:
         - obj:
             id: obj_lampa_colors
             x: 2
-            y: 198
+            y: 204
             width: 236
             height: 48
             bg_opa: TRANSP
@@ -405,9 +405,9 @@ lvgl:
         - obj:
             id: obj_lampa_scenes
             x: 2
-            y: 198
+            y: 204
             width: 236
-            height: 120
+            height: 110
             bg_opa: TRANSP
             border_width: 0
             pad_all: 0
@@ -424,7 +424,7 @@ lvgl:
               - button:
                   id: btn_scene_auto
                   x: 0
-                  y: 18
+                  y: 14
                   width: 112
                   height: 30
                   pad_all: 0
@@ -451,7 +451,7 @@ lvgl:
               - button:
                   id: btn_scene_bialy
                   x: 116
-                  y: 18
+                  y: 14
                   width: 112
                   height: 30
                   pad_all: 0
@@ -478,7 +478,7 @@ lvgl:
               - button:
                   id: btn_scene_wschod
                   x: 0
-                  y: 54
+                  y: 45
                   width: 112
                   height: 30
                   pad_all: 0
@@ -505,7 +505,7 @@ lvgl:
               - button:
                   id: btn_scene_zachod
                   x: 116
-                  y: 54
+                  y: 45
                   width: 112
                   height: 30
                   pad_all: 0
@@ -532,7 +532,7 @@ lvgl:
               - button:
                   id: btn_scene_tecza
                   x: 0
-                  y: 90
+                  y: 76
                   width: 112
                   height: 30
                   pad_all: 0
@@ -559,7 +559,7 @@ lvgl:
               - button:
                   id: btn_scene_ognisko
                   x: 116
-                  y: 90
+                  y: 76
                   width: 112
                   height: 30
                   pad_all: 0
