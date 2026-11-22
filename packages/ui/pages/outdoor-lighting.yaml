@@ -1,0 +1,52 @@
+# JARVIS 2.0 — STRONA OŚWIETLENIA ZEWNĘTRZNEGO
+# Wydzielona z heating.yaml bez zmiany identyfikatora ani zachowania strony.
+
+lvgl:
+  pages:
+    # ------------------------------------------------------
+    # Oswietlenie zewnetrzne - PLACEHOLDER
+    # ------------------------------------------------------
+    - id: page_zewnetrzne
+      bg_color: 0x000000
+      on_swipe_left:
+        - lvgl.page.show:
+            id: page_piec
+            animation: NONE
+            time: 300ms
+      on_swipe_right:
+        - lvgl.page.show:
+            id: page_piec
+            animation: NONE
+            time: 300ms
+      widgets:
+        - label:
+            text: "OŚWIETLENIE"
+            align: TOP_MID
+            y: 25
+            text_font: font_ui_24
+            text_color: 0xFFFFFF
+        - label:
+            text: "ZEWNĘTRZNE"
+            align: TOP_MID
+            y: 55
+            text_font: font_ui_18
+            text_color: 0xAAAAAA
+        - obj:
+            x: 2
+            y: 100
+            width: 236
+            height: 100
+            bg_opa: TRANSP
+            border_width: 2
+            border_color: 0x333333
+            radius: 8
+            pad_all: 2
+            scrollable: false
+            widgets:
+              - label:
+                  text: "Wkrótce..."
+                  x: 0
+                  y: 0
+                  text_font: font_ui_14
+                  text_color: 0x666666
+
