@@ -3,8 +3,9 @@
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
 esphome:
-  includes:
-    - esp_heap_caps.h
+  platformio_options:
+    build_flags:
+      - "-include esp_heap_caps.h"
 
 esp32:
   board: esp32dev
