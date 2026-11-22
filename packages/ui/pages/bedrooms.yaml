@@ -70,11 +70,11 @@ lvgl:
                           - globals.set:
                               id: lamp_selected
                               value: !lambda 'return std::string("studio");'
-                          - script.execute: prepare_lamp_page
-                          - lvgl.page.show:
+                                                    - lvgl.page.show:
                               id: page_lampa_wspolna
                               animation: NONE
                               time: 200ms
+- script.execute: prepare_lamp_page
                           - script.execute: confirm_click
                         else:
                           - switch.toggle: sypialnia_lampa
@@ -649,11 +649,11 @@ lvgl:
                           - globals.set:
                               id: lamp_selected
                               value: !lambda 'return std::string("erni");'
-                          - script.execute: prepare_lamp_page
-                          - lvgl.page.show:
+                                                    - lvgl.page.show:
                               id: page_lampa_wspolna
                               animation: NONE
                               time: 200ms
+- script.execute: prepare_lamp_page
                           - script.execute: confirm_click
                         else:
                           - switch.toggle: erni_lampa
