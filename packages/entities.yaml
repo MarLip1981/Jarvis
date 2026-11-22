@@ -36,21 +36,17 @@ sensor:
         - script.execute: ha_rx_flash
         - if:
             condition:
-              lambda: 'return !std::isnan(x);'
+              lambda: 'return id(lamp_selected) == "salon" && !std::isnan(x);'
             then:
               - lvgl.slider.update:
-                  id: slider_salon_brightness
-                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+                  id: slider_lampa_brightness
+                  value: !lambda 'return (int)(x / 255.0 * 100.0);'
               - lvgl.label.update:
-                  id: lbl_salon_brightness_val
+                  id: lbl_lampa_brightness_val
                   text: !lambda |-
-                    char buf[8];
-                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    char buf[12];
+                    snprintf(buf, sizeof(buf), "%d%%", (int)(x / 255.0 * 100.0));
                     return std::string(buf);
-            else:
-              - lvgl.label.update:
-                  id: lbl_salon_brightness_val
-                  text: "--"
 
   - platform: homeassistant
     id: salon_colortemp_attr
@@ -61,21 +57,17 @@ sensor:
         - script.execute: ha_rx_flash
         - if:
             condition:
-              lambda: 'return !std::isnan(x);'
+              lambda: 'return id(lamp_selected) == "salon" && !std::isnan(x);'
             then:
               - lvgl.slider.update:
-                  id: slider_salon_colortemp
-                  value: !lambda 'return (int) x;'
+                  id: slider_lampa_colortemp
+                  value: !lambda 'return (int)x;'
               - lvgl.label.update:
-                  id: lbl_salon_colortemp_val
+                  id: lbl_lampa_colortemp_val
                   text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    char buf[12];
+                    snprintf(buf, sizeof(buf), "%d K", (int)x);
                     return std::string(buf);
-            else:
-              - lvgl.label.update:
-                  id: lbl_salon_colortemp_val
-                  text: "--"
 
   - platform: homeassistant
     id: piec_current_temp
@@ -163,21 +155,17 @@ sensor:
         - script.execute: ha_rx_flash
         - if:
             condition:
-              lambda: 'return !std::isnan(x);'
+              lambda: 'return id(lamp_selected) == "erni" && !std::isnan(x);'
             then:
               - lvgl.slider.update:
-                  id: slider_erni_brightness
-                  value: !lambda 'return (int) (x / 255.0 * 100.0);'
+                  id: slider_lampa_brightness
+                  value: !lambda 'return (int)(x / 255.0 * 100.0);'
               - lvgl.label.update:
-                  id: lbl_erni_brightness_val
+                  id: lbl_lampa_brightness_val
                   text: !lambda |-
-                    char buf[8];
-                    snprintf(buf, sizeof(buf), "%d%%", (int) (x / 255.0 * 100.0));
+                    char buf[12];
+                    snprintf(buf, sizeof(buf), "%d%%", (int)(x / 255.0 * 100.0));
                     return std::string(buf);
-            else:
-              - lvgl.label.update:
-                  id: lbl_erni_brightness_val
-                  text: "--"
 
   - platform: homeassistant
     id: erni_colortemp_attr
@@ -188,22 +176,17 @@ sensor:
         - script.execute: ha_rx_flash
         - if:
             condition:
-              lambda: 'return !std::isnan(x);'
+              lambda: 'return id(lamp_selected) == "erni" && !std::isnan(x);'
             then:
               - lvgl.slider.update:
-                  id: slider_erni_colortemp
-                  value: !lambda 'return (int) x;'
+                  id: slider_lampa_colortemp
+                  value: !lambda 'return (int)x;'
               - lvgl.label.update:
-                  id: lbl_erni_colortemp_val
+                  id: lbl_lampa_colortemp_val
                   text: !lambda |-
-                    char buf[10];
-                    snprintf(buf, sizeof(buf), "%d K", (int) x);
+                    char buf[12];
+                    snprintf(buf, sizeof(buf), "%d K", (int)x);
                     return std::string(buf);
-            else:
-              - lvgl.label.update:
-                  id: lbl_erni_colortemp_val
-                  text: "--"
-
 
   - platform: internal_temperature
     id: cpu_temp_sensor
@@ -392,10 +375,6 @@ binary_sensor:
             id: btn_lampy_salon
             hidden: !lambda 'return !x;'
         - lvgl.label.update:
-            id: lbl_salon_lamp_state
-            text: !lambda |-
-              return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-        - lvgl.label.update:
             id: lbl_salon_glowna_icon
             text: !lambda |-
               return x ? std::string("\U000F06E8") : std::string("\U000F0336");
@@ -514,16 +493,25 @@ text_sensor:
   # czego nie da sie wiarygodnie odczytac z samego binary_sensor.
   - platform: homeassistant
     id: state_salon_lampka_raw
+    on_value:
+      then:
+        - script.execute: prepare_lamp_page
     entity_id: light.salon_lampka
     internal: true
 
   - platform: homeassistant
     id: state_sypialnia_lampa_raw
+    on_value:
+      then:
+        - script.execute: prepare_lamp_page
     entity_id: light.studio
     internal: true
 
   - platform: homeassistant
     id: state_erni_lampa_raw
+    on_value:
+      then:
+        - script.execute: prepare_lamp_page
     entity_id: light.mlody_lampka_nocna
     internal: true
 

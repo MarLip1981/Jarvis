@@ -67,8 +67,12 @@ lvgl:
                         condition:
                           lambda: 'return ((esphome::millis)() - id(btn_press_ms)) > 500;'
                         then:
+                          - globals.set:
+                              id: lamp_selected
+                              value: "studio"
+                          - script.execute: prepare_lamp_page
                           - lvgl.page.show:
-                              id: page_sypialnia_lampa
+                              id: page_lampa_wspolna
                               animation: NONE
                               time: 200ms
                           - script.execute: confirm_click
@@ -81,108 +85,359 @@ lvgl:
     # glownej stronie Sypialni). Wyjscie: swipe w KAZDA strone
     # wraca na Sypialnia.
     # ------------------------------------------------------
-    - id: page_sypialnia_lampa
+    - id: page_lampa_wspolna
       bg_color: 0x000000
       on_swipe_left:
-        - lvgl.page.show:
-            id: page_sypialnia
-            animation: NONE
-            time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "salon";'
+            then:
+              - lvgl.page.show:
+                  id: page_salon
+                  animation: NONE
+                  time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "studio";'
+            then:
+              - lvgl.page.show:
+                  id: page_sypialnia
+                  animation: NONE
+                  time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "erni";'
+            then:
+              - lvgl.page.show:
+                  id: page_erni
+                  animation: NONE
+                  time: 200ms
       on_swipe_right:
-        - lvgl.page.show:
-            id: page_sypialnia
-            animation: NONE
-            time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "salon";'
+            then:
+              - lvgl.page.show:
+                  id: page_salon
+                  animation: NONE
+                  time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "studio";'
+            then:
+              - lvgl.page.show:
+                  id: page_sypialnia
+                  animation: NONE
+                  time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "erni";'
+            then:
+              - lvgl.page.show:
+                  id: page_erni
+                  animation: NONE
+                  time: 200ms
       widgets:
         - label:
-            text: "SYPIALNIA - SCENY"
+            id: lbl_lampa_title
+            text: "LAMPA"
             align: TOP_MID
-            y: 30
+            y: 10
             text_font: font_ui_18
             text_color: 0xFFFFFF
         - label:
-            id: lbl_sypialnia_lamp_state_icon
+            id: lbl_lampa_icon
             text: "\U000F0E4F"
             align: TOP_MID
-            y: 54
+            y: 34
             text_font: icon_font_lamp_state
             text_color: 0xFF3333
         - label:
-            id: lbl_sypialnia_lamp_state
+            id: lbl_lampa_status
             text: "Lampa: niedostępna"
             align: TOP_MID
-            y: 98
+            y: 68
             text_font: font_ui_14
             text_color: 0xFF3333
+        - button:
+            x: 8
+            y: 91
+            width: 224
+            height: 28
+            pad_all: 0
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 5
+            shadow_width: 0
+            widgets:
+              - label:
+                  id: lbl_lampa_toggle
+                  align: CENTER
+                  text: "WŁĄCZ LAMPĘ"
+                  text_font: font_ui_14
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - if:
+                        condition:
+                          lambda: 'return id(lamp_selected) == "salon";'
+                        then:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.salon_lampka
+                    - if:
+                        condition:
+                          lambda: 'return id(lamp_selected) == "studio";'
+                        then:
+                          - switch.toggle: sypialnia_lampa
+                    - if:
+                        condition:
+                          lambda: 'return id(lamp_selected) == "erni";'
+                        then:
+                          - switch.toggle: erni_lampa
+                    - script.execute: confirm_click
         - obj:
+            id: obj_lampa_adjustments
             x: 2
-            y: 118
+            y: 124
             width: 236
-            height: 184
+            height: 68
             bg_opa: TRANSP
-            border_width: 2
-            border_color: 0x333333
-            radius: 8
-            pad_all: 2
+            border_width: 0
+            pad_all: 0
             scrollable: false
             widgets:
+              - label:
+                  text: "Jasność"
+                  x: 4
+                  y: 0
+                  text_font: font_ui_12
+                  text_color: 0xCCCCCC
+              - label:
+                  id: lbl_lampa_brightness_val
+                  text: "--"
+                  x: 178
+                  y: 0
+                  text_font: font_ui_12
+                  text_color: 0xFFFFFF
+              - slider:
+                  id: slider_lampa_brightness
+                  x: 4
+                  y: 16
+                  width: 224
+                  height: 14
+                  min_value: 1
+                  max_value: 100
+                  value: 50
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          then:
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "salon";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.salon_lampka
+                                      data_template:
+                                        brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "erni";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.mlody_lampka_nocna
+                                      data_template:
+                                        brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
+                            - script.execute: confirm_click
+              - label:
+                  text: "Barwa"
+                  x: 4
+                  y: 36
+                  text_font: font_ui_12
+                  text_color: 0xCCCCCC
+              - label:
+                  id: lbl_lampa_colortemp_val
+                  text: "--"
+                  x: 178
+                  y: 36
+                  text_font: font_ui_12
+                  text_color: 0xFFFFFF
+              - slider:
+                  id: slider_lampa_colortemp
+                  x: 4
+                  y: 52
+                  width: 224
+                  height: 14
+                  min_value: 2000
+                  max_value: 6500
+                  value: 4000
+                  on_release:
+                    then:
+                      - if:
+                          condition:
+                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                          then:
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "salon";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.salon_lampka
+                                      data_template:
+                                        color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "erni";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.mlody_lampka_nocna
+                                      data_template:
+                                        color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
+                            - script.execute: confirm_click
+        - obj:
+            id: obj_lampa_colors
+            x: 2
+            y: 198
+            width: 236
+            height: 48
+            bg_opa: TRANSP
+            border_width: 0
+            pad_all: 0
+            scrollable: false
+            hidden: true
+            widgets:
+              - label:
+                  text: "Kolor"
+                  x: 4
+                  y: 0
+                  text_font: font_ui_12
+                  text_color: 0xCCCCCC
               - button:
                   x: 0
-                  y: 0
-                  width: 232
-                  height: 28
+                  y: 20
+                  width: 55
+                  height: 22
                   pad_all: 0
-                  bg_color: 0x18232B
-                  border_width: 1
-                  border_color: 0x45515C
-                  radius: 5
-                  shadow_width: 0
-                  pressed:
-                    bg_color: 0x31546B
-                  widgets:
-                    - label:
-                        align: CENTER
-                        text: "WŁĄCZ / WYŁĄCZ"
-                        text_font: font_ui_14
-                        text_align: CENTER
+                  bg_color: 0xFF0000
                   on_click:
                     - if:
                         condition:
                           lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                         then:
-                        - switch.toggle: sypialnia_lampa
-                        - script.execute: confirm_click
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[255, 0, 0]"
+                          - script.execute: confirm_click
+              - button:
+                  x: 59
+                  y: 20
+                  width: 55
+                  height: 22
+                  pad_all: 0
+                  bg_color: 0x00FF00
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[0, 255, 0]"
+                          - script.execute: confirm_click
+              - button:
+                  x: 118
+                  y: 20
+                  width: 55
+                  height: 22
+                  pad_all: 0
+                  bg_color: 0x0000FF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[0, 0, 255]"
+                          - script.execute: confirm_click
+              - button:
+                  x: 177
+                  y: 20
+                  width: 55
+                  height: 22
+                  pad_all: 0
+                  bg_color: 0xFFFFFF
+                  on_click:
+                    - if:
+                        condition:
+                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                        then:
+                          - homeassistant.action:
+                              action: light.turn_on
+                              data:
+                                entity_id: light.salon_lampka
+                              data_template:
+                                rgb_color: "[255, 255, 255]"
+                          - script.execute: confirm_click
+        - obj:
+            id: obj_lampa_scenes
+            x: 2
+            y: 198
+            width: 236
+            height: 120
+            bg_opa: TRANSP
+            border_width: 0
+            pad_all: 0
+            scrollable: false
+            hidden: true
+            widgets:
               - label:
                   id: lbl_scena_studio
                   text: "..."
-                  x: 0
-                  y: 34
-                  text_font: font_ui_14
+                  x: 4
+                  y: 0
+                  text_font: font_ui_12
                   text_color: 0xFFFFFF
-
-              # --- Siatka 6 przyciskow scen 2x3. Podswietlenie
-              # aktualnie wybranej sceny bierze sie WYLACZNIE ze stanu
-              # w HA (state_scena_wybor -> patrz text_sensor nizej) -
-              # dzieki temu zawsze jest zgodne z prawda, tak jak na
-              # dashboardzie, niezaleznie od tego skad przyszla zmiana ---
               - button:
                   id: btn_scene_auto
                   x: 0
-                  y: 52
+                  y: 18
                   width: 112
-                  height: 32
+                  height: 30
                   pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
                   radius: 5
-                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
                         text: "AUTO"
                         text_font: font_ui_14
-                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -197,21 +452,19 @@ lvgl:
               - button:
                   id: btn_scene_bialy
                   x: 116
-                  y: 52
+                  y: 18
                   width: 112
-                  height: 32
+                  height: 30
                   pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
                   radius: 5
-                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
                         text: "BIAŁY"
                         text_font: font_ui_14
-                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -226,21 +479,19 @@ lvgl:
               - button:
                   id: btn_scene_wschod
                   x: 0
-                  y: 88
+                  y: 54
                   width: 112
-                  height: 32
+                  height: 30
                   pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
                   radius: 5
-                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
                         text: "WSCHÓD"
                         text_font: font_ui_14
-                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -255,21 +506,19 @@ lvgl:
               - button:
                   id: btn_scene_zachod
                   x: 116
-                  y: 88
+                  y: 54
                   width: 112
-                  height: 32
+                  height: 30
                   pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
                   radius: 5
-                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
                         text: "ZACHÓD"
                         text_font: font_ui_14
-                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -284,21 +533,19 @@ lvgl:
               - button:
                   id: btn_scene_tecza
                   x: 0
-                  y: 124
+                  y: 90
                   width: 112
-                  height: 32
+                  height: 30
                   pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
                   radius: 5
-                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
                         text: "TĘCZA"
                         text_font: font_ui_14
-                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -313,21 +560,19 @@ lvgl:
               - button:
                   id: btn_scene_ognisko
                   x: 116
-                  y: 124
+                  y: 90
                   width: 112
-                  height: 32
+                  height: 30
                   pad_all: 0
                   bg_color: 0x18232B
                   border_width: 1
                   border_color: 0x45515C
                   radius: 5
-                  shadow_width: 0
                   widgets:
                     - label:
                         align: CENTER
                         text: "OGNISKO"
                         text_font: font_ui_14
-                        text_align: CENTER
                   on_click:
                     - if:
                         condition:
@@ -339,10 +584,6 @@ lvgl:
                                 entity_id: input_select.animacja_swiatla_studio
                                 option: "Ognisko"
                           - script.execute: confirm_click
-
-    # ------------------------------------------------------
-    # Erni
-    # ------------------------------------------------------
     - id: page_erni
       bg_color: 0x000000
       on_swipe_left:
@@ -406,8 +647,12 @@ lvgl:
                         condition:
                           lambda: 'return ((esphome::millis)() - id(btn_press_ms)) > 500;'
                         then:
+                          - globals.set:
+                              id: lamp_selected
+                              value: "erni"
+                          - script.execute: prepare_lamp_page
                           - lvgl.page.show:
-                              id: page_erni_lampa
+                              id: page_lampa_wspolna
                               animation: NONE
                               time: 200ms
                           - script.execute: confirm_click
@@ -419,155 +664,4 @@ lvgl:
     # Erni > Lampa - jasnosc i barwa (przytrzymanie przycisku na
     # glownej stronie Erni). Wyjscie: swipe w KAZDA strone
     # wraca na Erni.
-    # ------------------------------------------------------
-    - id: page_erni_lampa
-      bg_color: 0x000000
-      on_swipe_left:
-        - lvgl.page.show:
-            id: page_erni
-            animation: NONE
-            time: 200ms
-      on_swipe_right:
-        - lvgl.page.show:
-            id: page_erni
-            animation: NONE
-            time: 200ms
-      widgets:
-        - label:
-            text: "ERNI - LAMPA"
-            align: TOP_MID
-            y: 30
-            text_font: font_ui_18
-            text_color: 0xFFFFFF
-        - label:
-            id: lbl_erni_lamp_state_icon
-            text: "\U000F0E4F"
-            align: TOP_MID
-            y: 54
-            text_font: icon_font_lamp_state
-            text_color: 0xFF3333
-        - label:
-            id: lbl_erni_lamp_state
-            text: "Lampa: niedostępna"
-            align: TOP_MID
-            y: 98
-            text_font: font_ui_14
-            text_color: 0xFF3333
-        - obj:
-            x: 2
-            y: 118
-            width: 236
-            height: 196
-            bg_opa: TRANSP
-            border_width: 2
-            border_color: 0x333333
-            radius: 8
-            pad_all: 2
-            scrollable: false
-            widgets:
-              - button:
-                  x: 0
-                  y: 0
-                  width: 232
-                  height: 28
-                  pad_all: 0
-                  bg_color: 0x18232B
-                  border_width: 1
-                  border_color: 0x45515C
-                  radius: 5
-                  shadow_width: 0
-                  pressed:
-                    bg_color: 0x31546B
-                  widgets:
-                    - label:
-                        align: CENTER
-                        text: "WŁĄCZ / WYŁĄCZ"
-                        text_font: font_ui_14
-                        text_align: CENTER
-                  on_click:
-                    - if:
-                        condition:
-                          lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                        then:
-                        - switch.toggle: erni_lampa
-                        - script.execute: confirm_click
-              - label:
-                  id: lbl_erni_brightness
-                  text: "Jasność"
-                  x: 5
-                  y: 34
-                  text_font: font_ui_14
-                  text_color: 0xCCCCCC
-              - slider:
-                  id: slider_erni_brightness
-                  x: 20
-                  y: 56
-                  width: 30
-                  height: 100
-                  min_value: 1
-                  max_value: 100
-                  value: 50
-                  on_release:
-                    then:
-                      - if:
-                          condition:
-                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                          then:
-                            - homeassistant.action:
-                                action: light.turn_on
-                                data:
-                                  entity_id: light.sypialnia
-                                data_template:
-                                  brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_erni_brightness)));'
-                            - script.execute: confirm_click
-
-              - label:
-                  id: lbl_erni_colortemp
-                  text: "Barwa"
-                  x: 125
-                  y: 34
-                  text_font: font_ui_14
-                  text_color: 0xCCCCCC
-              - slider:
-                  id: slider_erni_colortemp
-                  x: 160
-                  y: 56
-                  width: 30
-                  height: 100
-                  min_value: 2000
-                  max_value: 6500
-                  value: 4000
-                  on_release:
-                    then:
-                      - if:
-                          condition:
-                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                          then:
-                            - homeassistant.action:
-                                action: light.turn_on
-                                data:
-                                  entity_id: light.sypialnia
-                                data_template:
-                                  color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_erni_colortemp)));'
-                            - script.execute: confirm_click
-
-              - label:
-                  id: lbl_erni_brightness_val
-                  text: "--"
-                  align: TOP_LEFT
-                  x: 15
-                  y: 160
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-              - label:
-                  id: lbl_erni_colortemp_val
-                  text: "--"
-                  align: TOP_LEFT
-                  x: 148
-                  y: 160
-                  text_font: font_ui_14
-                  text_color: 0xFFFFFF
-
-    # ------------------------------------------------------
-    # Piec - PLACEHOLDER, szukamy jeszcze wlasciwych encji w HA
     # ------------------------------------------------------

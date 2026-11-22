@@ -97,6 +97,10 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  - id: lamp_selected
+    type: std::string
+    restore_value: false
+    initial_value: '"salon"'
 
 # ---------------------------------------------------------
 # Wspolny skrypt potwierdzenia kliknięcia - LED na zielono +
@@ -123,6 +127,122 @@ script:
 
   # Wskaźnik wysyłania: potwierdza akcję wywołaną z interfejsu.
   # Tryb restart utrzymuje sygnał przez pełne 400 ms od ostatniej akcji.
+  - id: prepare_lamp_page
+    mode: restart
+    then:
+      - lvgl.label.update:
+          id: lbl_lampa_title
+          text: !lambda |-
+            if (id(lamp_selected) == "salon") return std::string("SALON");
+            if (id(lamp_selected) == "studio") return std::string("SYPIALNIA");
+            return std::string("ERNI");
+      - lvgl.label.update:
+          id: lbl_lampa_status
+          text: !lambda |-
+            std::string raw;
+            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
+            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
+            if (raw == "on") return std::string("Lampa: WŁĄCZONA");
+            if (raw == "off") return std::string("Lampa: wyłączona");
+            return std::string("Lampa: niedostępna");
+          text_color: !lambda |-
+            std::string raw;
+            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
+            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
+            if (raw == "on") return lv_color_hex(0x00FF00);
+            if (raw == "off") return lv_color_hex(0xFFFFFF);
+            return lv_color_hex(0xFF3333);
+      - lvgl.label.update:
+          id: lbl_lampa_icon
+          text: !lambda |-
+            std::string raw;
+            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
+            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
+            if (raw == "on") return std::string("\U000F06E8");
+            if (raw == "off") return std::string("\U000F0336");
+            return std::string("\U000F0E4F");
+          text_color: !lambda |-
+            std::string raw;
+            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
+            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
+            if (raw == "on") return lv_color_hex(0x00FF00);
+            if (raw == "off") return lv_color_hex(0x888888);
+            return lv_color_hex(0xFF3333);
+      - lvgl.label.update:
+          id: lbl_lampa_toggle
+          text: !lambda |-
+            std::string raw;
+            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
+            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
+            if (raw == "on") return std::string("WYŁĄCZ LAMPĘ");
+            if (raw == "off") return std::string("WŁĄCZ LAMPĘ");
+            return std::string("BRAK POŁĄCZENIA");
+      - lvgl.obj.update:
+          id: obj_lampa_adjustments
+          hidden: !lambda 'return id(lamp_selected) == "studio";'
+      - lvgl.obj.update:
+          id: obj_lampa_colors
+          hidden: !lambda 'return id(lamp_selected) != "salon";'
+      - lvgl.obj.update:
+          id: obj_lampa_scenes
+          hidden: !lambda 'return id(lamp_selected) != "studio";'
+      - if:
+          condition:
+            lambda: 'return id(lamp_selected) == "salon" && std::isfinite(id(salon_brightness_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_brightness
+                value: !lambda 'return (int)(id(salon_brightness_attr).state / 255.0 * 100.0);'
+            - lvgl.label.update:
+                id: lbl_lampa_brightness_val
+                text: !lambda |-
+                  char buf[8];
+                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(salon_brightness_attr).state / 255.0 * 100.0));
+                  return std::string(buf);
+      - if:
+          condition:
+            lambda: 'return id(lamp_selected) == "salon" && std::isfinite(id(salon_colortemp_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_colortemp
+                value: !lambda 'return (int)id(salon_colortemp_attr).state;'
+            - lvgl.label.update:
+                id: lbl_lampa_colortemp_val
+                text: !lambda |-
+                  char buf[12];
+                  snprintf(buf, sizeof(buf), "%d K", (int)id(salon_colortemp_attr).state);
+                  return std::string(buf);
+      - if:
+          condition:
+            lambda: 'return id(lamp_selected) == "erni" && std::isfinite(id(erni_brightness_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_brightness
+                value: !lambda 'return (int)(id(erni_brightness_attr).state / 255.0 * 100.0);'
+            - lvgl.label.update:
+                id: lbl_lampa_brightness_val
+                text: !lambda |-
+                  char buf[8];
+                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(erni_brightness_attr).state / 255.0 * 100.0));
+                  return std::string(buf);
+      - if:
+          condition:
+            lambda: 'return id(lamp_selected) == "erni" && std::isfinite(id(erni_colortemp_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_colortemp
+                value: !lambda 'return (int)id(erni_colortemp_attr).state;'
+            - lvgl.label.update:
+                id: lbl_lampa_colortemp_val
+                text: !lambda |-
+                  char buf[12];
+                  snprintf(buf, sizeof(buf), "%d K", (int)id(erni_colortemp_attr).state);
+                  return std::string(buf);
   - id: confirm_click
     mode: restart
     then:
