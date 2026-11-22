@@ -111,6 +111,14 @@ lvgl:
                   id: page_erni
                   animation: NONE
                   time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "adresowka";'
+            then:
+              - lvgl.page.show:
+                  id: page_zewnetrzne
+                  animation: NONE
+                  time: 200ms
       on_swipe_right:
         - if:
             condition:
@@ -134,6 +142,14 @@ lvgl:
             then:
               - lvgl.page.show:
                   id: page_erni
+                  animation: NONE
+                  time: 200ms
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "adresowka";'
+            then:
+              - lvgl.page.show:
+                  id: page_zewnetrzne
                   animation: NONE
                   time: 200ms
       widgets:
@@ -198,6 +214,14 @@ lvgl:
                           lambda: 'return id(lamp_selected) == "erni";'
                         then:
                           - switch.toggle: erni_lampa
+                    - if:
+                        condition:
+                          lambda: 'return id(lamp_selected) == "adresowka";'
+                        then:
+                          - homeassistant.action:
+                              action: light.toggle
+                              data:
+                                entity_id: light.adresowka
                     - script.execute: confirm_click
         - obj:
             id: obj_lampa_adjustments
@@ -258,6 +282,16 @@ lvgl:
                                         entity_id: light.mlody_lampka_nocna
                                       data_template:
                                         brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "adresowka";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.adresowka
+                                      data_template:
+                                        brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
                             - script.execute: confirm_click
               - label:
                   text: "Barwa"
@@ -305,6 +339,16 @@ lvgl:
                                       action: light.turn_on
                                       data:
                                         entity_id: light.mlody_lampka_nocna
+                                      data_template:
+                                        color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "adresowka";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.adresowka
                                       data_template:
                                         color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
                             - script.execute: confirm_click
