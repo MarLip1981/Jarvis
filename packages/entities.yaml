@@ -90,6 +90,9 @@ sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
+        - globals.set:
+            id: cache_piec_target
+            value: !lambda "return x;"
         - lvgl.label.update:
             id: lbl_piec_target
             text: !lambda |-
