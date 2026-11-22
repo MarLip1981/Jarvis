@@ -134,6 +134,7 @@ script:
           text: !lambda |-
             if (id(lamp_selected) == "salon") return std::string("SALON");
             if (id(lamp_selected) == "studio") return std::string("SYPIALNIA");
+            if (id(lamp_selected) == "adresowka") return std::string("ADRESÓWKA");
             return std::string("ERNI");
       - lvgl.label.update:
           id: lbl_lampa_status
@@ -141,6 +142,7 @@ script:
             std::string raw;
             if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
             else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
             else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
             if (raw == "on") return std::string("Lampa: WŁĄCZONA");
             if (raw == "off") return std::string("Lampa: wyłączona");
@@ -149,6 +151,7 @@ script:
             std::string raw;
             if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
             else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
             else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
             if (raw == "on") return lv_color_hex(0x00FF00);
             if (raw == "off") return lv_color_hex(0xFFFFFF);
@@ -159,6 +162,7 @@ script:
             std::string raw;
             if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
             else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
             else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
             if (raw == "on") return std::string("\U000F06E8");
             if (raw == "off") return std::string("\U000F0336");
@@ -167,6 +171,7 @@ script:
             std::string raw;
             if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
             else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
             else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
             if (raw == "on") return lv_color_hex(0x00FF00);
             if (raw == "off") return lv_color_hex(0x888888);
@@ -177,6 +182,7 @@ script:
             std::string raw;
             if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
             else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
+            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
             else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
             if (raw == "on") return std::string("WYŁĄCZ LAMPĘ");
             if (raw == "off") return std::string("WŁĄCZ LAMPĘ");
@@ -231,6 +237,19 @@ script:
                   return std::string(buf);
       - if:
           condition:
+            lambda: 'return id(lamp_selected) == "adresowka" && std::isfinite(id(adresowka_brightness_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_brightness
+                value: !lambda 'return (int)(id(adresowka_brightness_attr).state / 255.0 * 100.0);'
+            - lvgl.label.update:
+                id: lbl_lampa_brightness_val
+                text: !lambda |-
+                  char buf[8];
+                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(adresowka_brightness_attr).state / 255.0 * 100.0));
+                  return std::string(buf);
+      - if:
+          condition:
             lambda: 'return id(lamp_selected) == "erni" && std::isfinite(id(erni_colortemp_attr).state);'
           then:
             - lvgl.slider.update:
@@ -241,6 +260,19 @@ script:
                 text: !lambda |-
                   char buf[12];
                   snprintf(buf, sizeof(buf), "%d K", (int)id(erni_colortemp_attr).state);
+                  return std::string(buf);
+      - if:
+          condition:
+            lambda: 'return id(lamp_selected) == "adresowka" && std::isfinite(id(adresowka_colortemp_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_colortemp
+                value: !lambda 'return (int)id(adresowka_colortemp_attr).state;'
+            - lvgl.label.update:
+                id: lbl_lampa_colortemp_val
+                text: !lambda |-
+                  char buf[12];
+                  snprintf(buf, sizeof(buf), "%d K", (int)id(adresowka_colortemp_attr).state);
                   return std::string(buf);
   - id: confirm_click
     mode: restart
