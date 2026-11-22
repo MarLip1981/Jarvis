@@ -156,7 +156,7 @@ sensor:
 
   - platform: homeassistant
     id: erni_brightness_attr
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     attribute: brightness
     on_value:
       then:
@@ -181,7 +181,7 @@ sensor:
 
   - platform: homeassistant
     id: erni_colortemp_attr
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     attribute: color_temp_kelvin
     on_value:
       then:
@@ -449,7 +449,7 @@ binary_sensor:
 
   - platform: homeassistant
     id: state_erni_lampa
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     on_state:
       then:
         - script.execute: ha_rx_flash
@@ -524,7 +524,7 @@ text_sensor:
 
   - platform: homeassistant
     id: state_erni_lampa_raw
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
     internal: true
 
   - platform: homeassistant
@@ -996,7 +996,7 @@ switch:
 
   - platform: homeassistant
     id: erni_lampa
-    entity_id: light.sypialnia
+    entity_id: light.mlody_lampka_nocna
 
 # ---------------------------------------------------------
 # LVGL
