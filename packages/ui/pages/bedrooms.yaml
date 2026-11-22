@@ -228,7 +228,7 @@ lvgl:
             x: 2
             y: 150
             width: 236
-            height: 68
+            height: 36
             bg_opa: TRANSP
             border_width: 0
             pad_all: 0
@@ -292,65 +292,6 @@ lvgl:
                                         entity_id: light.adresowka
                                       data_template:
                                         brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
-                            - script.execute: confirm_click
-              - label:
-                  text: "Barwa"
-                  x: 4
-                  y: 36
-                  text_font: font_ui_12
-                  text_color: 0xCCCCCC
-              - label:
-                  id: lbl_lampa_colortemp_val
-                  text: "--"
-                  x: 178
-                  y: 36
-                  text_font: font_ui_12
-                  text_color: 0xFFFFFF
-              - slider:
-                  id: slider_lampa_colortemp
-                  x: 4
-                  y: 52
-                  width: 224
-                  height: 14
-                  min_value: 2000
-                  max_value: 6500
-                  value: 4000
-                  on_release:
-                    then:
-                      - if:
-                          condition:
-                            lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
-                          then:
-                            - if:
-                                condition:
-                                  lambda: 'return id(lamp_selected) == "salon";'
-                                then:
-                                  - homeassistant.action:
-                                      action: light.turn_on
-                                      data:
-                                        entity_id: light.salon_lampka
-                                      data_template:
-                                        color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
-                            - if:
-                                condition:
-                                  lambda: 'return id(lamp_selected) == "erni";'
-                                then:
-                                  - homeassistant.action:
-                                      action: light.turn_on
-                                      data:
-                                        entity_id: light.mlody_lampka_nocna
-                                      data_template:
-                                        color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
-                            - if:
-                                condition:
-                                  lambda: 'return id(lamp_selected) == "adresowka";'
-                                then:
-                                  - homeassistant.action:
-                                      action: light.turn_on
-                                      data:
-                                        entity_id: light.adresowka
-                                      data_template:
-                                        color_temp_kelvin: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_colortemp)));'
                             - script.execute: confirm_click
         - obj:
             id: obj_lampa_colors
