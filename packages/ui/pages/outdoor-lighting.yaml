@@ -44,7 +44,7 @@ lvgl:
               - label:
                   text: "ADRESÓWKA"
                   align: CENTER
-                  text_font: font_ui_18
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
@@ -76,7 +76,7 @@ lvgl:
               - label:
                   text: "WEJŚCIE / SCHODKI"
                   align: CENTER
-                  text_font: font_ui_18
+                  text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
               - if:
