@@ -497,6 +497,14 @@ text_sensor:
     internal: true
 
   - platform: homeassistant
+    id: state_wejscie_schodki_lampa_raw
+    on_value:
+      then:
+        - script.execute: prepare_lamp_page
+    entity_id: light.wejscie_schodki
+    internal: true
+
+  - platform: homeassistant
     id: state_adresowka_sos_raw
     entity_id: input_boolean.tryb_sos_adresowki
     on_value:
