@@ -6,6 +6,7 @@ lvgl:
   pages:
     - id: page_boot
       bg_color: 0x000000
+      scrollable: false
       widgets:
         # Pelnoekranowy obraz Easter Egg jako tlo ekranu startowego.
         # Wykorzystuje ten sam zasob img_ironman co ukryta strona Easter Egg.
@@ -21,7 +22,7 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
-            text: "V2.0 TEST 028"
+            text: "V2.0 TEST 029"
             align: BOTTOM_MID
             y: -16
             text_font: font_ui_14
@@ -33,6 +34,7 @@ lvgl:
     # ------------------------------------------------------
     - id: page_flash
       bg_color: 0x000000
+      scrollable: false
       on_load:
         - lvgl.page.update:
             id: page_flash
