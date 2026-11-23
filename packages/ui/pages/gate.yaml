@@ -16,7 +16,7 @@ lvgl:
             time: 300ms
       widgets:
         - label:
-            text: "Brama"
+            text: "BRAMA"
             align: TOP_MID
             y: 24
             text_font: font_ui_24
@@ -30,9 +30,10 @@ lvgl:
             width: 216
             height: 84
             bg_color: 0x182B35
-            bg_opa: 25%
-            border_width: 0
-            radius: 6
+            bg_opa: 35%
+            border_width: 1
+            border_color: 0x45515C
+            radius: 10
             pad_all: 0
             scrollable: false
             scrollbar_mode: "OFF"
@@ -399,11 +400,19 @@ lvgl:
                   text_color: 0xFFCC00
                   hidden: true
         - label:
-            id: lbl_brama_status
-            text: "Stan: oczekiwanie na HA"
-            align: TOP_MID
-            y: 188
-            text_font: font_gate_14
+            id: lbl_brama_status_caption
+            text: "Status"
+            x: 12
+            y: 151
+            text_font: font_ui_12
+            text_color: 0xFFFFFF
+        - label:
+            id: lbl_brama_status_value
+            text: "oczekiwanie na HA"
+            x: 61
+            y: 151
+            width: 167
+            text_font: font_ui_12
             text_color: 0x888888
             recolor: true
         - label:
@@ -415,26 +424,44 @@ lvgl:
             text_color: 0x00AEEF
             hidden: true
         - label:
+            id: lbl_brama_lock_caption
+            text: "Blokada zamknięcia:"
+            x: 12
+            y: 176
+            text_font: font_ui_12
+            text_color: 0xFFFFFF
+        - label:
             id: lbl_brama_lock_state
-            text: "Blokada zamknięcia: --"
-            align: TOP_MID
-            y: 210
+            text: "--"
+            x: 151
+            y: 176
+            width: 77
+            text_align: RIGHT
             text_font: font_ui_12
             text_color: 0x888888
         - label:
+            id: lbl_brama_lighting_caption
+            text: "Oświetlenie wjazdu:"
+            x: 12
+            y: 198
+            text_font: font_ui_12
+            text_color: 0xFFFFFF
+        - label:
             id: lbl_brama_lighting_state
-            text: "Oświetlenie wjazdu: --"
-            align: TOP_MID
-            y: 230
+            text: "--"
+            x: 151
+            y: 198
+            width: 77
+            text_align: RIGHT
             text_font: font_ui_12
             text_color: 0x888888
         # Sterowanie brama i trybem furtki bezposrednio z karty.
         - button:
             id: btn_brama_karta_main
             x: 12
-            y: 280
+            y: 260
             width: 104
-            height: 32
+            height: 42
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
@@ -444,7 +471,7 @@ lvgl:
             widgets:
               - label:
                   id: lbl_brama_main_button
-                  text: "OTWÓRZ"
+                  text: "BRAMA"
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
@@ -481,13 +508,13 @@ lvgl:
         - button:
             id: btn_brama_karta_pedestrian
             x: 124
-            y: 290
+            y: 260
             width: 104
-            height: 26
+            height: 42
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
-            border_color: 0xB88632
+            border_color: 0x45515C
             radius: 5
             shadow_width: 0
             widgets:
@@ -503,19 +530,6 @@ lvgl:
                   id: btn_press_ms
                   value: !lambda 'return (esphome::millis)();'
             on_click:
-              # Przy aktywnej furtce: 0.6-1.49 s otwiera furtke, >=1.5 s przelacza P4.
-              # Gdy furtka jest wylaczona, przycisk staje sie sterowaniem P4.
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 1500 && id(brama_pedestrian_enabled).state && id(brama_lighting_enabled).has_state() && id(brama_lighting_enabled).state == "true" && id(brama_entrance_lighting_entity).has_state() && !id(brama_entrance_lighting_entity).state.empty();'
-                  then:
-                    - homeassistant.action:
-                        action: switch.toggle
-                        data_template:
-                          entity_id: "{{ target_switch }}"
-                        variables:
-                          target_switch: !lambda 'return id(brama_entrance_lighting_entity).state;'
-                    - script.execute: confirm_click
               - if:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && ((esphome::millis)() - id(btn_press_ms)) < 1500 && id(brama_pedestrian_enabled).state && id(brama_pedestrian_button_entity).has_state() && !id(brama_pedestrian_button_entity).state.empty();'
@@ -530,22 +544,11 @@ lvgl:
                               return id(brama_main_button_entity).state;
                             return id(brama_pedestrian_button_entity).state;
                     - script.execute: confirm_click
-              - if:
-                  condition:
-                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked) && ((esphome::millis)() - id(btn_press_ms)) >= 600 && !id(brama_pedestrian_enabled).state && id(brama_lighting_enabled).has_state() && id(brama_lighting_enabled).state == "true" && id(brama_entrance_lighting_entity).has_state() && !id(brama_entrance_lighting_entity).state.empty();'
-                  then:
-                    - homeassistant.action:
-                        action: switch.toggle
-                        data_template:
-                          entity_id: "{{ target_switch }}"
-                        variables:
-                          target_switch: !lambda 'return id(brama_entrance_lighting_entity).state;'
-                    - script.execute: confirm_click
         - label:
             id: lbl_brama_warning
             text: "UWAGA: FOTOKOMÓRKA"
             align: TOP_MID
-            y: 250
+            y: 226
             text_font: font_ui_12
             text_color: 0xFFCC00
             hidden: true
