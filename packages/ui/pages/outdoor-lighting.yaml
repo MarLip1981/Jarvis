@@ -106,8 +106,7 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  id: lbl_outdoor_wjazd_state
-                  text: "WJAZD: --"
+                  text: "WJAZD"
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
@@ -116,10 +115,14 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.oswietlenie_zewnetrzne_wjazd
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("outdoor_wjazd");'
+                    - lvgl.page.show:
+                        id: page_lampa_wspolna
+                        animation: NONE
+                        time: 200ms
+                    - script.execute: prepare_lamp_page
                     - script.execute: confirm_click
         - button:
             id: btn_zewnetrzne_podworko
@@ -135,8 +138,7 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  id: lbl_outdoor_podworko_state
-                  text: "PODWÓRKO: --"
+                  text: "PODWÓRKO"
                   align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
@@ -145,8 +147,12 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
-                    - homeassistant.action:
-                        action: light.toggle
-                        data:
-                          entity_id: light.oswietlenie_zewnetrzne_podworko
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("outdoor_podworko");'
+                    - lvgl.page.show:
+                        id: page_lampa_wspolna
+                        animation: NONE
+                        time: 200ms
+                    - script.execute: prepare_lamp_page
                     - script.execute: confirm_click
