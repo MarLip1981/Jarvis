@@ -207,10 +207,10 @@ lvgl:
             text_font: font_ui_14
             text_color: 0xFF3333
         - button:
-            x: 8
-            y: 119
-            width: 224
-            height: 28
+            x: 20
+            y: 122
+            width: 200
+            height: 42
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
@@ -281,10 +281,10 @@ lvgl:
                     - script.execute: confirm_click
         - obj:
             id: obj_lampa_adjustments
-            x: 2
-            y: 150
-            width: 236
-            height: 36
+            x: 8
+            y: 176
+            width: 224
+            height: 42
             bg_opa: TRANSP
             border_width: 0
             pad_all: 0
@@ -305,10 +305,10 @@ lvgl:
                   text_color: 0xFFFFFF
               - slider:
                   id: slider_lampa_brightness
-                  x: 4
-                  y: 16
-                  width: 224
-                  height: 14
+                  x: 16
+                  y: 18
+                  width: 192
+                  height: 18
                   min_value: 1
                   max_value: 100
                   value: 50
