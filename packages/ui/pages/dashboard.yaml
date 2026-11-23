@@ -91,7 +91,7 @@ lvgl:
         - button:
             id: btn_pulpit_lights
             x: 4
-            y: 130
+            y: 128
             width: 220
             height: 24
             bg_opa: TRANSP
@@ -135,7 +135,7 @@ lvgl:
         - button:
             id: btn_pulpit_piec
             x: 4
-            y: 158
+            y: 154
             width: 220
             height: 24
             bg_opa: TRANSP
@@ -175,14 +175,14 @@ lvgl:
             id: lbl_drzwi_icon
             text: "\U000F081B"
             x: 4
-            y: 182
+            y: 180
             text_font: icon_font_btn
             text_color: 0x888888
         - label:
             id: lbl_pulpit_drzwi
             text: "Drzwi:   ..."
             x: 32
-            y: 185
+            y: 183
             text_font: font_ui_14
             text_color: 0xFFFFFF
             recolor: true
@@ -191,7 +191,7 @@ lvgl:
         - button:
             id: btn_pulpit_brama_status_row
             x: 4
-            y: 208
+            y: 206
             width: 220
             height: 24
             bg_opa: TRANSP
@@ -343,7 +343,7 @@ lvgl:
         # Znacznik kompilacji — zmieniamy numer przy każdym kolejnym wgraniu testowym.
         - label:
             id: lbl_pulpit_build
-            text: "TEST 026"
+            text: "TEST 028"
             align: BOTTOM_MID
             y: -4
             text_font: font_ui_12
