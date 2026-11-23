@@ -822,7 +822,7 @@ text_sensor:
                 ? std::string("FURTKA") : std::string("OŚWIETLENIE");
         - lvgl.obj.update:
             id: btn_brama_karta_main
-            width: !lambda 'return x == "Otwarta" ? 216 : 104;'
+            width: !lambda 'return x.find("Otwarta") != std::string::npos ? 216 : 104;'
         - lvgl.obj.update:
             id: btn_brama_karta_pedestrian
             hidden: !lambda |-
@@ -953,10 +953,8 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
-              if (!id(brama_pedestrian_enabled).state)
-                return x == "on" ? std::string("OŚWIETLENIE WŁ.") : std::string("OŚWIETLENIE WYŁ.");
-              return id(brama_ha_status).has_state() && id(brama_ha_status).state == "Otwarta"
-                ? std::string("FURTKA / ZAMKNIJ") : std::string("FURTKA / OTWÓRZ");
+              return id(brama_pedestrian_enabled).state
+                ? std::string("FURTKA") : std::string("OŚWIETLENIE");
   - platform: homeassistant
     id: brama_lighting_enabled
     entity_id: sensor.brama_przesuwna_bft_jarvis
