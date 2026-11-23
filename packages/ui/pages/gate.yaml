@@ -389,23 +389,17 @@ lvgl:
                         border_width: 0
                         radius: 0
                     - line:
-                        points:
-                          - 123, 1
-                          - 164, 35
+                        points: [[123, 1], [164, 35]]
                         line_width: 4
                         line_color: 0x344953
                         line_rounded: false
                     - line:
-                        points:
-                          - 127, 8
-                          - 158, 34
+                        points: [[127, 8], [158, 34]]
                         line_width: 2
                         line_color: 0x91A3AB
                         line_rounded: false
                     - line:
-                        points:
-                          - 127, 19
-                          - 148, 35
+                        points: [[127, 19], [148, 35]]
                         line_width: 2
                         line_color: 0x91A3AB
                         line_rounded: false
@@ -462,7 +456,7 @@ lvgl:
               # Ostrzezenie i P4 pozostaja w warstwie nadrzednej.
               - label:
                   id: lbl_brama_warning_icon
-                  text: "\\U000F0027"
+                  text: "\U000F0027"
                   x: 91
                   y: 47
                   text_font: icon_font_btn
