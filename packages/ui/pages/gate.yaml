@@ -22,27 +22,113 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
 
-        # Scena: podjazd, prowadnica, slupki i ruchome skrzydlo.
+        # Scena wzorowana na karcie integracji BFT: ogrodzenie, slupki, pionowe profile,
+        # prowadnica, sygnalizator i naped. Identyfikatory elementow ruchomych zachowane.
         - obj:
             x: 12
             y: 70
             width: 216
             height: 132
-            bg_color: 0x080D11
+            bg_color: 0x101A20
             border_width: 1
-            border_color: 0x26343D
-            radius: 5
+            border_color: 0x344953
+            radius: 9
             pad_all: 0
             scrollable: false
             widgets:
+              # Podjazd i dolna prowadnica.
               - obj:
-                  x: 0
-                  y: 108
-                  width: 216
-                  height: 3
-                  bg_color: 0x78838A
+                  x: 3
+                  y: 109
+                  width: 210
+                  height: 2
+                  bg_color: 0x82939A
                   border_width: 0
                   radius: 0
+              - obj:
+                  x: 3
+                  y: 116
+                  width: 210
+                  height: 1
+                  bg_color: 0x344953
+                  bg_opa: 70%
+                  border_width: 0
+                  radius: 0
+              # Fragment muru po lewej stronie wjazdu.
+              - obj:
+                  x: 3
+                  y: 43
+                  width: 21
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              - obj:
+                  x: 3
+                  y: 57
+                  width: 21
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              - obj:
+                  x: 3
+                  y: 71
+                  width: 21
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              - obj:
+                  x: 3
+                  y: 85
+                  width: 21
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              # Fragment ogrodzenia po prawej stronie.
+              - obj:
+                  x: 193
+                  y: 43
+                  width: 20
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              - obj:
+                  x: 193
+                  y: 57
+                  width: 20
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              - obj:
+                  x: 193
+                  y: 71
+                  width: 20
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              - obj:
+                  x: 193
+                  y: 85
+                  width: 20
+                  height: 10
+                  bg_color: 0x536A74
+                  border_width: 1
+                  border_color: 0x344953
+                  radius: 1
+              # Slupki bramy — ich kolor zmienia sie wraz z oswietleniem P4.
               - obj:
                   id: gate_pillar_left
                   x: 26
@@ -52,6 +138,14 @@ lvgl:
                   bg_color: 0x59636A
                   border_width: 1
                   border_color: 0xAAB2B7
+                  radius: 2
+              - obj:
+                  x: 24
+                  y: 17
+                  width: 17
+                  height: 4
+                  bg_color: 0xD0D8DB
+                  border_width: 0
                   radius: 1
               - obj:
                   id: gate_pillar_right
@@ -62,51 +156,207 @@ lvgl:
                   bg_color: 0x59636A
                   border_width: 1
                   border_color: 0xAAB2B7
-                  radius: 1
+                  radius: 2
               - obj:
-                  x: 43
-                  y: 102
-                  width: 15
-                  height: 7
-                  bg_color: 0x9AA3A8
+                  x: 176
+                  y: 17
+                  width: 17
+                  height: 4
+                  bg_color: 0xD0D8DB
                   border_width: 0
                   radius: 1
+              # Sygnalizator BFT nad prawym slupkiem.
               - obj:
-                  x: 165
-                  y: 102
+                  x: 175
+                  y: 10
                   width: 15
                   height: 7
-                  bg_color: 0x9AA3A8
-                  border_width: 0
-                  radius: 1
-              # Sygnalizator BFT — swieci przy otwartej bramie i podczas ruchu.
+                  bg_color: 0x263943
+                  border_width: 1
+                  border_color: 0x637983
+                  radius: 3
               - obj:
                   id: gate_beacon
-                  x: 23
-                  y: 9
-                  width: 13
-                  height: 8
-                  bg_color: 0xFF8A00
+                  x: 177
+                  y: 7
+                  width: 11
+                  height: 7
+                  bg_color: 0xFFAD35
                   bg_opa: TRANSP
                   border_width: 1
                   border_color: 0xFFD080
                   radius: 3
-              # Uproszczony naped BFT DEIMOS w scenie.
+              # Skrzydlo — pionowe profile jak na karcie integracji.
+              # gate_leaf pozostaje jednym ruchomym obiektem sterowanym z runtime.yaml.
+              - obj:
+                  id: gate_leaf
+                  x: 44
+                  y: 28
+                  width: 136
+                  height: 78
+                  bg_color: 0x465B65
+                  border_width: 2
+                  border_color: 0xAAB7BD
+                  radius: 1
+                  pad_all: 0
+                  scrollable: false
+                  widgets:
+                    - obj:
+                        x: 4
+                        y: 4
+                        width: 124
+                        height: 4
+                        bg_color: 0xAAB7BD
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 4
+                        y: 66
+                        width: 124
+                        height: 5
+                        bg_color: 0x344953
+                        border_width: 0
+                        radius: 0
+                    - obj:
+                        x: 5
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 15
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 25
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 35
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 45
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 55
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 65
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 75
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 85
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 95
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 105
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 115
+                        y: 9
+                        width: 6
+                        height: 57
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+              # Napęd BFT DEIMOS — nieruchomy, poza przesuwanym skrzydłem.
               - obj:
                   x: 181
                   y: 82
                   width: 25
-                  height: 26
-                  bg_color: 0x26323A
+                  height: 27
+                  bg_color: 0x172B49
                   border_width: 1
-                  border_color: 0xAAB2B7
-                  radius: 2
+                  border_color: 0x71818E
+                  radius: 3
                   widgets:
                     - label:
                         text: "BFT"
-                        align: CENTER
+                        align: TOP_MID
+                        y: 2
                         text_font: font_ui_12
                         text_color: 0xFFFFFF
+                    - obj:
+                        x: 3
+                        y: 16
+                        width: 17
+                        height: 6
+                        bg_color: 0xBD202B
+                        border_width: 0
+                        radius: 1
+                    - label:
+                        text: "U"
+                        x: 8
+                        y: 15
+                        text_font: font_ui_12
+                        text_color: 0xFFFFFF
+              # Oznaczenia ostrzegawcze rysowane nad skrzydlem.
               - label:
                   id: lbl_brama_warning_icon
                   text: "\U000F0027"
@@ -122,76 +372,6 @@ lvgl:
                   y: 5
                   text_font: font_ui_12
                   text_color: 0x777777
-              - obj:
-                  id: gate_leaf
-                  x: 44
-                  y: 28
-                  width: 136
-                  height: 78
-                  bg_color: 0x202A30
-                  border_width: 2
-                  border_color: 0x9AA5AB
-                  radius: 1
-                  pad_all: 0
-                  scrollable: false
-                  widgets:
-                    - obj:
-                        x: 5
-                        y: 7
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-                    - obj:
-                        x: 5
-                        y: 17
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-                    - obj:
-                        x: 5
-                        y: 27
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-                    - obj:
-                        x: 5
-                        y: 37
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-                    - obj:
-                        x: 5
-                        y: 47
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-                    - obj:
-                        x: 5
-                        y: 57
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-                    - obj:
-                        x: 5
-                        y: 67
-                        width: 122
-                        height: 5
-                        bg_color: 0x8C989F
-                        border_width: 0
-                        radius: 0
-
         - label:
             id: lbl_brama_status
             text: "Stan: oczekiwanie na HA"
