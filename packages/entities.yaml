@@ -937,11 +937,7 @@ text_sensor:
               return std::string("--");
             text_color: !lambda |-
               return x == "on" ? lv_color_hex(0xFFCC00) : x == "off" ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
-        - lvgl.label.update:
-            id: lbl_brama_aux_button
-            text: !lambda |-
-              return id(brama_pedestrian_enabled).state
-                ? std::string("FURTKA") : std::string("OŚWIETLENIE");
+
   - platform: homeassistant
     id: brama_lighting_enabled
     entity_id: sensor.brama_przesuwna_bft_jarvis
