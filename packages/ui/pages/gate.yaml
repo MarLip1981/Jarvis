@@ -346,6 +346,15 @@ lvgl:
                         border_width: 1
                         border_color: 0x425760
                         radius: 0
+                    - obj:
+                        x: 121
+                        y: 4
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
                     - line:
                         points: [[123, 1], [164, 32]]
                         line_width: 2
