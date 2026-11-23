@@ -940,9 +940,6 @@ text_sensor:
     on_value:
       then:
         - lvgl.label.update:
-            id: lbl_brama_p4
-            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFFCC00) : lv_color_hex(0x777777);'
-        - lvgl.label.update:
             id: lbl_brama_lighting_state
             text: !lambda |-
               if (x == "on") return std::string("Oświetlenie wjazdu: WŁĄCZONE");
