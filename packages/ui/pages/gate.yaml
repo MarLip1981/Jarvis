@@ -409,19 +409,30 @@ lvgl:
                   text_color: 0xFFCC00
                   hidden: true
         - label:
+            id: lbl_brama_warning
+            text: "BLOKADA ZAMKNIĘCIA"
+            align: TOP_MID
+            x: 12
+            y: 147
+            width: 216
+            text_align: CENTER
+            text_font: font_ui_14
+            text_color: 0xFF3333
+            hidden: true
+        - label:
             id: lbl_brama_status_caption
             text: "Status"
             x: 12
-            y: 151
+            y: 174
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - label:
             id: lbl_brama_status_value
             text: "oczekiwanie na HA"
             x: 61
-            y: 151
+            y: 168
             width: 167
-            text_font: font_ui_12
+            text_font: font_ui_18
             text_color: 0x888888
             recolor: true
         - label:
@@ -434,41 +445,45 @@ lvgl:
             hidden: true
         - label:
             id: lbl_brama_lock_caption
-            text: "Blokada zamknięcia:"
-            x: 12
-            y: 176
+            text: "Blokada zamknięcia"
+            align: TOP_MID
+            y: 198
+            width: 216
+            text_align: CENTER
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - label:
             id: lbl_brama_lock_state
             text: "--"
-            x: 151
-            y: 176
-            width: 77
-            text_align: RIGHT
-            text_font: font_ui_12
+            align: TOP_MID
+            y: 213
+            width: 216
+            text_align: CENTER
+            text_font: font_ui_14
             text_color: 0x888888
         - label:
             id: lbl_brama_lighting_caption
-            text: "Oświetlenie wjazdu:"
-            x: 12
-            y: 198
+            text: "Oświetlenie wjazdu"
+            align: TOP_MID
+            y: 234
+            width: 216
+            text_align: CENTER
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - label:
             id: lbl_brama_lighting_state
             text: "--"
-            x: 151
-            y: 198
-            width: 77
-            text_align: RIGHT
-            text_font: font_ui_12
+            align: TOP_MID
+            y: 249
+            width: 216
+            text_align: CENTER
+            text_font: font_ui_14
             text_color: 0x888888
         # Sterowanie brama i trybem furtki bezposrednio z karty.
         - button:
             id: btn_brama_karta_main
             x: 12
-            y: 260
+            y: 274
             width: 104
             height: 42
             pad_all: 0
@@ -518,7 +533,7 @@ lvgl:
             id: btn_brama_karta_pedestrian
             hidden: true
             x: 124
-            y: 260
+            y: 274
             width: 104
             height: 42
             pad_all: 0
@@ -578,14 +593,6 @@ lvgl:
                         variables:
                           target_switch: !lambda 'return id(brama_entrance_lighting_entity).state;'
                     - script.execute: confirm_click
-        - label:
-            id: lbl_brama_warning
-            text: "UWAGA: FOTOKOMÓRKA"
-            align: TOP_MID
-            y: 226
-            text_font: font_ui_12
-            text_color: 0xFFCC00
-            hidden: true
         - label:
             id: lbl_brama_gate_event
             text: "Brama: brak danych"
