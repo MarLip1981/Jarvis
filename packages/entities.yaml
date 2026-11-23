@@ -317,7 +317,8 @@ binary_sensor:
             hidden: !lambda 'return !x;'
         - lvgl.obj.update:
             id: btn_brama_karta_pedestrian
-            hidden: !lambda 'return !x && (!id(brama_lighting_enabled).has_state() || id(brama_lighting_enabled).state != "true");'
+            hidden: !lambda 'return (!x && (!id(brama_lighting_enabled).has_state() || id(brama_lighting_enabled).state != "true")) ||
+              (id(brama_ha_status).has_state() && id(brama_ha_status).state.find("Otwarta") != std::string::npos);'
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
@@ -812,19 +813,23 @@ text_sensor:
             text: !lambda |-
               if (x.find("Otwieranie") != std::string::npos || x.find("Zamykanie") != std::string::npos)
                 return std::string("STOP");
-              if (x == "Otwarta") return std::string("ZAMKNIJ");
-              if (x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0)
-                return std::string("OTWÓRZ");
-              return std::string("STERUJ");
+              if (x.find("Otwarta") != std::string::npos) return std::string("ZAMKNIJ");
+              return std::string("BRAMA");
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
-              if (!id(brama_pedestrian_enabled).state) {
-                if (id(brama_entrance_lighting_state).has_state() && id(brama_entrance_lighting_state).state == "on")
-                  return std::string("OŚWIETLENIE WŁ.");
-                return std::string("OŚWIETLENIE WYŁ.");
-              }
-              return x == "Otwarta" ? std::string("FURTKA ZAMKNIJ") : std::string("FURTKA OTWÓRZ");
+              return id(brama_pedestrian_enabled).state
+                ? std::string("FURTKA") : std::string("OŚWIETLENIE");
+        - lvgl.obj.update:
+            id: btn_brama_karta_main
+            width: !lambda 'return x == "Otwarta" ? 216 : 104;'
+        - lvgl.obj.update:
+            id: btn_brama_karta_pedestrian
+            hidden: !lambda |-
+              const bool opened = x.find("Otwarta") != std::string::npos;
+              const bool auxiliary = id(brama_pedestrian_enabled).state ||
+                (id(brama_lighting_enabled).has_state() && id(brama_lighting_enabled).state == "true");
+              return opened || !auxiliary;
         - lvgl.label.update:
             id: lbl_pulpit_brama_status
             text: !lambda |-
@@ -915,6 +920,15 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_brama_warning_icon
             text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);'
+        - lvgl.label.update:
+            id: lbl_brama_lock_state
+            text: !lambda |-
+              if (x == "on") return std::string("Blokada zamknięcia: WŁĄCZONA");
+              if (x == "off") return std::string("Blokada zamknięcia: WYŁĄCZONA");
+              return std::string("Blokada zamknięcia: --");
+            text_color: !lambda |-
+              return x == "on" ? lv_color_hex(0xFF4444) : x == "off"
+                ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
   - platform: homeassistant
     id: brama_entrance_lighting_entity
     entity_id: sensor.brama_przesuwna_bft_jarvis
@@ -928,6 +942,14 @@ text_sensor:
         - lvgl.label.update:
             id: lbl_brama_p4
             text_color: !lambda 'return x == "on" ? lv_color_hex(0xFFCC00) : lv_color_hex(0x777777);'
+        - lvgl.label.update:
+            id: lbl_brama_lighting_state
+            text: !lambda |-
+              if (x == "on") return std::string("Oświetlenie wjazdu: WŁĄCZONE");
+              if (x == "off") return std::string("Oświetlenie wjazdu: WYŁĄCZONE");
+              return std::string("Oświetlenie wjazdu: --");
+            text_color: !lambda |-
+              return x == "on" ? lv_color_hex(0xFFCC00) : lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
@@ -943,7 +965,8 @@ text_sensor:
       then:
         - lvgl.obj.update:
             id: btn_brama_karta_pedestrian
-            hidden: !lambda 'return x != "true" && !id(brama_pedestrian_enabled).state;'
+            hidden: !lambda 'return (x != "true" && !id(brama_pedestrian_enabled).state) ||
+              (id(brama_ha_status).has_state() && id(brama_ha_status).state.find("Otwarta") != std::string::npos);'
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
