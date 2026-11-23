@@ -63,7 +63,7 @@ lvgl:
         - button:
             id: btn_zewnetrzne_wejscie_schodki
             x: 10
-            y: 140
+            y: 146
             width: 220
             height: 48
             pad_all: 4
@@ -95,9 +95,9 @@ lvgl:
         - button:
             id: btn_zewnetrzne_wjazd
             x: 10
-            y: 192
+            y: 204
             width: 220
-            height: 46
+            height: 48
             pad_all: 4
             bg_color: 0x18232B
             border_width: 1
@@ -127,9 +127,9 @@ lvgl:
         - button:
             id: btn_zewnetrzne_podworko
             x: 10
-            y: 244
+            y: 262
             width: 220
-            height: 46
+            height: 48
             pad_all: 4
             bg_color: 0x18232B
             border_width: 1
