@@ -509,12 +509,7 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_wjazd
     on_value:
       then:
-        - lvgl.label.update:
-            id: lbl_outdoor_wjazd_state
-            text: !lambda |-
-              if (x == "on") return std::string("WJAZD: WŁĄCZONY");
-              if (x == "off") return std::string("WJAZD: WYŁĄCZONY");
-              return std::string("WJAZD: BRAK STANU");
+        - script.execute: prepare_lamp_page
     internal: true
 
   - platform: homeassistant
@@ -522,12 +517,7 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_podworko
     on_value:
       then:
-        - lvgl.label.update:
-            id: lbl_outdoor_podworko_state
-            text: !lambda |-
-              if (x == "on") return std::string("PODWÓRKO: WŁĄCZONE");
-              if (x == "off") return std::string("PODWÓRKO: WYŁĄCZONE");
-              return std::string("PODWÓRKO: BRAK STANU");
+        - script.execute: prepare_lamp_page
     internal: true
 
   - platform: homeassistant
