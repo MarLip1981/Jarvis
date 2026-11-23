@@ -403,18 +403,17 @@ lvgl:
               - label:
                   id: lbl_brama_warning_icon
                   text: "\U000F0027"
-                  x: 93
-                  y: 38
-                  text_font: icon_font_btn
+                  x: 83
+                  y: 28
+                  text_font: icon_font_warning
                   text_color: 0xFFCC00
                   hidden: true
         - label:
             id: lbl_brama_warning
             text: "BLOKADA ZAMKNIĘCIA"
             align: TOP_MID
-            x: 12
             y: 147
-            width: 216
+            width: 240
             text_align: CENTER
             text_font: font_ui_14
             text_color: 0xFF3333
@@ -432,6 +431,7 @@ lvgl:
             x: 61
             y: 168
             width: 167
+            text_align: CENTER
             text_font: font_ui_18
             text_color: 0x888888
             recolor: true
@@ -446,10 +446,10 @@ lvgl:
         - label:
             id: lbl_brama_lock_caption
             text: "Blokada zamknięcia"
-            align: TOP_MID
+            x: 12
             y: 198
             width: 216
-            text_align: CENTER
+            text_align: LEFT
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - label:
@@ -457,17 +457,17 @@ lvgl:
             text: "--"
             align: TOP_MID
             y: 213
-            width: 216
+            width: 240
             text_align: CENTER
             text_font: font_ui_14
             text_color: 0x888888
         - label:
             id: lbl_brama_lighting_caption
             text: "Oświetlenie wjazdu"
-            align: TOP_MID
+            x: 12
             y: 234
             width: 216
-            text_align: CENTER
+            text_align: LEFT
             text_font: font_ui_12
             text_color: 0xFFFFFF
         - label:
@@ -475,7 +475,7 @@ lvgl:
             text: "--"
             align: TOP_MID
             y: 249
-            width: 216
+            width: 240
             text_align: CENTER
             text_font: font_ui_14
             text_color: 0x888888
