@@ -402,7 +402,7 @@ lvgl:
               # Fotokomorka / reczna blokada – ten sam zolty znak co na karcie HA.
               - label:
                   id: lbl_brama_warning_icon
-                  text: "\\U000F0027"
+                  text: "\U000F0027"
                   x: 93
                   y: 38
                   text_font: icon_font_btn
