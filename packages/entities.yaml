@@ -334,7 +334,7 @@ binary_sensor:
             id: lbl_brama_warning
             text: !lambda |-
               const bool lock = id(brama_manual_lock_state).has_state() && id(brama_manual_lock_state).state == "on";
-              return lock ? (x ? std::string("FOTOKOMÓRKA + BLOKADA") : std::string("BLOKADA ZAMKNIĘCIA")) : std::string("UWAGA: FOTOKOMÓRKA");
+              return lock ? std::string("BLOKADA ZAMKNIĘCIA") : std::string("UWAGA: FOTOKOMÓRKA");
             text_color: !lambda |-
               return (id(brama_manual_lock_state).has_state() && id(brama_manual_lock_state).state == "on")
                 ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);
@@ -907,8 +907,7 @@ text_sensor:
             id: lbl_brama_warning
             text: !lambda |-
               const bool photo = id(brama_photocell).has_state() && id(brama_photocell).state;
-              return photo ? (x == "on" ? std::string("FOTOKOMÓRKA + BLOKADA") : std::string("UWAGA: FOTOKOMÓRKA"))
-                           : std::string("BLOKADA ZAMKNIĘCIA");
+              return x == "on" ? std::string("BLOKADA ZAMKNIĘCIA") : std::string("UWAGA: FOTOKOMÓRKA");
             text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);'
         - lvgl.label.update:
             id: lbl_brama_warning_icon
