@@ -203,7 +203,7 @@ lvgl:
             id: lbl_lampa_status
             text: "Lampa: niedostępna"
             align: TOP_MID
-            y: 98
+            y: 90
             text_font: font_ui_14
             text_color: 0xFF3333
         - button:
@@ -448,7 +448,7 @@ lvgl:
             x: 2
             y: 204
             width: 236
-            height: 110
+            height: 114
             bg_opa: TRANSP
             border_width: 0
             pad_all: 0
@@ -464,7 +464,7 @@ lvgl:
                   text_color: 0xFFFFFF
               - button:
                   id: btn_scene_auto
-                  x: 0
+                  x: 2
                   y: 14
                   width: 112
                   height: 30
@@ -491,7 +491,7 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_bialy
-                  x: 116
+                  x: 122
                   y: 14
                   width: 112
                   height: 30
@@ -518,8 +518,8 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_wschod
-                  x: 0
-                  y: 45
+                  x: 2
+                  y: 48
                   width: 112
                   height: 30
                   pad_all: 0
@@ -545,8 +545,8 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_zachod
-                  x: 116
-                  y: 45
+                  x: 122
+                  y: 48
                   width: 112
                   height: 30
                   pad_all: 0
@@ -572,8 +572,8 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_tecza
-                  x: 0
-                  y: 76
+                  x: 2
+                  y: 82
                   width: 112
                   height: 30
                   pad_all: 0
@@ -599,8 +599,8 @@ lvgl:
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_ognisko
-                  x: 116
-                  y: 76
+                  x: 122
+                  y: 82
                   width: 112
                   height: 30
                   pad_all: 0
