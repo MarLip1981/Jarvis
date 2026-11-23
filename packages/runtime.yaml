@@ -27,6 +27,31 @@ interval:
               (mode == "always_blink" || (mode != "no_blink" && closing));
             if (blink && (((esphome::millis)() / 500) % 2) != 0) return LV_OPA_TRANSP;
             return LV_OPA_COVER;
+      # Kolor skrzydla odzwierciedla stan odczytany z HA.
+      - lvgl.obj.update:
+          id: gate_leaf
+          bg_color: !lambda |-
+            if (!id(brama_ha_status).has_state()) return lv_color_hex(0x465B65);
+            const std::string s = id(brama_ha_status).state;
+            if (s.find("Otwarta") != std::string::npos) return lv_color_hex(0x713333);
+            if (s.find("Otwieranie") != std::string::npos ||
+                s.find("Zamykanie") != std::string::npos ||
+                s.find("Furtka") != std::string::npos) return lv_color_hex(0x8A6424);
+            if (s.find("Zamknięta") != std::string::npos ||
+                s.find("Zamknieta") != std::string::npos) return lv_color_hex(0x245B45);
+            return lv_color_hex(0x465B65);
+      - lvgl.obj.update:
+          id: gate_leaf_panel
+          bg_color: !lambda |-
+            if (!id(brama_ha_status).has_state()) return lv_color_hex(0x607984);
+            const std::string s = id(brama_ha_status).state;
+            if (s.find("Otwarta") != std::string::npos) return lv_color_hex(0x9A4A4A);
+            if (s.find("Otwieranie") != std::string::npos ||
+                s.find("Zamykanie") != std::string::npos ||
+                s.find("Furtka") != std::string::npos) return lv_color_hex(0xB88735);
+            if (s.find("Zamknięta") != std::string::npos ||
+                s.find("Zamknieta") != std::string::npos) return lv_color_hex(0x3C8A68);
+            return lv_color_hex(0x607984);
       # P4 oswietla slupki na scenie.
       - lvgl.obj.update:
           id: gate_pillar_left
