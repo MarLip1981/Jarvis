@@ -85,9 +85,9 @@ lvgl:
                           - script.execute: confirm_click
         - button:
             x: 10
-            y: 130
+            y: 146
             width: 220
-            height: 50
+            height: 48
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
@@ -114,9 +114,9 @@ lvgl:
                   - script.execute: confirm_click
         - button:
             x: 10
-            y: 190
+            y: 204
             width: 220
-            height: 50
+            height: 48
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
