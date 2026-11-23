@@ -16,9 +16,9 @@ lvgl:
             time: 300ms
       widgets:
         - label:
-            text: "BRAMA"
+            text: "Brama"
             align: TOP_MID
-            y: 30
+            y: 24
             text_font: font_ui_24
             text_color: 0xFFFFFF
 
@@ -26,7 +26,7 @@ lvgl:
         # Identyfikatory animacji oraz sterowania pozostaja bez zmian.
         - obj:
             x: 12
-            y: 70
+            y: 52
             width: 216
             height: 132
             bg_color: 0x101A20
@@ -260,6 +260,7 @@ lvgl:
                   scrollbar_mode: "OFF"
                   widgets:
                     - obj:
+                        id: gate_leaf_panel
                         x: 0
                         y: 0
                         width: 123
@@ -490,10 +491,11 @@ lvgl:
                   text_font: icon_font_btn
                   text_color: 0xFFCC00
                   hidden: true
-id: lbl_brama_status
+        - label:
+            id: lbl_brama_status
             text: "Stan: oczekiwanie na HA"
             align: TOP_MID
-            y: 208
+            y: 188
             text_font: font_gate_14
             text_color: 0x888888
             recolor: true
@@ -504,13 +506,28 @@ id: lbl_brama_status
             y: 228
             text_font: font_ui_12
             text_color: 0x00AEEF
+            hidden: true
+        - label:
+            id: lbl_brama_lock_state
+            text: "Blokada zamknięcia: --"
+            align: TOP_MID
+            y: 210
+            text_font: font_ui_12
+            text_color: 0x888888
+        - label:
+            id: lbl_brama_lighting_state
+            text: "Oświetlenie wjazdu: --"
+            align: TOP_MID
+            y: 230
+            text_font: font_ui_12
+            text_color: 0x888888
         # Sterowanie brama i trybem furtki bezposrednio z karty.
         - button:
             id: btn_brama_karta_main
             x: 12
-            y: 290
+            y: 280
             width: 104
-            height: 26
+            height: 32
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
@@ -621,7 +638,7 @@ id: lbl_brama_status
             id: lbl_brama_warning
             text: "UWAGA: FOTOKOMÓRKA"
             align: TOP_MID
-            y: 244
+            y: 250
             text_font: font_ui_12
             text_color: 0xFFCC00
             hidden: true
@@ -632,6 +649,7 @@ id: lbl_brama_status
             y: 260
             text_font: font_ui_12
             text_color: 0xAAB2B7
+            hidden: true
         - label:
             id: lbl_brama_wicket_event
             text: "Furtka: brak danych"
@@ -639,3 +657,4 @@ id: lbl_brama_status
             y: 273
             text_font: font_ui_12
             text_color: 0xAAB2B7
+            hidden: true
