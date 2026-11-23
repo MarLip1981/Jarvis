@@ -203,7 +203,7 @@ lvgl:
             id: lbl_lampa_status
             text: "Lampa: niedostępna"
             align: TOP_MID
-            y: 90
+            y: 168
             text_font: font_ui_14
             text_color: 0xFF3333
         - button:
@@ -282,7 +282,7 @@ lvgl:
         - obj:
             id: obj_lampa_adjustments
             x: 8
-            y: 176
+            y: 198
             width: 224
             height: 42
             bg_opa: TRANSP
@@ -352,7 +352,7 @@ lvgl:
         - obj:
             id: obj_lampa_colors
             x: 2
-            y: 222
+            y: 244
             width: 236
             height: 48
             bg_opa: TRANSP
