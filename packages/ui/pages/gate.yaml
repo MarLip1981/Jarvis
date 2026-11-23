@@ -22,8 +22,8 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
 
-        # Scena wzorowana na karcie integracji BFT: ogrodzenie, slupki, pionowe profile,
-        # prowadnica, sygnalizator i naped. Identyfikatory elementow ruchomych zachowane.
+        # Scena odwzorowuje proporcje i charakterystyczne detale SVG z karty integracji BFT.
+        # Zachowujemy identyfikatory elementow animowanych i wszystkie akcje sterowania.
         - obj:
             x: 12
             y: 70
@@ -36,340 +36,443 @@ lvgl:
             pad_all: 0
             scrollable: false
             widgets:
-              # Podjazd i dolna prowadnica.
+              # Tlo i linie podjazdu.
+              - obj:
+                  x: 2
+                  y: 20
+                  width: 212
+                  height: 78
+                  bg_color: 0x182B35
+                  bg_opa: 35%
+                  border_width: 0
+                  radius: 7
               - obj:
                   x: 3
-                  y: 109
+                  y: 94
                   width: 210
                   height: 2
-                  bg_color: 0x82939A
-                  border_width: 0
-                  radius: 0
-              - obj:
-                  x: 3
-                  y: 116
-                  width: 210
-                  height: 1
-                  bg_color: 0x344953
+                  bg_color: 0x637983
                   bg_opa: 70%
                   border_width: 0
                   radius: 0
-              # Fragment muru po lewej stronie wjazdu.
+              - obj:
+                  x: 3
+                  y: 105
+                  width: 210
+                  height: 1
+                  bg_color: 0x637983
+                  bg_opa: 22%
+                  border_width: 0
+                  radius: 0
+              # Niskie fragmenty ogrodzenia po obu stronach wjazdu.
               - obj:
                   x: 3
                   y: 43
-                  width: 21
-                  height: 10
-                  bg_color: 0x536A74
+                  width: 32
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
               - obj:
                   x: 3
-                  y: 57
-                  width: 21
-                  height: 10
-                  bg_color: 0x536A74
+                  y: 52
+                  width: 32
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
               - obj:
                   x: 3
-                  y: 71
-                  width: 21
-                  height: 10
-                  bg_color: 0x536A74
+                  y: 61
+                  width: 32
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
               - obj:
                   x: 3
-                  y: 85
-                  width: 21
-                  height: 10
-                  bg_color: 0x536A74
+                  y: 70
+                  width: 32
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
-              # Fragment ogrodzenia po prawej stronie.
               - obj:
-                  x: 193
+                  x: 177
                   y: 43
-                  width: 20
-                  height: 10
-                  bg_color: 0x536A74
+                  width: 36
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
               - obj:
-                  x: 193
-                  y: 57
-                  width: 20
-                  height: 10
-                  bg_color: 0x536A74
+                  x: 177
+                  y: 52
+                  width: 36
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
               - obj:
-                  x: 193
-                  y: 71
-                  width: 20
-                  height: 10
-                  bg_color: 0x536A74
+                  x: 177
+                  y: 61
+                  width: 36
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
               - obj:
-                  x: 193
-                  y: 85
-                  width: 20
-                  height: 10
-                  bg_color: 0x536A74
+                  x: 177
+                  y: 70
+                  width: 36
+                  height: 6
+                  bg_color: 0x637983
                   border_width: 1
                   border_color: 0x344953
                   radius: 1
-              # Slupki bramy — ich kolor zmienia sie wraz z oswietleniem P4.
+              # Metalowe slupki.
               - obj:
                   id: gate_pillar_left
-                  x: 26
-                  y: 18
-                  width: 13
-                  height: 91
-                  bg_color: 0x59636A
+                  x: 35
+                  y: 36
+                  width: 10
+                  height: 58
+                  bg_color: 0x9AA8AD
                   border_width: 1
-                  border_color: 0xAAB2B7
+                  border_color: 0x637983
                   radius: 2
               - obj:
-                  x: 24
-                  y: 17
-                  width: 17
-                  height: 4
+                  x: 34
+                  y: 35
+                  width: 12
+                  height: 3
                   bg_color: 0xD0D8DB
                   border_width: 0
                   radius: 1
               - obj:
                   id: gate_pillar_right
-                  x: 178
-                  y: 18
-                  width: 13
-                  height: 91
-                  bg_color: 0x59636A
+                  x: 167
+                  y: 36
+                  width: 11
+                  height: 58
+                  bg_color: 0x9AA8AD
                   border_width: 1
-                  border_color: 0xAAB2B7
+                  border_color: 0x637983
                   radius: 2
               - obj:
-                  x: 176
-                  y: 17
-                  width: 17
-                  height: 4
+                  x: 166
+                  y: 35
+                  width: 13
+                  height: 3
                   bg_color: 0xD0D8DB
                   border_width: 0
                   radius: 1
-              # Sygnalizator BFT nad prawym slupkiem.
+              # Sygnalizator na prawym slupku, z warstwa swiatla sterowana runtime.
               - obj:
-                  x: 175
-                  y: 10
-                  width: 15
-                  height: 7
-                  bg_color: 0x263943
+                  x: 167
+                  y: 23
+                  width: 11
+                  height: 14
+                  bg_color: 0x596A70
                   border_width: 1
-                  border_color: 0x637983
-                  radius: 3
+                  border_color: 0x46565E
+                  radius: 5
+              - obj:
+                  x: 168
+                  y: 22
+                  width: 9
+                  height: 5
+                  bg_color: 0xFFB52E
+                  bg_opa: 18%
+                  border_width: 0
+                  radius: 4
               - obj:
                   id: gate_beacon
-                  x: 177
-                  y: 7
-                  width: 11
-                  height: 7
-                  bg_color: 0xFFAD35
+                  x: 169
+                  y: 23
+                  width: 7
+                  height: 5
+                  bg_color: 0xFFE3A0
                   bg_opa: TRANSP
-                  border_width: 1
-                  border_color: 0xFFD080
+                  border_width: 0
                   radius: 3
-              # Skrzydlo — pionowe profile jak na karcie integracji.
-              # gate_leaf pozostaje jednym ruchomym obiektem sterowanym z runtime.yaml.
+              # Skrzydlo: 16 profili, belki oraz ukośne wzmocnienie jak w karcie BFT.
+              # X pozostaje zgodny z runtime: 44 + kierunek * pozycja * 1.8.
               - obj:
                   id: gate_leaf
                   x: 44
-                  y: 28
-                  width: 136
-                  height: 78
+                  y: 44
+                  width: 164
+                  height: 47
                   bg_color: 0x465B65
-                  border_width: 2
-                  border_color: 0xAAB7BD
+                  border_width: 1
+                  border_color: 0x344953
                   radius: 1
                   pad_all: 0
                   scrollable: false
                   widgets:
                     - obj:
-                        x: 4
-                        y: 4
-                        width: 124
-                        height: 4
-                        bg_color: 0xAAB7BD
+                        x: 0
+                        y: 0
+                        width: 123
+                        height: 45
+                        bg_color: 0x607984
+                        bg_opa: 30%
+                        border_width: 1
+                        border_color: 0x344953
+                        radius: 0
+                    - obj:
+                        x: 2
+                        y: 1
+                        width: 119
+                        height: 3
+                        bg_color: 0x8FA2AA
                         border_width: 0
                         radius: 0
                     - obj:
-                        x: 4
-                        y: 66
-                        width: 124
-                        height: 5
+                        x: 3.00
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 10.25
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 17.50
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 24.75
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 32.00
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 39.25
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 46.50
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 53.75
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 61.00
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 68.25
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 75.50
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 82.75
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 90.00
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 97.25
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 104.50
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 111.75
+                        y: 5
+                        width: 5
+                        height: 34
+                        bg_color: 0x8FA2AA
+                        border_width: 1
+                        border_color: 0x425760
+                        radius: 0
+                    - obj:
+                        x: 2
+                        y: 40
+                        width: 119
+                        height: 4
                         bg_color: 0x344953
                         border_width: 0
                         radius: 0
+                    - line:
+                        points:
+                          - 123, 1
+                          - 164, 35
+                        line_width: 4
+                        line_color: 0x344953
+                        line_rounded: false
+                    - line:
+                        points:
+                          - 127, 8
+                          - 158, 34
+                        line_width: 2
+                        line_color: 0x91A3AB
+                        line_rounded: false
+                    - line:
+                        points:
+                          - 127, 19
+                          - 148, 35
+                        line_width: 2
+                        line_color: 0x91A3AB
+                        line_rounded: false
                     - obj:
-                        x: 5
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
+                        x: 159
+                        y: 34
+                        width: 5
+                        height: 11
+                        bg_color: 0x536A74
                         border_width: 1
-                        border_color: 0x425760
+                        border_color: 0x344953
                         radius: 0
-                    - obj:
-                        x: 15
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 25
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 35
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 45
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 55
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 65
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 75
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 85
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 95
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 105
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-                    - obj:
-                        x: 115
-                        y: 9
-                        width: 6
-                        height: 57
-                        bg_color: 0x8FA2AA
-                        border_width: 1
-                        border_color: 0x425760
-                        radius: 0
-              # Napęd BFT DEIMOS — nieruchomy, poza przesuwanym skrzydłem.
+              # Napęd BFT DEIMOS: obudowa, logo i panel ULTRA.
               - obj:
-                  x: 181
-                  y: 82
-                  width: 25
-                  height: 27
+                  x: 178
+                  y: 72
+                  width: 17
+                  height: 20
                   bg_color: 0x172B49
                   border_width: 1
-                  border_color: 0x71818E
+                  border_color: 0x52647B
                   radius: 3
                   widgets:
+                    - obj:
+                        x: 2
+                        y: 2
+                        width: 13
+                        height: 14
+                        bg_color: 0x203958
+                        border_width: 1
+                        border_color: 0x314D6C
+                        radius: 2
                     - label:
                         text: "BFT"
                         align: TOP_MID
-                        y: 2
+                        y: 3
                         text_font: font_ui_12
                         text_color: 0xFFFFFF
                     - obj:
-                        x: 3
-                        y: 16
-                        width: 17
-                        height: 6
+                        x: 2
+                        y: 14
+                        width: 13
+                        height: 4
                         bg_color: 0xBD202B
-                        border_width: 0
+                        border_width: 1
+                        border_color: 0xE35A60
                         radius: 1
                     - label:
                         text: "U"
-                        x: 8
-                        y: 15
+                        x: 7
+                        y: 12
                         text_font: font_ui_12
                         text_color: 0xFFFFFF
-              # Oznaczenia ostrzegawcze rysowane nad skrzydlem.
+              # Ostrzezenie i P4 pozostaja w warstwie nadrzednej.
               - label:
                   id: lbl_brama_warning_icon
-                  text: "\U000F0027"
-                  x: 151
-                  y: 5
+                  text: "\\U000F0027"
+                  x: 91
+                  y: 47
                   text_font: icon_font_btn
                   text_color: 0xFFCC00
                   hidden: true
               - label:
                   id: lbl_brama_p4
                   text: "P4"
-                  x: 193
-                  y: 5
+                  x: 194
+                  y: 23
                   text_font: font_ui_12
                   text_color: 0x777777
         - label:
