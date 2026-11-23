@@ -26,9 +26,9 @@ lvgl:
         - button:
             id: btn_salon_lampa
             x: 10
-            y: 70
+            y: 88
             width: 220
-            height: 50
+            height: 48
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
