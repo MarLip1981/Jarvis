@@ -514,7 +514,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Bialy"
+                                option: "Biały"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_wschod
@@ -541,7 +541,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Wschod"
+                                option: "Wschód"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_zachod
@@ -568,7 +568,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Zachod"
+                                option: "Zachód"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_tecza
@@ -595,7 +595,7 @@ lvgl:
                               action: input_select.select_option
                               data:
                                 entity_id: input_select.animacja_swiatla_studio
-                                option: "Tecza"
+                                option: "Tęcza"
                           - script.execute: confirm_click
               - button:
                   id: btn_scene_ognisko
