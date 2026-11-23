@@ -31,7 +31,7 @@ lvgl:
         - button:
             id: btn_zewnetrzne_adresowka
             x: 10
-            y: 112
+            y: 88
             width: 220
             height: 48
             pad_all: 4
@@ -63,7 +63,7 @@ lvgl:
         - button:
             id: btn_zewnetrzne_wejscie_schodki
             x: 10
-            y: 170
+            y: 140
             width: 220
             height: 48
             pad_all: 4
@@ -91,4 +91,62 @@ lvgl:
                         animation: NONE
                         time: 200ms
                     - script.execute: prepare_lamp_page
+                    - script.execute: confirm_click
+        - button:
+            id: btn_zewnetrzne_wjazd
+            x: 10
+            y: 192
+            width: 220
+            height: 46
+            pad_all: 4
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  id: lbl_outdoor_wjazd_state
+                  text: "WJAZD: --"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - homeassistant.action:
+                        action: light.toggle
+                        data:
+                          entity_id: light.oswietlenie_zewnetrzne_wjazd
+                    - script.execute: confirm_click
+        - button:
+            id: btn_zewnetrzne_podworko
+            x: 10
+            y: 244
+            width: 220
+            height: 46
+            pad_all: 4
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x45515C
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  id: lbl_outdoor_podworko_state
+                  text: "PODWÓRKO: --"
+                  align: CENTER
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - homeassistant.action:
+                        action: light.toggle
+                        data:
+                          entity_id: light.oswietlenie_zewnetrzne_podworko
                     - script.execute: confirm_click
