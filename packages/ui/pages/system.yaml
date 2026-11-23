@@ -7,24 +7,25 @@ lvgl:
     - id: page_boot
       bg_color: 0x000000
       widgets:
+        # Pelnoekranowy obraz Easter Egg jako tlo ekranu startowego.
+        # Wykorzystuje ten sam zasob img_ironman co ukryta strona Easter Egg.
+        - image:
+            id: boot_ironman_img
+            x: 0
+            y: -20
+            src: img_ironman
         - label:
-            text: "\U000F10CB"
-            align: CENTER
-            y: -90
-            text_font: icon_font_title
-            text_color: 0x00AEEF
+            text: "J.A.R.V.I.S"
+            align: BOTTOM_MID
+            y: -48
+            text_font: font_ui_24
+            text_color: 0xFFFFFF
         - label:
-            text: "JARVIS"
-            align: CENTER
-            y: -10
-            text_font: font_ui_40
-            text_color: 0x00AEEF
-        - label:
-            text: "v0.01 alfa"
-            align: CENTER
-            y: 35
+            text: "V2.0 TEST 028"
+            align: BOTTOM_MID
+            y: -16
             text_font: font_ui_14
-            text_color: 0x888888
+            text_color: 0xCCCCCC
 
     # ------------------------------------------------------
     # Pelnoekranowy test R/G/B - CALKOWICIE pusty ekran, zero
