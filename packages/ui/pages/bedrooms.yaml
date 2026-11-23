@@ -24,10 +24,10 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - button:
-            x: 12
-            y: 90
-            width: 216
-            height: 50
+            x: 10
+            y: 88
+            width: 220
+            height: 48
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
@@ -684,10 +684,10 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - button:
-            x: 12
-            y: 90
-            width: 216
-            height: 50
+            x: 10
+            y: 88
+            width: 220
+            height: 48
             pad_all: 0
             bg_color: 0x18232B
             border_width: 1
