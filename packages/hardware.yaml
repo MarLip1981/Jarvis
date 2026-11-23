@@ -272,6 +272,9 @@ display:
     dimensions: 240x320
     invert_colors: false
     color_order: RGB
+    # Poprzedni ili9xxx pracował domyślnie z 40 MHz; zachowujemy tę samą
+    # szybkość transmisji, zamiast domyślnych 10 MHz sterownika mipi_spi.
+    data_rate: 40MHz
     transform:
       mirror_x: false
       mirror_y: false
