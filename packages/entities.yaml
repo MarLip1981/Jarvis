@@ -505,6 +505,32 @@ text_sensor:
     internal: true
 
   - platform: homeassistant
+    id: state_outdoor_wjazd_raw
+    entity_id: light.oswietlenie_zewnetrzne_wjazd
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_outdoor_wjazd_state
+            text: !lambda |-
+              if (x == "on") return std::string("WJAZD: WŁĄCZONY");
+              if (x == "off") return std::string("WJAZD: WYŁĄCZONY");
+              return std::string("WJAZD: BRAK STANU");
+    internal: true
+
+  - platform: homeassistant
+    id: state_outdoor_podworko_raw
+    entity_id: light.oswietlenie_zewnetrzne_podworko
+    on_value:
+      then:
+        - lvgl.label.update:
+            id: lbl_outdoor_podworko_state
+            text: !lambda |-
+              if (x == "on") return std::string("PODWÓRKO: WŁĄCZONE");
+              if (x == "off") return std::string("PODWÓRKO: WYŁĄCZONE");
+              return std::string("PODWÓRKO: BRAK STANU");
+    internal: true
+
+  - platform: homeassistant
     id: state_adresowka_sos_raw
     entity_id: input_boolean.tryb_sos_adresowki
     on_value:
