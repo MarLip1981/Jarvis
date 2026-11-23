@@ -275,6 +275,7 @@ display:
     transform:
       mirror_x: false
       mirror_y: false
+      swap_xy: false
     update_interval: never   # LVGL rysuje samo, gdy trzeba
 
 touchscreen:
