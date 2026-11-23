@@ -516,6 +516,7 @@ lvgl:
                     - script.execute: confirm_click
         - button:
             id: btn_brama_karta_pedestrian
+            hidden: true
             x: 124
             y: 260
             width: 104
