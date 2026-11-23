@@ -158,6 +158,13 @@ font:
       - "\U000F035D" # strzalka w dol
 
   - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+    id: icon_font_warning
+    size: 40
+    bpp: 4
+    glyphs:
+      - "\U000F0027" # trojkat ostrzegawczy
+
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_btn
     size: 20
     bpp: 4
