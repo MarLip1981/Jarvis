@@ -3,14 +3,14 @@
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
 esphome:
-  platformio_options:
-    build_flags:
-      - "-include esp_heap_caps.h"
 
 esp32:
   board: esp32dev
   framework:
     type: arduino
+    advanced:
+      flash_chip: generic
+      minimum_chip_revision: "3.1"
 
 
 logger:
@@ -260,7 +260,7 @@ light:
 # Czujnik swiatla LDR -> auto-jasnosc podswietlenia
 
 display:
-  - platform: ili9xxx
+  - platform: mipi_spi
     model: ST7796
     id: my_display
     # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik TFT.
