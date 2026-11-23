@@ -317,13 +317,10 @@ binary_sensor:
             hidden: !lambda 'return !x;'
         - lvgl.obj.update:
             id: btn_brama_karta_pedestrian
-            hidden: !lambda 'return (!x && (!id(brama_lighting_enabled).has_state() || id(brama_lighting_enabled).state != "true")) ||
-              (id(brama_ha_status).has_state() && id(brama_ha_status).state.find("Otwarta") != std::string::npos);'
-        - lvgl.label.update:
-            id: lbl_brama_aux_button
-            text: !lambda |-
-              if (x) return std::string("FURTKA");
-              return std::string("OŚWIETLENIE");
+            hidden: !lambda |-
+              const bool opened = id(brama_ha_status).has_state() &&
+                id(brama_ha_status).state.find("Otwarta") != std::string::npos;
+              return !x || opened;
   - platform: homeassistant
     id: brama_photocell
     entity_id: binary_sensor.wjazd_brama_wjazdowa_fotokomorka_przeszkoda
@@ -802,7 +799,7 @@ text_sensor:
             id: lbl_brama_status_value
             text: !lambda 'return x;'
             text_color: !lambda |-
-              if (x == "Otwarta" || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
+              if (x.find("Otwarta") != std::string::npos || x == "Zatrzymanie Awaryjne!") return lv_color_hex(0xFF3333);
               if (x.find("Otwieranie") != std::string::npos ||
                   x.find("Zamykanie") != std::string::npos ||
                   x.find("Furtka") != std::string::npos) return lv_color_hex(0xFFAA00);
@@ -939,7 +936,7 @@ text_sensor:
               if (x == "off") return std::string("WYŁĄCZONE");
               return std::string("--");
             text_color: !lambda |-
-              return x == "on" ? lv_color_hex(0xFFCC00) : lv_color_hex(0x888888);
+              return x == "on" ? lv_color_hex(0xFFCC00) : x == "off" ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
         - lvgl.label.update:
             id: lbl_brama_aux_button
             text: !lambda |-
@@ -951,14 +948,7 @@ text_sensor:
     attribute: entrance_lighting_enabled_text
     on_value:
       then:
-        - lvgl.obj.update:
-            id: btn_brama_karta_pedestrian
-            hidden: !lambda 'return (x != "true" && !id(brama_pedestrian_enabled).state) ||
-              (id(brama_ha_status).has_state() && id(brama_ha_status).state.find("Otwarta") != std::string::npos);'
-        - lvgl.label.update:
-            id: lbl_brama_aux_button
-            text: !lambda |-
-              return id(brama_pedestrian_enabled).state ? std::string("FURTKA") : std::string("OŚWIETLENIE");
+P4 button dependency
   - platform: homeassistant
     id: brama_gate_button_event
     entity_id: sensor.brama_przesuwna_bft_jarvis
