@@ -2,8 +2,6 @@
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
-esphome:
-
 esp32:
   board: esp32dev
   framework:
