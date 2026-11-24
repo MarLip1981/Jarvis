@@ -406,10 +406,14 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("salon");'
                     - lvgl.page.show:
-                        id: page_salon
+                        id: page_lampa_wspolna
                         animation: NONE
                         time: 250ms
+                    - script.execute: prepare_lamp_page
                     - script.execute: confirm_click
         - button:
             id: btn_lampy_sypialnia
@@ -445,10 +449,14 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("studio");'
                     - lvgl.page.show:
-                        id: page_sypialnia
+                        id: page_lampa_wspolna
                         animation: NONE
                         time: 250ms
+                    - script.execute: prepare_lamp_page
                     - script.execute: confirm_click
         - button:
             id: btn_lampy_erni
@@ -484,10 +492,14 @@ lvgl:
                   condition:
                     lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
                   then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("erni");'
                     - lvgl.page.show:
-                        id: page_erni
+                        id: page_lampa_wspolna
                         animation: NONE
                         time: 250ms
+                    - script.execute: prepare_lamp_page
                     - script.execute: confirm_click
         - button:
             id: btn_lampy_wejscie
