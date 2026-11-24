@@ -343,15 +343,15 @@ lvgl:
         # Znacznik kompilacji — zmieniamy numer przy każdym kolejnym wgraniu testowym.
         - label:
             id: lbl_pulpit_build
-            text: "TEST 037"
+            text: "TEST 038"
             align: BOTTOM_MID
             y: -4
             text_font: font_ui_12
             text_color: 0x555555
 
     # ------------------------------------------------------
-    # Lista aktualnie wlaczonych lamp. Wybor lampy otwiera
-    # odpowiadajaca jej strone pomieszczenia.
+    # Lista aktualnie wlaczonych lamp. Widoczne sa tylko te,
+    # ktore aktualnie swieca. Dotkniecie otwiera sterowanie lampy.
     # ------------------------------------------------------
     - id: page_lampy
       bg_color: 0x000000
@@ -369,15 +369,15 @@ lvgl:
         - label:
             text: "WŁĄCZONE ŚWIATŁA"
             align: TOP_MID
-            y: 36
+            y: 28
             text_font: font_ui_18
             text_color: 0xFFFFFF
         - button:
             id: btn_lampy_salon
             x: 10
-            y: 82
+            y: 70
             width: 220
-            height: 44
+            height: 32
             pad_all: 0
             hidden: true
             bg_color: 0x18232B
@@ -387,16 +387,16 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  x: 4
+                  x: 8
                   align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
                   height: 20
-                  text: "SALON - LAMPA"
+                  text: "SALON"
                   x: 32
-                  y: 12
+                  align: LEFT_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
@@ -414,9 +414,9 @@ lvgl:
         - button:
             id: btn_lampy_sypialnia
             x: 10
-            y: 136
+            y: 70
             width: 220
-            height: 44
+            height: 32
             pad_all: 0
             hidden: true
             bg_color: 0x18232B
@@ -426,16 +426,16 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  x: 4
+                  x: 8
                   align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
                   height: 20
-                  text: "SYPIALNIA - LAMPA"
+                  text: "SYPIALNIA"
                   x: 32
-                  y: 12
+                  align: LEFT_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
@@ -453,9 +453,9 @@ lvgl:
         - button:
             id: btn_lampy_erni
             x: 10
-            y: 190
+            y: 70
             width: 220
-            height: 44
+            height: 32
             pad_all: 0
             hidden: true
             bg_color: 0x18232B
@@ -465,16 +465,16 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  x: 4
+                  x: 8
                   align: LEFT_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
               - label:
                   height: 20
-                  text: "ERNIE - LAMPA"
+                  text: "ERNI"
                   x: 32
-                  y: 12
+                  align: LEFT_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
@@ -489,6 +489,178 @@ lvgl:
                         animation: NONE
                         time: 250ms
                     - script.execute: confirm_click
+        - button:
+            id: btn_lampy_wejscie
+            x: 10
+            y: 70
+            width: 220
+            height: 32
+            pad_all: 0
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  x: 8
+                  align: LEFT_MID
+                  text: "\U000F0335"
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  height: 20
+                  text: "WEJŚCIE / SCHODKI"
+                  x: 32
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  width: 180
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("wejscie_schodki");'
+                    - lvgl.page.show:
+                        id: page_lampa_wspolna
+                        animation: NONE
+                        time: 250ms
+                    - script.execute: prepare_lamp_page
+                    - script.execute: confirm_click
+        - button:
+            id: btn_lampy_wjazd
+            x: 10
+            y: 70
+            width: 220
+            height: 32
+            pad_all: 0
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  x: 8
+                  align: LEFT_MID
+                  text: "\U000F0335"
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  height: 20
+                  text: "WJAZD"
+                  x: 32
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  width: 180
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("outdoor_wjazd");'
+                    - lvgl.page.show:
+                        id: page_lampa_wspolna
+                        animation: NONE
+                        time: 250ms
+                    - script.execute: prepare_lamp_page
+                    - script.execute: confirm_click
+        - button:
+            id: btn_lampy_podworko
+            x: 10
+            y: 70
+            width: 220
+            height: 32
+            pad_all: 0
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  x: 8
+                  align: LEFT_MID
+                  text: "\U000F0335"
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  height: 20
+                  text: "PODWÓRKO"
+                  x: 32
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  width: 180
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("outdoor_podworko");'
+                    - lvgl.page.show:
+                        id: page_lampa_wspolna
+                        animation: NONE
+                        time: 250ms
+                    - script.execute: prepare_lamp_page
+                    - script.execute: confirm_click
+        - button:
+            id: btn_lampy_adresowka
+            x: 10
+            y: 70
+            width: 220
+            height: 32
+            pad_all: 0
+            hidden: true
+            bg_color: 0x18232B
+            border_width: 1
+            border_color: 0x333333
+            radius: 6
+            shadow_width: 0
+            widgets:
+              - label:
+                  x: 8
+                  align: LEFT_MID
+                  text: "\U000F0335"
+                  text_font: icon_font_btn
+                  text_color: 0x00DD66
+              - label:
+                  height: 20
+                  text: "ADRESÓWKA"
+                  x: 32
+                  align: LEFT_MID
+                  text_font: font_ui_14
+                  text_color: 0xFFFFFF
+                  width: 180
+                  text_align: CENTER
+            on_click:
+              - if:
+                  condition:
+                    lambda: 'return !id(screen_was_asleep) && !id(touch_gesture_blocked);'
+                  then:
+                    - globals.set:
+                        id: lamp_selected
+                        value: !lambda 'return std::string("adresowka");'
+                    - lvgl.page.show:
+                        id: page_lampa_wspolna
+                        animation: NONE
+                        time: 250ms
+                    - script.execute: prepare_lamp_page
+                    - script.execute: confirm_click
         - label:
             id: lbl_lampy_empty
             text: "Brak włączonych lamp"
@@ -497,7 +669,6 @@ lvgl:
             text_font: font_ui_14
             text_color: 0x888888
             hidden: true
-
 
 
     # ------------------------------------------------------
