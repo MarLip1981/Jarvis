@@ -181,19 +181,40 @@ interval:
           const bool salon_on = id(state_salon_lampka_raw).has_state() && id(state_salon_lampka_raw).state == "on";
           const bool studio_on = id(state_sypialnia_lampa_raw).has_state() && id(state_sypialnia_lampa_raw).state == "on";
           const bool erni_on = id(state_erni_lampa_raw).has_state() && id(state_erni_lampa_raw).state == "on";
-          int on_count = (salon_on ? 1 : 0) + (studio_on ? 1 : 0) + (erni_on ? 1 : 0);
-          // Lista pokazuje tylko faktycznie wlaczone lampy.
-          if (salon_on) lv_obj_clear_flag(id(btn_lampy_salon), LV_OBJ_FLAG_HIDDEN);
-          else lv_obj_add_flag(id(btn_lampy_salon), LV_OBJ_FLAG_HIDDEN);
-          if (studio_on) lv_obj_clear_flag(id(btn_lampy_sypialnia), LV_OBJ_FLAG_HIDDEN);
-          else lv_obj_add_flag(id(btn_lampy_sypialnia), LV_OBJ_FLAG_HIDDEN);
-          if (erni_on) lv_obj_clear_flag(id(btn_lampy_erni), LV_OBJ_FLAG_HIDDEN);
-          else lv_obj_add_flag(id(btn_lampy_erni), LV_OBJ_FLAG_HIDDEN);
+          const bool wejscie_on = id(state_wejscie_schodki_lampa_raw).has_state() && id(state_wejscie_schodki_lampa_raw).state == "on";
+          const bool wjazd_on = id(state_outdoor_wjazd_raw).has_state() && id(state_outdoor_wjazd_raw).state == "on";
+          const bool podworko_on = id(state_outdoor_podworko_raw).has_state() && id(state_outdoor_podworko_raw).state == "on";
+          const bool adresowka_on = id(state_adresowka_lampa_raw).has_state() && id(state_adresowka_lampa_raw).state == "on";
+          const int on_count = (salon_on ? 1 : 0) + (studio_on ? 1 : 0) + (erni_on ? 1 : 0) +
+                               (wejscie_on ? 1 : 0) + (wjazd_on ? 1 : 0) +
+                               (podworko_on ? 1 : 0) + (adresowka_on ? 1 : 0);
+
+          // Widoczne sa tylko wlaczone lampy; pozycje ukladaja sie bez pustych miejsc.
+          int row = 0;
+          auto place_lamp = [&row](lv_obj_t *obj, bool is_on) {
+            if (is_on) {
+              lv_obj_set_pos(obj, 10, 70 + row * 35);
+              lv_obj_clear_flag(obj, LV_OBJ_FLAG_HIDDEN);
+              row++;
+            } else {
+              lv_obj_add_flag(obj, LV_OBJ_FLAG_HIDDEN);
+            }
+          };
+          place_lamp(id(btn_lampy_salon), salon_on);
+          place_lamp(id(btn_lampy_sypialnia), studio_on);
+          place_lamp(id(btn_lampy_erni), erni_on);
+          place_lamp(id(btn_lampy_wejscie), wejscie_on);
+          place_lamp(id(btn_lampy_wjazd), wjazd_on);
+          place_lamp(id(btn_lampy_podworko), podworko_on);
+          place_lamp(id(btn_lampy_adresowka), adresowka_on);
+
           if (on_count == 0) {
             lv_label_set_text(id(lbl_pulpit_lamps), "#888888 0#");
           } else {
-            char count_text[32];
-            snprintf(count_text, sizeof(count_text), on_count == 1 ? "#00FF00 1 włączona#" : "#00FF00 %d włączone#", on_count);
+            char count_text[40];
+            const char *form = on_count == 1 ? "włączona" :
+                               (on_count >= 2 && on_count <= 4 ? "włączone" : "włączonych");
+            snprintf(count_text, sizeof(count_text), "#00FF00 %d %s#", on_count, form);
             lv_label_set_text(id(lbl_pulpit_lamps), count_text);
           }
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
