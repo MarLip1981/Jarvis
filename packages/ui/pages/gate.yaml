@@ -29,26 +29,14 @@ lvgl:
             y: 60
             width: 216
             height: 84
-            bg_color: 0x182B35
-            bg_opa: 35%
-            border_width: 1
-            border_color: 0x45515C
-            radius: 10
+            bg_opa: TRANSP
+            border_width: 0
+            radius: 0
             pad_all: 0
             scrollable: false
             scrollbar_mode: "OFF"
             widgets:
-              # Podloze i przęsła ogrodzenia po obu stronach.
-              - line:
-                  points: [[3, 70], [213, 70]]
-                  line_width: 1
-                  line_color: 0x637983
-                  line_rounded: false
-              - line:
-                  points: [[3, 76], [213, 76]]
-                  line_width: 1
-                  line_color: 0x637983
-                  line_rounded: false
+              # Przesla ogrodzenia po obu stronach wjazdu.
               - obj:
                   x: 3
                   y: 25
@@ -121,57 +109,6 @@ lvgl:
                   border_width: 1
                   border_color: 0x344953
                   radius: 0
-              # Metalowe slupki – proporcje jak na karcie Home Assistant.
-              - obj:
-                  id: gate_pillar_left
-                  x: 18
-                  y: 16
-                  width: 9
-                  height: 54
-                  bg_color: 0x9AA8AD
-                  border_width: 1
-                  border_color: 0x637983
-                  radius: 1
-              - line:
-                  points: [[17, 16], [29, 16]]
-                  line_width: 2
-                  line_color: 0xD0D8DB
-                  line_rounded: false
-              - obj:
-                  id: gate_pillar_right
-                  x: 150
-                  y: 16
-                  width: 10
-                  height: 54
-                  bg_color: 0x9AA8AD
-                  border_width: 1
-                  border_color: 0x637983
-                  radius: 1
-              - line:
-                  points: [[149, 16], [161, 16]]
-                  line_width: 2
-                  line_color: 0xD0D8DB
-                  line_rounded: false
-              # Obudowa lampy i jej sygnalizator.
-              - obj:
-                  x: 150
-                  y: 5
-                  width: 10
-                  height: 11
-                  bg_color: 0x596A70
-                  border_width: 1
-                  border_color: 0x46565E
-                  radius: 3
-              - obj:
-                  id: gate_beacon
-                  x: 153
-                  y: 7
-                  width: 5
-                  height: 5
-                  bg_color: 0xFFE3A0
-                  bg_opa: TRANSP
-                  border_width: 0
-                  radius: 3
               # Skrzydlo przesuwne i ukośne wzmocnienie – ten sam kształt co na karcie HA.
               - obj:
                   id: gate_leaf
@@ -370,35 +307,119 @@ lvgl:
                         line_width: 1
                         line_color: 0x91A3AB
                         line_rounded: false
-              # Napęd BFT DEIMOS – granatowa obudowa i czerwony panel ULTRA.
+              # Metalowe slupki – proporcje jak na karcie Home Assistant.
+              - obj:
+                  id: gate_pillar_left
+                  x: 18
+                  y: 16
+                  width: 10
+                  height: 54
+                  bg_color: 0x9AA8AD
+                  border_width: 1
+                  border_color: 0x637983
+                  radius: 1
+              - line:
+                  points: [[17, 16], [29, 16]]
+                  line_width: 2
+                  line_color: 0xD0D8DB
+                  line_rounded: false
+              - obj:
+                  id: gate_pillar_right
+                  x: 150
+                  y: 16
+                  width: 10
+                  height: 54
+                  bg_color: 0x9AA8AD
+                  border_width: 1
+                  border_color: 0x637983
+                  radius: 1
+              - line:
+                  points: [[149, 16], [161, 16]]
+                  line_width: 2
+                  line_color: 0xD0D8DB
+                  line_rounded: false
+              # Obudowa lampy i jej sygnalizator.
+              - obj:
+                  x: 150
+                  y: 5
+                  width: 10
+                  height: 11
+                  bg_color: 0x596A70
+                  border_width: 1
+                  border_color: 0x46565E
+                  radius: 3
+              - obj:
+                  id: gate_beacon
+                  x: 153
+                  y: 7
+                  width: 5
+                  height: 5
+                  bg_color: 0xFFE3A0
+                  bg_opa: TRANSP
+                  border_width: 0
+                  radius: 3
+              # Napęd BFT DEIMOS ULTRA — pierwszy plan, po prawej stronie słupka.
+              # Granatowa obudowa, srebrna podstawa i czerwony panel; bez napisów.
               - obj:
                   x: 164
-                  y: 51
-                  width: 17
-                  height: 18
-                  bg_color: 0x172B49
+                  y: 39
+                  width: 28
+                  height: 31
+                  bg_color: 0x142943
                   border_width: 1
                   border_color: 0x52647B
-                  radius: 2
+                  radius: 4
+                  pad_all: 0
                   widgets:
                     - obj:
                         x: 2
                         y: 2
-                        width: 13
-                        height: 10
-                        bg_color: 0x203958
+                        width: 23
+                        height: 22
+                        bg_color: 0x1B3554
                         border_width: 1
-                        border_color: 0x314D6C
+                        border_color: 0x304B69
+                        radius: 3
+                    - line:
+                        points: [[4, 4], [23, 4]]
+                        line_width: 1
+                        line_color: 0x526B86
+                        line_rounded: false
+                    - obj:
+                        x: 1
+                        y: 25
+                        width: 26
+                        height: 5
+                        bg_color: 0xAEB8BC
+                        border_width: 1
+                        border_color: 0x77878E
                         radius: 1
                     - obj:
-                        x: 5
-                        y: 13
-                        width: 10
-                        height: 3
-                        bg_color: 0xBD202B
+                        x: 7
+                        y: 20
+                        width: 15
+                        height: 7
+                        bg_color: 0xB8202B
                         border_width: 1
-                        border_color: 0xE35A60
-                        radius: 0
+                        border_color: 0xE15A60
+                        radius: 1
+                    - obj:
+                        x: 13
+                        y: 21
+                        width: 4
+                        height: 4
+                        bg_color: 0xB9C0C3
+                        border_width: 1
+                        border_color: 0x5E6C72
+                        radius: 2
+                    - obj:
+                        x: 9
+                        y: 5
+                        width: 7
+                        height: 4
+                        bg_color: 0xC52A35
+                        border_width: 0
+                        radius: 1
               # Fotokomorka / reczna blokada – ten sam zolty znak co na karcie HA.
               - label:
                   id: lbl_brama_warning_icon
