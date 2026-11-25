@@ -22,7 +22,7 @@ lvgl:
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
-            text: "V2.0 TEST 038"
+            text: "V2.0 TEST 039"
             align: BOTTOM_MID
             y: -16
             text_font: font_ui_14
