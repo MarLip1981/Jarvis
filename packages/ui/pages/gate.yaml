@@ -354,10 +354,13 @@ lvgl:
                   y: 7
                   width: 5
                   height: 5
-                  bg_color: 0xFFE3A0
+                  bg_color: 0xFFAA00
                   bg_opa: TRANSP
                   border_width: 0
                   radius: 3
+                  shadow_width: 8
+                  shadow_color: 0xFFAA00
+                  shadow_opa: 45%
               # Napęd BFT DEIMOS ULTRA — pierwszy plan, po prawej stronie słupka.
               # Granatowa obudowa, srebrna podstawa i czerwony panel; bez napisów.
               - obj:
