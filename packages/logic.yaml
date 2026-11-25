@@ -41,6 +41,22 @@ globals:
     type: uint32_t
     restore_value: false
     initial_value: "0"
+  - id: brama_backlight_override
+    type: bool
+    restore_value: false
+    initial_value: "false"
+  - id: brama_backlight_original_on
+    type: bool
+    restore_value: false
+    initial_value: "true"
+  - id: brama_backlight_original_brightness
+    type: float
+    restore_value: false
+    initial_value: "1.0"
+  - id: brama_closed_flash_ms
+    type: uint32_t
+    restore_value: false
+    initial_value: "0"
   - id: brama_position_start
     type: float
     restore_value: false
