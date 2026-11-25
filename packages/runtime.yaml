@@ -22,7 +22,7 @@ interval:
             if (opening || open) return LV_OPA_COVER;
             if (closing) return (((esphome::millis)() / 500) % 2) == 0 ? LV_OPA_COVER : LV_OPA_TRANSP;
             // Wirtualna lampka nie wykonuje błysku po zamknięciu.
-            return LV_OPA_TRANSP
+            return LV_OPA_TRANSP;
       # Fizyczna dioda RGB: sygnalizacja cyklu bramy.
       - if:
           condition:
