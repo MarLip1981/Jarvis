@@ -401,6 +401,8 @@ lvgl:
                         border_width: 1
                         border_color: 0x77878E
                         radius: 1
+                        scrollable: false
+                        scrollbar_mode: "OFF"
                     - obj:
                         x: 7
                         y: 20
@@ -410,6 +412,8 @@ lvgl:
                         border_width: 1
                         border_color: 0xE15A60
                         radius: 1
+                        scrollable: false
+                        scrollbar_mode: "OFF"
                     - obj:
                         x: 13
                         y: 21
@@ -419,6 +423,8 @@ lvgl:
                         border_width: 1
                         border_color: 0x5E6C72
                         radius: 2
+                        scrollable: false
+                        scrollbar_mode: "OFF"
                     - obj:
                         x: 9
                         y: 5
@@ -427,6 +433,8 @@ lvgl:
                         bg_color: 0xC52A35
                         border_width: 0
                         radius: 1
+                        scrollable: false
+                        scrollbar_mode: "OFF"
               # Fotokomorka / reczna blokada – ten sam zolty znak co na karcie HA.
               - label:
                   id: lbl_brama_warning_icon
