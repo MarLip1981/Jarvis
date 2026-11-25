@@ -32,6 +32,66 @@ interval:
             if (closing) return (((esphome::millis)() / 500) % 2) == 0 ? LV_OPA_COVER : LV_OPA_TRANSP;
             if (id(brama_closed_flash_ms) > 0 && (esphome::millis)() - id(brama_closed_flash_ms) < 650) return LV_OPA_COVER;
             return LV_OPA_TRANSP;
+      # Fizyczna dioda RGB: sygnalizacja cyklu bramy.
+      - if:
+          condition:
+            lambda: 'return id(brama_ha_status).has_state() && (id(brama_ha_status).state.find("Otwieranie") != std::string::npos || id(brama_ha_status).state.find("Furtka") != std::string::npos);'
+          then:
+            - light.turn_on:
+                id: status_led
+                red: 1.0
+                green: 0.55
+                blue: 0.0
+                brightness: 100%
+                transition_length: 0s
+          else:
+            - if:
+                condition:
+                  lambda: 'return id(brama_ha_status).has_state() && id(brama_ha_status).state == "Otwarta";'
+                then:
+                  - light.turn_on:
+                      id: status_led
+                      red: 1.0
+                      green: 0.0
+                      blue: 0.0
+                      brightness: 100%
+                      transition_length: 0s
+                else:
+                  - if:
+                      condition:
+                        lambda: 'return id(brama_ha_status).has_state() && id(brama_ha_status).state.find("Zamykanie") != std::string::npos;'
+                      then:
+                        - if:
+                            condition:
+                              lambda: 'return (((esphome::millis)() / 500) % 2) == 0;'
+                            then:
+                              - light.turn_on:
+                                  id: status_led
+                                  red: 1.0
+                                  green: 0.55
+                                  blue: 0.0
+                                  brightness: 100%
+                                  transition_length: 0s
+                            else:
+                              - light.turn_off:
+                                  id: status_led
+                                  transition_length: 0s
+                      else:
+                        - if:
+                            condition:
+                              lambda: 'return id(brama_closed_flash_ms) > 0 && ((esphome::millis)() - id(brama_closed_flash_ms)) < 650;'
+                            then:
+                              - light.turn_on:
+                                  id: status_led
+                                  red: 0.0
+                                  green: 1.0
+                                  blue: 0.0
+                                  brightness: 100%
+                                  transition_length: 0s
+                            else:
+                              - light.turn_off:
+                                  id: status_led
+                                  transition_length: 0s
       # Aktywna blokada P3 pulsuje na czerwono.
       - lvgl.label.update:
           id: lbl_brama_warning
