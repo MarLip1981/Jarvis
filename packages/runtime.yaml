@@ -12,16 +12,7 @@ interval:
       # ALWAYS_BLINK podczas kazdego ruchu, NO_BLINK swieci stale.
       - lvgl.obj.update:
           id: gate_beacon
-          bg_color: !lambda |-
-            if (!id(brama_ha_status).has_state()) return lv_color_hex(0xFFAA00);
-            const std::string s = id(brama_ha_status).state;
-            if (s.find("Otwieranie") != std::string::npos || s.find("Furtka") != std::string::npos)
-              return lv_color_hex(0xFFAA00);
-            if (s == "Otwarta") return lv_color_hex(0xFF3333);
-            if (s.find("Zamykanie") != std::string::npos) return lv_color_hex(0xFFAA00);
-            if (id(brama_closed_flash_ms) > 0 && (esphome::millis)() - id(brama_closed_flash_ms) < 650)
-              return lv_color_hex(0x00FF00);
-            return lv_color_hex(0xFFAA00);
+          bg_color: 0xFFAA00
           bg_opa: !lambda |-
             if (!id(brama_ha_status).has_state()) return LV_OPA_TRANSP;
             const std::string s = id(brama_ha_status).state;
