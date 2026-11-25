@@ -770,6 +770,37 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
+        # Zapamiętaj ustawienia podświetlenia przed wymuszeniem 100% na cykl bramy.
+        - if:
+            condition:
+              lambda: 'return x.rfind("Zamknięta", 0) != 0 && x.rfind("Zamknieta", 0) != 0 && x != "unknown" && x != "unavailable" && !x.empty();'
+            then:
+              - if:
+                  condition:
+                    lambda: 'return !id(brama_backlight_override);'
+                  then:
+                    - globals.set:
+                        id: brama_backlight_original_on
+                        value: !lambda 'return id(tft_backlight).current_values.is_on();'
+                    - globals.set:
+                        id: brama_backlight_original_brightness
+                        value: !lambda 'return id(tft_backlight).current_values.get_brightness();'
+                    - globals.set:
+                        id: brama_backlight_override
+                        value: "true"
+              - globals.set:
+                  id: brama_closed_flash_ms
+                  value: "0"
+              - light.turn_on:
+                  id: tft_backlight
+                  brightness: 100%
+        - if:
+            condition:
+              lambda: 'return x.rfind("Zamknięta", 0) == 0 || x.rfind("Zamknieta", 0) == 0;'
+            then:
+              - globals.set:
+                  id: brama_closed_flash_ms
+                  value: !lambda 'return (esphome::millis)();'
         # Ruch wykryty bezposrednio z HA: karta bramy ma sie otworzyc
         # niezaleznie od tego, skad przyszlo polecenie (pilot, HA lub Jarvis).
         - if:
