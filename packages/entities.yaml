@@ -183,7 +183,7 @@ sensor:
       - lambda: |-
           // odwracamy i skalujemy orientacyjnie do 0.1 - 1.0
           float v = 1.0 - x;
-          if (v < 0.1) v = 0.1;
+          if (v < 0.2) v = 0.2;
           if (v > 1.0) v = 1.0;
           return v;
     on_value:
