@@ -343,7 +343,7 @@ lvgl:
         # Znacznik kompilacji — zmieniamy numer przy każdym kolejnym wgraniu testowym.
         - label:
             id: lbl_pulpit_build
-            text: "TEST 045"
+            text: "TEST 046"
             align: BOTTOM_MID
             y: -4
             text_font: font_ui_12
