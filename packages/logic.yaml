@@ -223,7 +223,7 @@ script:
             return std::string("BRAK POŁĄCZENIA");
       - lvgl.obj.update:
           id: obj_lampa_adjustments
-          hidden: !lambda 'return id(lamp_selected) == "studio" || id(lamp_selected) == "wejscie_schodki" || id(lamp_selected) == "outdoor_wjazd" || id(lamp_selected) == "outdoor_podworko";'
+          hidden: !lambda 'return id(lamp_selected) == "studio" || id(lamp_selected) == "outdoor_wjazd" || id(lamp_selected) == "outdoor_podworko";'
       - lvgl.obj.update:
           id: obj_lampa_colors
           hidden: !lambda 'return id(lamp_selected) != "salon";'
@@ -265,6 +265,20 @@ script:
                 text: !lambda |-
                   char buf[8];
                   snprintf(buf, sizeof(buf), "%d%%", (int)(id(erni_brightness_attr).state / 255.0 * 100.0));
+                  return std::string(buf);
+      # TEST 046: ustaw suwak z aktualnej jasności lampy Wejście / schodki.
+      - if:
+          condition:
+            lambda: 'return id(lamp_selected) == "wejscie_schodki" && std::isfinite(id(wejscie_schodki_brightness_attr).state);'
+          then:
+            - lvgl.slider.update:
+                id: slider_lampa_brightness
+                value: !lambda 'return (int)(id(wejscie_schodki_brightness_attr).state / 255.0 * 100.0);'
+            - lvgl.label.update:
+                id: lbl_lampa_brightness_val
+                text: !lambda |-
+                  char buf[8];
+                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(wejscie_schodki_brightness_attr).state / 255.0 * 100.0));
                   return std::string(buf);
       - if:
           condition:

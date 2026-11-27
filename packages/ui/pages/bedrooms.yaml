@@ -348,6 +348,17 @@ lvgl:
                                         entity_id: light.adresowka
                                       data_template:
                                         brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
+                            # TEST 046: wysłanie jasności suwaka do lampy Wejście / schodki.
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "wejscie_schodki";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.wejscie_schodki
+                                      data_template:
+                                        brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
                             - script.execute: confirm_click
         - obj:
             id: obj_lampa_colors
