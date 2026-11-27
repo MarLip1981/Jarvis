@@ -348,6 +348,22 @@ lvgl:
                                         entity_id: light.adresowka
                                       data_template:
                                         brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
+                            - if:
+                                condition:
+                                  lambda: 'return id(lamp_selected) == "wejscie_schodki";'
+                                then:
+                                  - homeassistant.action:
+                                      action: light.turn_on
+                                      data:
+                                        entity_id: light.wejscie_schodki
+                                      data_template:
+                                        brightness_pct: !lambda 'return std::to_string(lv_slider_get_value(id(slider_lampa_brightness)));'
+                                  - lvgl.label.update:
+                                      id: lbl_lampa_brightness_val
+                                      text: !lambda |-
+                                        char buf[8];
+                                        snprintf(buf, sizeof(buf), "%d%%", (int)lv_slider_get_value(id(slider_lampa_brightness)));
+                                        return std::string(buf);
                             - script.execute: confirm_click
         - obj:
             id: obj_lampa_colors
