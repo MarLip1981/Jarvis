@@ -42,8 +42,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 4
+                  align: LEFT_MID
+                  id: lbl_zew_adresowka_icon
+                  text: "\U000F0E4F"
+                  text_font: icon_font_btn
+                  text_color: 0xFF3333
+              - label:
                   text: "ADRESÓWKA"
-                  align: CENTER
+                  x: 32
+                  y: 15
+                  width: 180
+                  height: 20
+                  text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
@@ -74,8 +85,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 4
+                  align: LEFT_MID
+                  id: lbl_zew_wejscie_icon
+                  text: "\U000F0E4F"
+                  text_font: icon_font_btn
+                  text_color: 0xFF3333
+              - label:
                   text: "WEJŚCIE / SCHODKI"
-                  align: CENTER
+                  x: 32
+                  y: 15
+                  width: 180
+                  height: 20
+                  text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
@@ -86,6 +108,12 @@ lvgl:
                     - globals.set:
                         id: lamp_selected
                         value: !lambda 'return std::string("wejscie_schodki");'
+                    - lvgl.slider.update:
+                        id: slider_lampa_brightness
+                        value: 50
+                    - lvgl.label.update:
+                        id: lbl_lampa_brightness_val
+                        text: "50%"
                     - lvgl.page.show:
                         id: page_lampa_wspolna
                         animation: NONE
@@ -106,8 +134,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 4
+                  align: LEFT_MID
+                  id: lbl_zew_wjazd_icon
+                  text: "\U000F0E4F"
+                  text_font: icon_font_btn
+                  text_color: 0xFF3333
+              - label:
                   text: "WJAZD"
-                  align: CENTER
+                  x: 32
+                  y: 15
+                  width: 180
+                  height: 20
+                  text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
@@ -138,8 +177,19 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
+                  x: 4
+                  align: LEFT_MID
+                  id: lbl_zew_podworko_icon
+                  text: "\U000F0E4F"
+                  text_font: icon_font_btn
+                  text_color: 0xFF3333
+              - label:
                   text: "PODWÓRKO"
-                  align: CENTER
+                  x: 32
+                  y: 15
+                  width: 180
+                  height: 20
+                  text_align: CENTER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
             on_click:
