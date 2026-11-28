@@ -578,18 +578,8 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_radio_stacja
-            text: !lambda 'return x;'
-        - lvgl.label.update:
-            id: lbl_pulpit_radio
-            text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("Radio:   nie gra");
-              std::string station = x;
-              std::string track = id(radio_tytul).state;
-              if (station.empty()) station = "--";
-              if (track.empty()) track = "--";
-              return std::string("Radio:   ") + station + "  * " + track;
+        - script.execute: update_radio_labels
+
 
   - platform: homeassistant
     id: radio_tytul
@@ -597,66 +587,8 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_radio_tytul
-            text: !lambda 'return x;'
-        - lvgl.label.update:
-            id: lbl_pulpit_radio
-            text: !lambda |-
-              if (!id(radio_is_playing)) return std::string("Radio:   nie gra");
-              std::string station = id(radio_stacja).state;
-              std::string track = x;
-              if (station.empty()) station = "--";
-              if (track.empty()) track = "--";
-              return std::string("Radio:   ") + station + "  * " + track;
+        - script.execute: update_radio_labels
 
-  # Mały URL 200x200 z encji AtlasCube TEST 0.5.8 (stan encji; duży wariant pozostaje po stronie HA).
-  - platform: homeassistant
-    id: radio_cover_url
-    entity_id: sensor.atlascube_radio_cover_url_test
-    internal: true
-    on_value:
-      then:
-        - if:
-            condition:
-              lambda: 'return x.rfind("/local/atlascube-radio-covers-test/", 0) != 0;'
-            then:
-              - online_image.release: img_radio_cover
-              - lvgl.widget.hide: img_radio_cover_widget
-              - lvgl.widget.show: obj_radio_cover_placeholder
-            else:
-              - logger.log:
-                  level: INFO
-                  format: "JARVIS RADIO: otrzymano lokalny adres okladki z Home Assistant"
-              - lvgl.widget.show: obj_radio_cover_placeholder
-              - lvgl.widget.hide: img_radio_cover_widget
-              - lambda: |-
-                  // Staly bufor RGB565: 120 x 120 x 2 B = 28 800 B.
-                  // Pamiec jest rezerwowana statycznie, poza alokatorem heap.
-                  alignas(4) static uint8_t radio_cover_buffer[120 * 120 * 2];
-
-                  // Nie podmieniamy bufora w trakcie trwajacego dekodowania.
-                  if (id(img_radio_cover).is_decoding()) {
-                    ESP_LOGW("JARVIS RADIO", "Pominieto URL: poprzednia okladka jest jeszcze dekodowana");
-                    return;
-                  }
-
-                  if (!id(img_radio_cover).set_external_buffer(radio_cover_buffer, 120, 120)) {
-                    ESP_LOGE("JARVIS RADIO", "Nie udalo sie podlaczyc stalego bufora 120x120 RGB565");
-                    return;
-                  }
-
-                  const uint32_t free_heap = esp_get_free_heap_size();
-                  const uint32_t min_free_heap = esp_get_minimum_free_heap_size();
-                  const size_t largest_block = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
-                  ESP_LOGI("JARVIS RAM",
-                           "PRZED OKLADKA: wolny heap=%u B, minimum od startu=%u B, najwiekszy blok=%u B",
-                           static_cast<unsigned>(free_heap),
-                           static_cast<unsigned>(min_free_heap),
-                           static_cast<unsigned>(largest_block));
-
-                  id(img_radio_cover).set_url(std::string("http://192.168.1.100:8123") + x);
-                  id(img_radio_cover).update();
 
   - platform: homeassistant
     id: radio_stan
@@ -664,28 +596,16 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        # Sensor Atlascube zwraca "playing" podczas odtwarzania; pozostale stany
-        # traktujemy jako zatrzymane radio.
         - globals.set:
             id: radio_is_playing
             value: !lambda 'return (x == "playing");'
-        - lvgl.label.update:
-            id: lbl_radio_playstop_icon
-            text: !lambda |-
-              return (x == "playing") ? std::string("\U000F0666") : std::string("\U000F040C");
-        - lvgl.label.update:
-            id: lbl_pulpit_radio_icon
-            text_color: !lambda |-
-              return (x == "playing") ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
-        - lvgl.label.update:
-            id: lbl_pulpit_radio
-            text: !lambda |-
-              if (x != "playing") return std::string("Radio:   nie gra");
-              std::string station = id(radio_stacja).state;
-              std::string track = id(radio_tytul).state;
-              if (station.empty()) station = "--";
-              if (track.empty()) track = "--";
-              return std::string("Radio:   ") + station + "  * " + track;
+        - lambda: |-
+            lv_label_set_text_static(id(lbl_radio_playstop_icon),
+              x == "playing" ? "\\U000F0666" : "\\U000F040C");
+            lv_obj_set_style_text_color(id(lbl_pulpit_radio_icon),
+              lv_color_hex(x == "playing" ? 0x00FF00 : 0x888888), 0);
+        - script.execute: update_radio_labels
+
 
   - platform: homeassistant
     id: tv_state
