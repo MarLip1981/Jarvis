@@ -643,20 +643,14 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_tv_status
-            text: !lambda |-
-              if (x == "off") return std::string("Stan: WYŁĄCZONY");
-              if (x == "unavailable" || x == "unknown" || x.empty()) return std::string("Stan: NIEDOSTĘPNY");
-              return std::string("Stan: WŁĄCZONY");
-            text_color: !lambda |-
-              if (x == "unavailable" || x == "unknown" || x.empty()) return lv_color_hex(0xFF3333);
-              return lv_color_hex(0xFFFFFF);
-        - lvgl.label.update:
-            id: lbl_tv_status_icon
-            text_color: !lambda |-
-              if (x == "unavailable" || x == "unknown" || x.empty()) return lv_color_hex(0xFF3333);
-              return x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0x00FF00);
+        - lambda: |-
+            const bool unavailable = x == "unavailable" || x == "unknown" || x.empty();
+            const char *status = x == "off" ? "Stan: WYŁĄCZONY" : unavailable ? "Stan: NIEDOSTĘPNY" : "Stan: WŁĄCZONY";
+            const lv_color_t text_color = unavailable ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFFFFF);
+            const lv_color_t icon_color = unavailable ? lv_color_hex(0xFF3333) : x == "off" ? lv_color_hex(0x888888) : lv_color_hex(0x00FF00);
+            lv_label_set_text_static(id(lbl_tv_status), status);
+            lv_obj_set_style_text_color(id(lbl_tv_status), text_color, 0);
+            lv_obj_set_style_text_color(id(lbl_tv_status_icon), icon_color, 0);
 
   - platform: homeassistant
     id: piec_hvac_mode
@@ -677,9 +671,10 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_cwu_status
-            text: !lambda 'return std::string("Status: ") + x;'
+        - lambda: |-
+            static char cwu_status_buf[48];
+            snprintf(cwu_status_buf, sizeof(cwu_status_buf), "Status: %.40s", x.c_str());
+            lv_label_set_text_static(id(lbl_cwu_status), cwu_status_buf);
         - lvgl.button.update:
             id: btn_cwu_auto
             bg_color: !lambda 'return (x == "Auto") ? lv_color_hex(0x3A6A84) : lv_color_hex(0x18232B);'
@@ -725,9 +720,10 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_scena_studio
-            text: !lambda 'return x;'
+        - lambda: |-
+            static char scene_description_buf[128];
+            snprintf(scene_description_buf, sizeof(scene_description_buf), "%.120s", x.c_str());
+            lv_label_set_text_static(id(lbl_scena_studio), scene_description_buf);
 
 
   - platform: homeassistant
@@ -919,24 +915,18 @@ text_sensor:
         - lvgl.obj.update:
             id: lbl_brama_warning_icon
             hidden: !lambda 'return x != "on" && (!id(brama_photocell).has_state() || !id(brama_photocell).state);'
-        - lvgl.label.update:
-            id: lbl_brama_warning
-            text: !lambda |-
-              const bool photo = id(brama_photocell).has_state() && id(brama_photocell).state;
-              return x == "on" ? std::string("BLOKADA ZAMKNIĘCIA") : std::string("UWAGA: FOTOKOMÓRKA");
-            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);'
-        - lvgl.label.update:
-            id: lbl_brama_warning_icon
-            text_color: !lambda 'return x == "on" ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);'
-        - lvgl.label.update:
-            id: lbl_brama_lock_state
-            text: !lambda |-
-              if (x == "on") return std::string("WŁĄCZONA");
-              if (x == "off") return std::string("WYŁĄCZONA");
-              return std::string("--");
-            text_color: !lambda |-
-              return x == "on" ? lv_color_hex(0xFF4444) : x == "off"
-                ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
+        - lambda: |-
+            const bool locked = x == "on";
+            const bool photo = id(brama_photocell).has_state() && id(brama_photocell).state;
+            const char *warning = locked ? "BLOKADA ZAMKNIĘCIA" : "UWAGA: FOTOKOMÓRKA";
+            const char *lock_status = locked ? "WŁĄCZONA" : x == "off" ? "WYŁĄCZONA" : "--";
+            const lv_color_t warning_color = locked ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);
+            const lv_color_t lock_color = locked ? lv_color_hex(0xFF4444) : x == "off" ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
+            lv_label_set_text_static(id(lbl_brama_warning), warning);
+            lv_obj_set_style_text_color(id(lbl_brama_warning), warning_color, 0);
+            lv_obj_set_style_text_color(id(lbl_brama_warning_icon), warning_color, 0);
+            lv_label_set_text_static(id(lbl_brama_lock_state), lock_status);
+            lv_obj_set_style_text_color(id(lbl_brama_lock_state), lock_color, 0);
   - platform: homeassistant
     id: brama_entrance_lighting_entity
     entity_id: sensor.brama_przesuwna_bft_jarvis
@@ -947,14 +937,11 @@ text_sensor:
     attribute: entrance_lighting_state
     on_value:
       then:
-        - lvgl.label.update:
-            id: lbl_brama_lighting_state
-            text: !lambda |-
-              if (x == "on") return std::string("WŁĄCZONE");
-              if (x == "off") return std::string("WYŁĄCZONE");
-              return std::string("--");
-            text_color: !lambda |-
-              return x == "on" ? lv_color_hex(0xFFCC00) : x == "off" ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
+        - lambda: |-
+            const char *text = x == "on" ? "WŁĄCZONE" : x == "off" ? "WYŁĄCZONE" : "--";
+            const lv_color_t color = x == "on" ? lv_color_hex(0xFFCC00) : x == "off" ? lv_color_hex(0x00CC66) : lv_color_hex(0x888888);
+            lv_label_set_text_static(id(lbl_brama_lighting_state), text);
+            lv_obj_set_style_text_color(id(lbl_brama_lighting_state), color, 0);
 
   - platform: homeassistant
     id: brama_lighting_enabled
@@ -965,32 +952,31 @@ text_sensor:
         - lvgl.obj.update:
             id: btn_brama_karta_pedestrian
             hidden: !lambda 'return x != "true" && !id(brama_pedestrian_enabled).state;'
-        - lvgl.label.update:
-            id: lbl_brama_aux_button
-            text: !lambda |-
-              return id(brama_pedestrian_enabled).state ? std::string("FURTKA") : std::string("OŚWIETLENIE");
+        - lambda: |-
+            lv_label_set_text_static(id(lbl_brama_aux_button),
+              id(brama_pedestrian_enabled).state ? "FURTKA" : "OŚWIETLENIE");
   - platform: homeassistant
     id: brama_gate_button_event
     entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: gate_button_event_state
     on_value:
       then:
-        - lvgl.label.update:
-            id: lbl_brama_gate_event
-            text: !lambda |-
-              if (x == "unknown" || x.empty()) return std::string("Brama: brak danych");
-              return std::string("Brama: ") + x;
+        - lambda: |-
+            static char gate_event_buf[80];
+            if (x == "unknown" || x.empty()) snprintf(gate_event_buf, sizeof(gate_event_buf), "Brama: brak danych");
+            else snprintf(gate_event_buf, sizeof(gate_event_buf), "Brama: %.64s", x.c_str());
+            lv_label_set_text_static(id(lbl_brama_gate_event), gate_event_buf);
   - platform: homeassistant
     id: brama_wicket_button_event
     entity_id: sensor.brama_przesuwna_bft_jarvis
     attribute: wicket_button_event_state
     on_value:
       then:
-        - lvgl.label.update:
-            id: lbl_brama_wicket_event
-            text: !lambda |-
-              if (x == "unknown" || x.empty()) return std::string("Furtka: brak danych");
-              return std::string("Furtka: ") + x;
+        - lambda: |-
+            static char wicket_event_buf[80];
+            if (x == "unknown" || x.empty()) snprintf(wicket_event_buf, sizeof(wicket_event_buf), "Furtka: brak danych");
+            else snprintf(wicket_event_buf, sizeof(wicket_event_buf), "Furtka: %.64s", x.c_str());
+            lv_label_set_text_static(id(lbl_brama_wicket_event), wicket_event_buf);
 
 
 button:
