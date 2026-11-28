@@ -162,6 +162,10 @@ interval:
                 id: page_pulpit
                 animation: NONE
                 time: 300ms
+  # Kalendarz nie wymaga odświeżania co sekundę; aktualizujemy go raz na minutę.
+  - interval: 60s
+    then:
+      - script.execute: update_calendar_labels
   - interval: 1s
     then:
       # --- Chowanie licznika pozostalych kliknie easter egga, jesli
@@ -250,23 +254,4 @@ interval:
               snprintf(buf, sizeof(buf), "--:--:--");
             }
             return std::string(buf);
-      - lvgl.label.update:
-          id: lbl_pulpit_day
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            if (!t.is_valid()) return std::string("---");
-            static const char* dni[] = {"Niedziela","Poniedziałek","Wtorek","Środa",
-                                         "Czwartek","Piątek","Sobota"};
-            return std::string(dni[t.day_of_week - 1]);
-      - lvgl.label.update:
-          id: lbl_pulpit_date
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            if (!t.is_valid()) return std::string("--.--.----");
-            static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
-                                              "czerwca","lipca","sierpnia","września",
-                                              "października","listopada","grudnia"};
-            char buf[32];
-            snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
-            return std::string(buf);
-      # Lampy pulpitu są teraz odświeżane zdarzeniowo przez update_dashboard_lamps.
+      # Dzień i data aktualizowane osobnym, rzadszym zadaniem.      # Lampy pulpitu są teraz odświeżane zdarzeniowo przez update_dashboard_lamps.
