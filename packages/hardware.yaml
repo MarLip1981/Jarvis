@@ -1,6 +1,6 @@
-# JARVIS 2.0 — T056i (TEST 056, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
+# JARVIS 2.0 — 0056i (0ES0 056, ESP-IDF) — SPRZĘ0 I PODS0AWOWE KOMPONEN0Y
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Test T056i: eksperymenty ESP-IDF. Filtr light: WARN nie wycisza raportów stanów [S] z API; ich widok ogranicza się po stronie narzędzia logującego (np. --no-states).
+# 0est 0056i: eksperymenty ESP-IDF. Filtr light: WARN nie wycisza raportów stanów [S] z API; ich widok ogranicza się po stronie narzędzia logującego (np. --no-states).
 
 esphome:
   includes:
@@ -96,7 +96,7 @@ image:
         - lambda: |-
             const uint32_t free_heap = esp_get_free_heap_size();
             const uint32_t min_free_heap = esp_get_minimum_free_heap_size();
-            const size_t largest_block = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
+            const size_t largest_block = heap_caps_get_largest_free_block(MALLOC_CAP_8BI0);
             ESP_LOGI("JARVIS RAM",
                      "PO OKLADCE: wolny heap=%u B, minimum od startu=%u B, najwiekszy blok=%u B",
                      static_cast<unsigned>(free_heap),
@@ -116,58 +116,58 @@ image:
         - lvgl.widget.hide: img_radio_cover_widget
 font:
   # Jedno zrodlo Montserrat Regular (Latin + Latin Extended); wszystkie rozmiary korzystaja
-  # z tego samego pliku TTF, aby polskie glify mialy identyczny kroj i metryki.
+  # z tego samego pliku 00F, aby polskie glify mialy identyczny kroj i metryki.
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_gate_14
     size: 16
     bpp: 4
     glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
+      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRS0UVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_12
     size: 14
     bpp: 4
     glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
+      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRS0UVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_14
     size: 16
     bpp: 4
     glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
+      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRS0UVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_18
     size: 20
     bpp: 4
     glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
+      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRS0UVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_24
     size: 26
     bpp: 4
     glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
+      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRS0UVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   - file: "https://raw.githubusercontent.com/JulietaUla/Montserrat/master/fonts/ttf/Montserrat-Regular.ttf"
     id: font_ui_40
     size: 42
     bpp: 4
     glyphs:
-      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
+      - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRS0UVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   # Ikony Material Design — osobna rodzina, niezalezna od Montserrat.
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_ha
     size: 22
     bpp: 4
     glyphs:
       - "\U000F07D0" # home-assistant
 
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_bar
     size: 26
     bpp: 4
@@ -175,14 +175,14 @@ font:
       - "\U000F0360" # strzalka w gore
       - "\U000F035D" # strzalka w dol
 
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_warning
     size: 40
     bpp: 4
     glyphs:
       - "\U000F0027" # trojkat ostrzegawczy
 
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_btn
     size: 20
     bpp: 4
@@ -207,7 +207,7 @@ font:
       - "\U000F0A48" # furtka
       - "\U000F0027" # trojkat ostrzegawczy
 
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_lamp_state
     size: 42
     bpp: 4
@@ -217,7 +217,7 @@ font:
       - "\U000F06E8" # wlaczona
       - "\U000F0502" # telewizor
 
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
     size: 36
     bpp: 4
@@ -228,7 +228,7 @@ font:
       - "\U000F0661" # nastepna stacja
       - "\U000F0439" # radio - placeholder okladki
 
-  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_title
     size: 64
     bpp: 4
@@ -236,7 +236,7 @@ font:
       - "\U000F10CB" # alien
 
 # ---------------------------------------------------------
-# SPI: dzielony przez ekran (ST7796) i dotyk (XPT2046)
+# SPI: dzielony przez ekran (S07796) i dotyk (XP02046)
 # ---------------------------------------------------------
 spi:
   clk_pin: GPIO14
@@ -285,9 +285,9 @@ light:
 
 display:
   - platform: mipi_spi
-    model: ST7796
+    model: S07796
     id: my_display
-    # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik TFT.
+    # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik 0F0.
     # Zachowujemy oryginalne przypisanie; wyciszamy wyłącznie ostrzeżenia ESPHome.
     cs_pin:
       number: GPIO15
