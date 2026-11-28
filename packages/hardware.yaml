@@ -1,6 +1,6 @@
-# JARVIS 2.0 — SPRZĘT I PODSTAWOWE KOMPONENTY
+# JARVIS 2.0 — T050i (TEST 050, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
+# Test T050i: migracja frameworka na ESP-IDF; zachowujemy istniejącą logikę i identyfikatory.
 
 esphome:
   includes:
@@ -235,7 +235,7 @@ spi:
     number: GPIO12
     ignore_strapping_warning: true
 
-# Podswietlenie sterowane jako PWM, zeby dalo sie przygasac
+# Podświetlenie sterowane jako PWM, zeby dalo sie przygasac
 output:
   - platform: ledc
     pin: GPIO27
@@ -248,12 +248,12 @@ output:
   - platform: ledc
     pin:
       number: GPIO17
-      inverted: true
+    inverted: true
     id: led_green
   - platform: ledc
     pin:
       number: GPIO16
-      inverted: true
+    inverted: true
     id: led_blue
 
 light:
