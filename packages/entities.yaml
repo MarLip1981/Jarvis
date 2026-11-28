@@ -428,6 +428,12 @@ text_sensor:
     id: state_salon_lampka_raw
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 0)) | (state << 0);
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
@@ -442,6 +448,12 @@ text_sensor:
     id: state_sypialnia_lampa_raw
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 2)) | (state << 2);
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
@@ -456,6 +468,12 @@ text_sensor:
     id: state_erni_lampa_raw
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 4)) | (state << 4);
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
@@ -470,6 +488,12 @@ text_sensor:
     id: state_adresowka_lampa_raw
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 6)) | (state << 6);
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -483,6 +507,12 @@ text_sensor:
     id: state_wejscie_schodki_lampa_raw
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 8)) | (state << 8);
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -497,6 +527,12 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_wjazd
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 10)) | (state << 10);
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -510,6 +546,12 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_podworko
     on_value:
       then:
+        - globals.set:
+            id: lamp_state_mask
+            value: !lambda |-
+              const uint16_t mask = id(lamp_state_mask);
+              const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
+              return (mask & ~(3u << 12)) | (state << 12);
         - script.execute: update_dashboard_lamps
         - if:
             condition:
