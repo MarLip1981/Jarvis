@@ -367,59 +367,23 @@ script:
           else if (id(state_adresowka_sos_raw).state == "on") lv_label_set_text_static(id(lbl_adresowka_sos), "WYŁĄCZ SOS");
           else if (id(state_adresowka_sos_raw).state == "off") lv_label_set_text_static(id(lbl_adresowka_sos), "WŁĄCZ SOS");
           else lv_label_set_text_static(id(lbl_adresowka_sos), "SOS: BRAK STANU");
-      - if:
-          condition:
-            lambda: 'return id(lamp_selected) == "salon" && std::isfinite(id(salon_brightness_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_brightness
-                value: !lambda 'return (int)(id(salon_brightness_attr).state / 255.0 * 100.0);'
-            - lvgl.label.update:
-                id: lbl_lampa_brightness_val
-                text: !lambda |-
-                  char buf[8];
-                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(salon_brightness_attr).state / 255.0 * 100.0));
-                  return std::string(buf);
-      - if:
-          condition:
-            lambda: 'return id(lamp_selected) == "erni" && std::isfinite(id(erni_brightness_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_brightness
-                value: !lambda 'return (int)(id(erni_brightness_attr).state / 255.0 * 100.0);'
-            - lvgl.label.update:
-                id: lbl_lampa_brightness_val
-                text: !lambda |-
-                  char buf[8];
-                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(erni_brightness_attr).state / 255.0 * 100.0));
-                  return std::string(buf);
-      # TEST 046: ustaw suwak z aktualnej jasności lampy Wejście / schodki.
-      - if:
-          condition:
-            lambda: 'return id(lamp_selected) == "wejscie_schodki" && std::isfinite(id(wejscie_schodki_brightness_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_brightness
-                value: !lambda 'return (int)(id(wejscie_schodki_brightness_attr).state / 255.0 * 100.0);'
-            - lvgl.label.update:
-                id: lbl_lampa_brightness_val
-                text: !lambda |-
-                  char buf[8];
-                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(wejscie_schodki_brightness_attr).state / 255.0 * 100.0));
-                  return std::string(buf);
-      - if:
-          condition:
-            lambda: 'return id(lamp_selected) == "adresowka" && std::isfinite(id(adresowka_brightness_attr).state);'
-          then:
-            - lvgl.slider.update:
-                id: slider_lampa_brightness
-                value: !lambda 'return (int)(id(adresowka_brightness_attr).state / 255.0 * 100.0);'
-            - lvgl.label.update:
-                id: lbl_lampa_brightness_val
-                text: !lambda |-
-                  char buf[8];
-                  snprintf(buf, sizeof(buf), "%d%%", (int)(id(adresowka_brightness_attr).state / 255.0 * 100.0));
-                  return std::string(buf);
+      - lambda: |-
+          float brightness = NAN;
+          if (id(lamp_selected) == "salon" && std::isfinite(id(salon_brightness_attr).state))
+            brightness = id(salon_brightness_attr).state;
+          else if (id(lamp_selected) == "erni" && std::isfinite(id(erni_brightness_attr).state))
+            brightness = id(erni_brightness_attr).state;
+          else if (id(lamp_selected) == "wejscie_schodki" && std::isfinite(id(wejscie_schodki_brightness_attr).state))
+            brightness = id(wejscie_schodki_brightness_attr).state;
+          else if (id(lamp_selected) == "adresowka" && std::isfinite(id(adresowka_brightness_attr).state))
+            brightness = id(adresowka_brightness_attr).state;
+          if (std::isfinite(brightness)) {
+            const int percent = static_cast<int>(brightness / 255.0f * 100.0f);
+            lv_slider_set_value(id(slider_lampa_brightness), percent, LV_ANIM_OFF);
+            static char brightness_buf[8];
+            snprintf(brightness_buf, sizeof(brightness_buf), "%d%%", percent);
+            lv_label_set_text_static(id(lbl_lampa_brightness_val), brightness_buf);
+          }
 
   - id: confirm_click
     mode: restart
