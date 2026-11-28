@@ -206,7 +206,7 @@ lvgl:
             x: 15
             y: 45
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -216,7 +216,7 @@ lvgl:
             x: -15
             y: 45
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -233,7 +233,7 @@ lvgl:
             x: 15
             y: 67
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -243,7 +243,7 @@ lvgl:
             x: -15
             y: 67
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -260,7 +260,7 @@ lvgl:
             x: 15
             y: 89
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -270,7 +270,7 @@ lvgl:
             x: -15
             y: 89
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -287,7 +287,7 @@ lvgl:
             x: 15
             y: 111
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -297,7 +297,7 @@ lvgl:
             x: -15
             y: 111
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -314,7 +314,7 @@ lvgl:
             x: 15
             y: 133
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -324,7 +324,7 @@ lvgl:
             x: -15
             y: 133
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -341,7 +341,7 @@ lvgl:
             x: 15
             y: 155
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -351,7 +351,7 @@ lvgl:
             x: -15
             y: 155
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -368,7 +368,7 @@ lvgl:
             x: 15
             y: 177
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -378,7 +378,7 @@ lvgl:
             x: -15
             y: 177
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -395,7 +395,7 @@ lvgl:
             x: 15
             y: 199
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -405,7 +405,7 @@ lvgl:
             x: -15
             y: 199
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -422,7 +422,7 @@ lvgl:
             x: 15
             y: 221
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -432,7 +432,7 @@ lvgl:
             x: -15
             y: 221
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -449,7 +449,7 @@ lvgl:
             x: 15
             y: 243
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -459,7 +459,7 @@ lvgl:
             x: -15
             y: 243
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -476,7 +476,7 @@ lvgl:
             x: 15
             y: 265
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -486,7 +486,7 @@ lvgl:
             x: -15
             y: 265
             bg_color: 0x000000
-            bg_opa: CO2ER
+            bg_opa: 100%
             text_font: font_ui_14
             text_color: 0x666666
 
