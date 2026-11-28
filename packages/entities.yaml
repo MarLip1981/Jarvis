@@ -371,23 +371,6 @@ binary_sensor:
             text_color: !lambda |-
               return (id(brama_manual_lock_state).has_state() && id(brama_manual_lock_state).state == "on")
                 ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);
-  - platform: homeassistant
-    id: state_salon_lampka
-    entity_id: light.salon_lampka
-    on_state:
-      then:
-        - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_salon_glowna_icon
-            text: !lambda |-
-              return x ? std::string("\U000F06E8") : std::string("\U000F0336");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
-        - lvgl.label.update:
-            id: lbl_salon_glowna_text
-            text: !lambda 'return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");'
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
-
-
   - platform: gpio
     # GPIO0 jest pinem BOOT ESP32. Przycisk działa jako zwykłe wejście po starcie,
     # ale jego przytrzymanie podczas resetu może uruchomić tryb bootloadera.
@@ -428,42 +411,6 @@ binary_sensor:
         - lvgl.label.update:
             id: lbl_ha
             text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFF0000);'
-
-  - platform: homeassistant
-    id: state_erni_lampa
-    entity_id: light.mlody_lampka_nocna
-    on_state:
-      then:
-        - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_erni_lampa
-            text: !lambda |-
-              return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
-        - lvgl.label.update:
-            id: lbl_erni_lampa_icon
-            text: !lambda |-
-              return x ? std::string("\U000F06E8") : std::string("\U000F0336");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
-
-
-  - platform: homeassistant
-    id: state_sypialnia_lampa
-    entity_id: light.studio
-    on_state:
-      then:
-        - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_sypialnia_lampa
-            text: !lambda |-
-              return x ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);'
-        - lvgl.label.update:
-            id: lbl_sypialnia_lampa_icon
-            text: !lambda |-
-              return x ? std::string("\U000F06E8") : std::string("\U000F0336");
-            text_color: !lambda 'return x ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);'
-
 
   - platform: homeassistant
     id: state_drzwi
