@@ -40,6 +40,12 @@ time:
       - lvgl.obj.update:
           id: lbl_arrow_down
           hidden: true
+    on_time:
+      - seconds: 0
+        minutes: 0
+        hours: 0
+        then:
+          - script.execute: update_calendar_labels
 
 # Lokalny odbiór okładek z cache Home Assistant.
 http_request:
