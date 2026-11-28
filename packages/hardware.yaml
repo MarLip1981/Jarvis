@@ -18,11 +18,8 @@ esp32:
       sram1_as_iram: true
 
 
-logger:
-  logs:
-    # Statusowe wpisy [S][light] zalewają log przy częstych zmianach RGB LED.
-    # WARN wycisza INFO/DEBUG tego komponentu, nie zmienia działania lamp ani loggera globalnego.
-    light: WARN
+# Nie filtrujemy komponentu light: filtr logów nie usuwa raportów stanów [S] z API.
+# Widok logów należy ograniczyć po stronie ESPHome CLI, np. --no-states.
 
 ota:
   platform: esphome
