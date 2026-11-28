@@ -315,7 +315,7 @@ script:
           else if (id(lamp_selected) == "erni") { title = "ERNI"; state = (states >> 4) & 3u; }
 
           const char *status = state == 2 ? "Lampa: WŁĄCZONA" : state == 1 ? "Lampa: wyłączona" : "Lampa: niedostępna";
-          const char *icon = state == 2 ? "\\U000F06E8" : state == 1 ? "\\U000F0336" : "\\U000F0E4F";
+          const char *icon = state == 2 ? "\U000F06E8" : state == 1 ? "\U000F0336" : "\U000F0E4F";
           const char *toggle = state == 2 ? "WYŁĄCZ LAMPĘ" : state == 1 ? "WŁĄCZ LAMPĘ" : "BRAK POŁĄCZENIA";
           const lv_color_t status_color = state == 2 ? lv_color_hex(0x00FF00) : state == 1 ? lv_color_hex(0xFFFFFF) : lv_color_hex(0xFF3333);
           const lv_color_t icon_color = state == 2 ? lv_color_hex(0x00FF00) : state == 1 ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333);
