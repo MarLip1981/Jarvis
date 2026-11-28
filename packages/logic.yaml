@@ -147,7 +147,7 @@ script:
                       text: "Drzwi:   #FF0000 OTWARTE 0s#"
                   - lvgl.label.update:
                       id: lbl_drzwi_icon
-                      text: "\\U000F081C"
+                      text: "\U000F081C"
                       text_color: 0xFF0000
                 else:
                   - lvgl.label.update:
@@ -155,7 +155,7 @@ script:
                       text: "Drzwi:   #00FF00 zamknięte#"
                   - lvgl.label.update:
                       id: lbl_drzwi_icon
-                      text: "\\U000F081B"
+                      text: "\U000F081B"
                       text_color: 0x888888
             - globals.set:
                 id: door_state_initialized
