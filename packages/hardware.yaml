@@ -156,14 +156,14 @@ font:
       - ' !"#$%&''()*+,-./:;<=>?@[]^_`{|}~0123456789ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyząćęłńóśźżĄĆĘŁŃÓŚŹŻ°'
 
   # Ikony Material Design — osobna rodzina, niezalezna od Montserrat.
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_ha
     size: 22
     bpp: 4
     glyphs:
       - "\U000F07D0" # home-assistant
 
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_bar
     size: 26
     bpp: 4
@@ -171,14 +171,14 @@ font:
       - "\U000F0360" # strzalka w gore
       - "\U000F035D" # strzalka w dol
 
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_warning
     size: 40
     bpp: 4
     glyphs:
       - "\U000F0027" # trojkat ostrzegawczy
 
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_btn
     size: 20
     bpp: 4
@@ -203,7 +203,7 @@ font:
       - "\U000F0A48" # furtka
       - "\U000F0027" # trojkat ostrzegawczy
 
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_lamp_state
     size: 42
     bpp: 4
@@ -213,7 +213,7 @@ font:
       - "\U000F06E8" # wlaczona
       - "\U000F0502" # telewizor
 
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_radio
     size: 36
     bpp: 4
@@ -224,7 +224,7 @@ font:
       - "\U000F0661" # nastepna stacja
       - "\U000F0439" # radio - placeholder okladki
 
-  - file: "https://github.com/0emplarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
+  - file: "https://github.com/Templarian/MaterialDesign-Webfont/raw/master/fonts/materialdesignicons-webfont.ttf"
     id: icon_font_title
     size: 64
     bpp: 4
