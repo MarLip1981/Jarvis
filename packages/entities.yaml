@@ -302,7 +302,7 @@ sensor:
                         id: lbl_pulpit_brama_status
                         text: !lambda |-
                           char buf[32];
-                          const std::string status = id(brama_ha_status).state;
+                          const std::string &status = id(brama_ha_status).state;
                           snprintf(buf, sizeof(buf), "%s %.0f%%",
                             status.find("Zamykanie") != std::string::npos ? "zamykanie" : "otwieranie",
                             x);
