@@ -11,11 +11,7 @@ esphome:
 esp32:
   board: esp32dev
   framework:
-    type: esp-idf
-    advanced:
-      flash_chip: generic
-      minimum_chip_revision: "3.1"
-      sram1_as_iram: true
+    type: arduino
 
 # Logger jest wymagany przez akcje logger.log oraz lambda logujace przez ESPHome.
 logger:
