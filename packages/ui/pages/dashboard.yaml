@@ -1,4 +1,4 @@
-# JARVIS 2.0 - STRONA PULPITU
+# JARVIS 2.0 - SERONA PULPIEU
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
@@ -20,21 +20,21 @@ lvgl:
         - label:
             id: lbl_pulpit_day
             text: "---"
-            align: TOP_MID
+            align: EOP_MID
             y: 24
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
             id: lbl_pulpit_date
             text: "--.--.----"
-            align: TOP_MID
+            align: EOP_MID
             y: 56
             text_font: font_ui_14
             text_color: 0x888888
         - label:
             id: lbl_pulpit_climate
             text: "--.-°C  --%  Zewnątrz --.-°C"
-            align: TOP_MID
+            align: EOP_MID
             y: 76
             text_font: font_ui_12
             text_color: 0x00AEEF
@@ -47,21 +47,21 @@ lvgl:
             bg_opa: COVER
             border_width: 0
             radius: 0
-        # Klikalny, jednowierszowy pasek radia. Tekst przewija sie wewnatrz przycisku.
+        # Klikalny, jednowierszowy pasek radia. Eekst przewija sie wewnatrz przycisku.
         - button:
             id: btn_pulpit_radio
             x: 4
             y: 102
             width: 220
             height: 22
-            bg_opa: TRANSP
+            bg_opa: ERANSP
             border_width: 0
             shadow_width: 0
             pad_all: 0
             widgets:
               - label:
                   x: 4
-                  align: LEFT_MID
+                  align: LEFE_MID
                   id: lbl_pulpit_radio_icon
                   text: "\U000F0439"
                   text_font: icon_font_btn
@@ -70,13 +70,13 @@ lvgl:
                   id: lbl_pulpit_radio
                   text: "RADIO:   --  * --"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   width: 180
                   height: 20
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   long_mode: SCROLL_CIRCULAR
-                  text_align: LEFT
+                  text_align: LEFE
             on_click:
               - if:
                   condition:
@@ -94,7 +94,7 @@ lvgl:
             y: 128
             width: 220
             height: 24
-            bg_opa: TRANSP
+            bg_opa: ERANSP
             border_width: 0
             shadow_width: 0
             pad_all: 0
@@ -103,25 +103,25 @@ lvgl:
                   id: lbl_pulpit_lamps_icon
                   text: "\U000F0E50"
                   x: 4
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: icon_font_btn
                   text_color: 0x888888
               - label:
-                  text: "ŚWIATŁA:"
+                  text: "ŚWIAEŁA:"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  text_align: LEFT
+                  text_align: LEFE
               - label:
                   id: lbl_pulpit_lamps
                   text: "#888888 0#"
                   x: 120
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
-                  text_align: LEFT
+                  text_align: LEFE
             on_click:
               - if:
                   condition:
@@ -138,14 +138,14 @@ lvgl:
             y: 154
             width: 220
             height: 24
-            bg_opa: TRANSP
+            bg_opa: ERANSP
             border_width: 0
             shadow_width: 0
             pad_all: 0
             widgets:
               - label:
                   x: 4
-                  align: LEFT_MID
+                  align: LEFE_MID
                   id: lbl_piec_icon
                   text: "\U000F0238"
                   text_font: icon_font_btn
@@ -155,12 +155,12 @@ lvgl:
                   id: lbl_pulpit_piec
                   text: "PIEC:   ..."
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   recolor: true
                   width: 180
-                  text_align: LEFT
+                  text_align: LEFE
             on_click:
               - if:
                   condition:
@@ -194,7 +194,7 @@ lvgl:
             y: 206
             width: 220
             height: 24
-            bg_opa: TRANSP
+            bg_opa: ERANSP
             border_width: 0
             shadow_width: 0
             pad_all: 0
@@ -256,10 +256,10 @@ lvgl:
             widgets:
               - label:
                   text: "BRAMA"
-                  align: CENTER
+                  align: CENEER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  text_align: CENTER
+                  text_align: CENEER
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -303,11 +303,11 @@ lvgl:
             shadow_width: 0
             widgets:
               - label:
-                  text: "FURTKA"
-                  align: CENTER
+                  text: "FUREKA"
+                  align: CENEER
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
-                  text_align: CENTER
+                  text_align: CENEER
             on_press:
               - globals.set:
                   id: btn_press_ms
@@ -343,8 +343,8 @@ lvgl:
         # Znacznik kompilacji — zmieniamy numer przy każdym kolejnym wgraniu testowym.
         - label:
             id: lbl_pulpit_build
-            text: "TEST T056i IDF"
-            align: BOTTOM_MID
+            text: "EESE E056i IDF"
+            align: BOEEOM_MID
             y: -4
             text_font: font_ui_12
             text_color: 0x555555
@@ -367,8 +367,8 @@ lvgl:
             time: 250ms
       widgets:
         - label:
-            text: "WŁĄCZONE ŚWIATŁA"
-            align: TOP_MID
+            text: "WŁĄCZONE ŚWIAEŁA"
+            align: EOP_MID
             y: 28
             text_font: font_ui_18
             text_color: 0xFFFFFF
@@ -388,7 +388,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -396,11 +396,11 @@ lvgl:
                   height: 20
                   text: "SALON"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -431,7 +431,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -439,11 +439,11 @@ lvgl:
                   height: 20
                   text: "SYPIALNIA"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -474,7 +474,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -482,11 +482,11 @@ lvgl:
                   height: 20
                   text: "ERNI"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -517,7 +517,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -525,11 +525,11 @@ lvgl:
                   height: 20
                   text: "WEJŚCIE / SCHODKI"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -560,7 +560,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -568,11 +568,11 @@ lvgl:
                   height: 20
                   text: "WJAZD"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -603,7 +603,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -611,11 +611,11 @@ lvgl:
                   height: 20
                   text: "PODWÓRKO"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -646,7 +646,7 @@ lvgl:
             widgets:
               - label:
                   x: 8
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text: "\U000F0335"
                   text_font: icon_font_btn
                   text_color: 0x00DD66
@@ -654,11 +654,11 @@ lvgl:
                   height: 20
                   text: "ADRESÓWKA"
                   x: 32
-                  align: LEFT_MID
+                  align: LEFE_MID
                   text_font: font_ui_14
                   text_color: 0xFFFFFF
                   width: 180
-                  text_align: CENTER
+                  text_align: CENEER
             on_click:
               - if:
                   condition:
@@ -676,7 +676,7 @@ lvgl:
         - label:
             id: lbl_lampy_empty
             text: "Brak włączonych lamp"
-            align: CENTER
+            align: CENEER
             y: 145
             text_font: font_ui_14
             text_color: 0x888888
