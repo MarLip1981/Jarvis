@@ -441,7 +441,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "salon";'
+            then:
+              - script.execute: prepare_lamp_page
     entity_id: light.salon_lampka
     internal: true
 
@@ -451,7 +455,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "studio";'
+            then:
+              - script.execute: prepare_lamp_page
     entity_id: light.studio
     internal: true
 
@@ -461,7 +469,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "erni";'
+            then:
+              - script.execute: prepare_lamp_page
     entity_id: light.mlody_lampka_nocna
     internal: true
 
@@ -471,7 +483,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "adresowka";'
+            then:
+              - script.execute: prepare_lamp_page
     entity_id: light.adresowka
     internal: true
 
@@ -481,7 +497,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "wejscie_schodki";'
+            then:
+              - script.execute: prepare_lamp_page
     entity_id: light.wejscie_schodki
     internal: true
 
@@ -492,7 +512,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "outdoor_wjazd";'
+            then:
+              - script.execute: prepare_lamp_page
     internal: true
 
   - platform: homeassistant
@@ -502,7 +526,11 @@ text_sensor:
       then:
         - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "outdoor_podworko";'
+            then:
+              - script.execute: prepare_lamp_page
     internal: true
 
   - platform: homeassistant
@@ -510,7 +538,11 @@ text_sensor:
     entity_id: input_boolean.tryb_sos_adresowki
     on_value:
       then:
-        - script.execute: prepare_lamp_page
+        - if:
+            condition:
+              lambda: 'return id(lamp_selected) == "adresowka";'
+            then:
+              - script.execute: prepare_lamp_page
     internal: true
 
   - platform: homeassistant
