@@ -32,6 +32,7 @@ time:
     id: sntp_time
     timezone: Europe/Warsaw
     on_time_sync:
+      - script.execute: update_calendar_labels
       - lvgl.obj.update:
           id: lbl_arrow_down
           hidden: false
