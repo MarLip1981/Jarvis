@@ -1,12 +1,12 @@
-# JARVIS 2.0 — T050i (TEST 050, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
+# JARVIS 2.0 — T051i (TEST 051, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Test T050i: migracja frameworka na ESP-IDF; zachowujemy istniejącą logikę i identyfikatory.
+# Test T051i: poprawka ścieżki nagłówka prywatnego API zegara ESP-IDF; logika i identyfikatory bez zmian.
 
 esphome:
   includes:
     - <esp_system.h>
     - <esp_heap_caps.h>
-    - <esp_clk.h>
+    - <esp_private/esp_clk.h>
 
 esp32:
   board: esp32dev
