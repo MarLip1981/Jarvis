@@ -1,6 +1,6 @@
-# JARVIS 2.0 — 0056i (0ES0 056, ESP-IDF) — SPRZĘ0 I PODS0AWOWE KOMPONEN0Y
-# Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# 0est 0056i: eksperymenty ESP-IDF. Filtr light: WARN nie wycisza raportów stanów [S] z API; ich widok ogranicza się po stronie narzędzia logującego (np. --no-states).
+# JARVIS T058 — sprzęt i komponenty bazowe (Arduino framework)
+# Test RAM: porównanie z działającym main; moduły okładek pozostają bez zmian.
+# Logger pozostaje wymagany przez logger.log i diagnostyczne lambda.
 
 esphome:
   includes:
