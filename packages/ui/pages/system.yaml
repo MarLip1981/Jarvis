@@ -84,7 +84,7 @@ lvgl:
             id: lbl_diag_cpu_status
             text: !lambda |-
               char buf[16];
-              snprintf(buf, sizeof(buf), "%u MHz", (unsigned) ESP.getCpuFreqMHz());
+              snprintf(buf, sizeof(buf), "%u MHz", (unsigned) (esp_clk_cpu_freq() / 1000000U));
               return std::string(buf);
             text_color: 0x00FF00
         - delay: 150ms
@@ -100,7 +100,7 @@ lvgl:
             id: lbl_diag_ram_status
             text: !lambda |-
               char buf[16];
-              snprintf(buf, sizeof(buf), "%u KB", (unsigned) (ESP.getFreeHeap() / 1024));
+              snprintf(buf, sizeof(buf), "%u KB", (unsigned) (esp_get_free_heap_size() / 1024));
               return std::string(buf);
             text_color: 0x00FF00
         - delay: 150ms
