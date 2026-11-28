@@ -27,7 +27,12 @@ Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modi
 - Replaced selected-lamp status/icon/toggle rendering with one LVGL lambda using static strings, reducing repeated string-selection lambdas and dynamic string returns. Existing brightness-slider updates and SOS feature are preserved.
 - Centralized radio station/title/playback UI rendering into one script with fixed buffers; radio cover path and its 120x120 RGB565 buffer are unchanged.
 - Added compact boiler-state manager and static label rendering for heating/standby/unavailable.
+- Reviewed and corrected the 2-bit light-state mapping so the bit offsets match all seven receivers and dashboard/detail-page consumers.
+- During diff review, caught that an overly broad radio callback replacement had removed the cover URL receiver; restored the complete original receiver before proceeding. Cover path/buffer code remains unchanged.
 - Removed the previous repeated temporary-string composition for dashboard radio text and selected-lamp UI. This aims to reduce allocation churn/fragmentation; receiver component objects and their stored HA text states remain.
+
+## Review status
+- Branch and diff review is in progress. T058 has not been compiled or installed. Source-only checks confirmed all seven light receivers update the packed manager and dashboard renderer no longer reads raw light text states. A YAML/C++ compile remains necessary before any device test.
 
 ## Intended implementation phases
 - Phase 0: establish measurements from stable main and current T057i under the same boot/page sequence. Record free heap, minimum heap, largest block and cover success. If no comparable stable-main logs, ask for them; don't invent a baseline.
