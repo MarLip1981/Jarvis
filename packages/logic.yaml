@@ -206,6 +206,25 @@ script:
   # Przygotowuje wspolna strone lampy wedlug wybranego pomieszczenia.
   # Odświeża widok lamp na pulpicie wyłącznie po zmianie stanu HA.
   # Wcześniej ten sam blok wykonywał się co sekundę, niezależnie od zmian.
+  - id: update_radio_labels
+    mode: restart
+    then:
+      - lambda: |-
+          static char station_buf[64];
+          static char title_buf[128];
+          static char dashboard_buf[192];
+          const char *station = id(radio_stacja).has_state() ? id(radio_stacja).state.c_str() : "--";
+          const char *track = id(radio_tytul).has_state() ? id(radio_tytul).state.c_str() : "--";
+          snprintf(station_buf, sizeof(station_buf), "%s", station && *station ? station : "--");
+          snprintf(title_buf, sizeof(title_buf), "%s", track && *track ? track : "--");
+          if (!id(radio_is_playing)) {
+            snprintf(dashboard_buf, sizeof(dashboard_buf), "Radio:   nie gra");
+          } else {
+            snprintf(dashboard_buf, sizeof(dashboard_buf), "Radio:   %.48s  * %.112s", station_buf, title_buf);
+          }
+          lv_label_set_text_static(id(lbl_radio_stacja), station_buf);
+          lv_label_set_text_static(id(lbl_radio_tytul), title_buf);
+          lv_label_set_text_static(id(lbl_pulpit_radio), dashboard_buf);
   - id: update_dashboard_lamps
     mode: restart
     then:
