@@ -623,8 +623,8 @@ text_sensor:
                     return;
                   }
 
-                  const uint32_t free_heap = ESP.getFreeHeap();
-                  const uint32_t min_free_heap = ESP.getMinFreeHeap();
+                  const uint32_t free_heap = esp_get_free_heap_size();
+                  const uint32_t min_free_heap = esp_get_minimum_free_heap_size();
                   const size_t largest_block = heap_caps_get_largest_free_block(MALLOC_CAP_8BIT);
                   ESP_LOGI("JARVIS RAM",
                            "PRZED OKLADKA: wolny heap=%u B, minimum od startu=%u B, najwiekszy blok=%u B",
