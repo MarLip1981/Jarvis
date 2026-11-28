@@ -917,7 +917,6 @@ text_sensor:
             hidden: !lambda 'return x != "on" && (!id(brama_photocell).has_state() || !id(brama_photocell).state);'
         - lambda: |-
             const bool locked = x == "on";
-            const bool photo = id(brama_photocell).has_state() && id(brama_photocell).state;
             const char *warning = locked ? "BLOKADA ZAMKNIĘCIA" : "UWAGA: FOTOKOMÓRKA";
             const char *lock_status = locked ? "WŁĄCZONA" : x == "off" ? "WYŁĄCZONA" : "--";
             const lv_color_t warning_color = locked ? lv_color_hex(0xFF3333) : lv_color_hex(0xFFCC00);
