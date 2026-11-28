@@ -199,13 +199,13 @@ sensor:
     pin: GPIO34
     id: ambient_light_raw
     name: "Czujnik światła (surowy)"
-    update_interval: 10s
+    update_interval: 5s
     attenuation: 12db
     filters:
       - lambda: |-
           // odwracamy i skalujemy orientacyjnie do 0.1 - 1.0
           float v = 1.0 - x;
-          if (v < 0.2) v = 0.2;
+          if (v < 0.1) v = 0.1;
           if (v > 1.0) v = 1.0;
           return v;
     on_value:
@@ -230,7 +230,7 @@ sensor:
     device_class: voltage
     state_class: measurement
     accuracy_decimals: 2
-    update_interval: 15s
+    update_interval: 10s
     attenuation: 12db
     filters:
       - multiply: 4.0303
@@ -312,7 +312,7 @@ sensor:
   - platform: wifi_signal
     id: wifi_db
     name: "Sygnał Wi-Fi"
-    update_interval: 60s
+    update_interval: 15s
     on_value:
       then:
         - lvgl.obj.update:
