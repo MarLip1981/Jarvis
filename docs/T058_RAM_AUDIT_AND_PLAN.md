@@ -9,7 +9,8 @@ Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modi
 - 39 globals in `packages/logic.yaml`.
 - 5 periodic interval sections in `packages/runtime.yaml`.
 - 13 font definitions in `packages/hardware.yaml`.
-- 152 unique LVGL IDs across the UI package files (IDs/reference regex audit; includes non-widget IDs and requires YAML-level confirmation).
+- UI regex inventory: roughly 281 widget declarations (161 labels, 52 buttons, 54 objects, 9 lines, 3 images, 2 sliders) across pages. Counts are text-pattern audit, not a parsed YAML AST; verify before object-removal decisions.
+- 152 unique LVGL ID declarations/references counted by regex; this is not a precise object count.
 - Cover pipeline is proven on-device: local HA URL, JPEG 120x120, static RGB565 buffer (28,800 bytes), online_image download/decode. Do not change the cover pipeline/buffer without separate evidence and explicit test.
 
 ## Findings
@@ -32,6 +33,7 @@ Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modi
 - Removed the previous repeated temporary-string composition for dashboard radio text and selected-lamp UI. This aims to reduce allocation churn/fragmentation; receiver component objects and their stored HA text states remain.
 
 ## Review status
+- T058 review caught and restored the radio cover receiver that was accidentally removed during an overly broad callback refactor; the 120x120 cover buffer/download/decode block is retained. The seven packed light-state bit offsets are now aligned with their dashboard and detail-page consumers.
 - Branch and diff review is in progress. T058 has not been compiled or installed. Source-only checks confirmed all seven light receivers update the packed manager and dashboard renderer no longer reads raw light text states. A YAML/C++ compile remains necessary before any device test.
 
 ## Intended implementation phases
