@@ -418,28 +418,8 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
-        - if:
-            condition:
-              lambda: 'return x;'
-            then:
-              - globals.set:
-                  id: door_open_since_ms
-                  value: !lambda 'return (esphome::millis)();'
-              - lvgl.label.update:
-                  id: lbl_pulpit_drzwi
-                  text: "Drzwi:   #FF0000 OTWARTE 0s#"
-              - lvgl.label.update:
-                  id: lbl_drzwi_icon
-                  text: "\U000F081C"
-                  text_color: 0xFF0000
-            else:
-              - lvgl.label.update:
-                  id: lbl_pulpit_drzwi
-                  text: "Drzwi:   #00FF00 zamknięte#"
-              - lvgl.label.update:
-                  id: lbl_drzwi_icon
-                  text: "\U000F081B"
-                  text_color: 0x888888
+        - script.execute: sync_dashboard_door_state
+
 
 text_sensor:
   # Surowe stany encji lamp z HA. Tekst rozroznia takze unavailable/unknown,
