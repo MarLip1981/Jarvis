@@ -706,26 +706,16 @@ text_sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_piec_mode
-            text: !lambda |-
-              return (x == "HEATING")
-                ? std::string("#FFAA00 GRZEJE#")
-                : (x == "STANDBY")
-                  ? std::string("#00FF00 CZUWA#")
-                  : std::string("#888888 --");
-        - lvgl.label.update:
-            id: lbl_pulpit_piec
-            text: !lambda |-
-              return (x == "HEATING")
-                ? std::string("Piec:   #FFAA00 grzeje#")
-                : (x == "STANDBY")
-                  ? std::string("Piec:   #00FF00 nie pracuje#")
-                  : std::string("Piec:   #888888 brak danych#");
-        - lvgl.label.update:
-            id: lbl_piec_icon
-            text_color: !lambda |-
-              return (x == "HEATING") ? lv_color_hex(0xFFAA00) : lv_color_hex(0x888888);
+        - globals.set:
+            id: boiler_state
+            value: !lambda 'return x == "HEATING" ? 2 : x == "STANDBY" ? 1 : 0;'
+        - lambda: |-
+            const uint8_t state = id(boiler_state);
+            const char *mode = state == 2 ? "#FFAA00 GRZEJE#" : state == 1 ? "#00FF00 CZUWA#" : "#888888 --";
+            const char *dashboard = state == 2 ? "Piec:   #FFAA00 grzeje#" : state == 1 ? "Piec:   #00FF00 nie pracuje#" : "Piec:   #888888 brak danych#";
+            lv_label_set_text_static(id(lbl_piec_mode), mode);
+            lv_label_set_text_static(id(lbl_pulpit_piec), dashboard);
+            lv_obj_set_style_text_color(id(lbl_piec_icon), lv_color_hex(state == 2 ? 0xFFAA00 : 0x888888), 0);
 
 
   - platform: homeassistant
