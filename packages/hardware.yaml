@@ -1,6 +1,6 @@
-# JARVIS 2.0 — T051i (TEST 051, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
+# JARVIS 2.0 — T052i (TEST 052, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Test T051i: poprawka ścieżki nagłówka prywatnego API zegara ESP-IDF; logika i identyfikatory bez zmian.
+# Test T052i: poprawka nagłówka zegara oraz włączenie SRAM1 jako IRAM (test kompilacji, bez instalacji).
 
 esphome:
   includes:
@@ -15,6 +15,7 @@ esp32:
     advanced:
       flash_chip: generic
       minimum_chip_revision: "3.1"
+      sram1_as_iram: true
 
 
 logger:
