@@ -1,6 +1,6 @@
-# JARVIS 2.0 — T055i (TEST 055, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
+# JARVIS 2.0 — T056i (TEST 055, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Test T055i: eksperymenty ESP-IDF. Filtr light: WARN nie wycisza raportów stanów [S] z API; ich widok ogranicza się po stronie narzędzia logującego (np. --no-states).
+# Test T056i: eksperymenty ESP-IDF. Filtr light: WARN nie wycisza raportów stanów [S] z API; ich widok ogranicza się po stronie narzędzia logującego (np. --no-states).
 
 esphome:
   includes:
