@@ -283,7 +283,7 @@ display:
   - platform: mipi_spi
     model: ST7796
     id: my_display
-    # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik 0F0.
+    # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik ST7796.
     # Zachowujemy oryginalne przypisanie; wyciszamy wyłącznie ostrzeżenia ESPHome.
     cs_pin:
       number: GPIO15
