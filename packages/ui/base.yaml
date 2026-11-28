@@ -3,7 +3,8 @@
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
 lvgl:
-  # CYD bez PSRAM — zachowujemy domyślny bufor LVGL z wersji bazowej.
+    # CYD bez PSRAM: zachowujemy bufor rysowania 8% z testowej bazy.
+  buffer_size: 8%
   displays:
     - my_display
   touchscreens:
