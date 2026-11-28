@@ -35,7 +35,7 @@ api:
 packages:
   jarvis_remote:
     url: https://github.com/MarLip1981/Jarvis
-    ref: main
+    ref: test-esp-idf-optimization-T054i
     # Krótki interwał odświeżania zapobiega kompilacji ze starej kopii
     # z cache ESPHome po zmianach w repozytorium.
     refresh: 1min
@@ -47,8 +47,10 @@ packages:
       - packages/ui/pages/system.yaml
       - packages/ui/pages/dashboard.yaml
       - packages/ui/pages/living-room.yaml
+      - packages/ui/pages/radio.yaml
       - packages/ui/pages/bedrooms.yaml
       - packages/ui/pages/heating.yaml
       - packages/ui/pages/outdoor-lighting.yaml
       - packages/ui/pages/gate.yaml
+      - packages/ui/pages/tv.yaml
       - packages/runtime.yaml
