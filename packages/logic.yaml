@@ -117,6 +117,10 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  - id: lamp_state_mask
+    type: uint16_t
+    restore_value: false
+    initial_value: "0"
   - id: lamp_selected
     type: std::string
     restore_value: false
@@ -206,13 +210,14 @@ script:
     mode: restart
     then:
       - lambda: |-
-          const bool salon_on = id(state_salon_lampka_raw).has_state() && id(state_salon_lampka_raw).state == "on";
-          const bool studio_on = id(state_sypialnia_lampa_raw).has_state() && id(state_sypialnia_lampa_raw).state == "on";
-          const bool erni_on = id(state_erni_lampa_raw).has_state() && id(state_erni_lampa_raw).state == "on";
-          const bool wejscie_on = id(state_wejscie_schodki_lampa_raw).has_state() && id(state_wejscie_schodki_lampa_raw).state == "on";
-          const bool wjazd_on = id(state_outdoor_wjazd_raw).has_state() && id(state_outdoor_wjazd_raw).state == "on";
-          const bool podworko_on = id(state_outdoor_podworko_raw).has_state() && id(state_outdoor_podworko_raw).state == "on";
-          const bool adresowka_on = id(state_adresowka_lampa_raw).has_state() && id(state_adresowka_lampa_raw).state == "on";
+          const uint16_t states = id(lamp_state_mask);
+          const bool salon_on = ((states >> 0) & 3u) == 2u;
+          const bool studio_on = ((states >> 2) & 3u) == 2u;
+          const bool erni_on = ((states >> 4) & 3u) == 2u;
+          const bool wejscie_on = ((states >> 6) & 3u) == 2u;
+          const bool wjazd_on = ((states >> 8) & 3u) == 2u;
+          const bool podworko_on = ((states >> 10) & 3u) == 2u;
+          const bool adresowka_on = ((states >> 12) & 3u) == 2u;
           const int on_count = (salon_on ? 1 : 0) + (studio_on ? 1 : 0) + (erni_on ? 1 : 0) +
                                (wejscie_on ? 1 : 0) + (wjazd_on ? 1 : 0) +
                                (podworko_on ? 1 : 0) + (adresowka_on ? 1 : 0);
@@ -264,12 +269,9 @@ script:
           if (on_count > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
           else lv_obj_clear_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
 
-          const bool salon_valid = id(state_salon_lampka_raw).has_state() &&
-            (id(state_salon_lampka_raw).state == "on" || id(state_salon_lampka_raw).state == "off");
-          const bool studio_valid = id(state_sypialnia_lampa_raw).has_state() &&
-            (id(state_sypialnia_lampa_raw).state == "on" || id(state_sypialnia_lampa_raw).state == "off");
-          const bool erni_valid = id(state_erni_lampa_raw).has_state() &&
-            (id(state_erni_lampa_raw).state == "on" || id(state_erni_lampa_raw).state == "off");
+          const bool salon_valid = ((states >> 0) & 3u) != 0u;
+          const bool studio_valid = ((states >> 2) & 3u) != 0u;
+          const bool erni_valid = ((states >> 4) & 3u) != 0u;
 
           lv_label_set_text_static(id(lbl_salon_glowna_text),
             !salon_valid ? "Lampa: niedostępna" : (salon_on ? "Lampa: WŁĄCZONA" : "Lampa: wyłączona"));
@@ -300,101 +302,48 @@ script:
   - id: prepare_lamp_page
     mode: restart
     then:
-      - lvgl.label.update:
-          id: lbl_lampa_title
-          text: !lambda |-
-            if (id(lamp_selected) == "salon") return std::string("SALON");
-            if (id(lamp_selected) == "studio") return std::string("SYPIALNIA");
-            if (id(lamp_selected) == "adresowka") return std::string("ADRESÓWKA");
-            if (id(lamp_selected) == "wejscie_schodki") return std::string("WEJŚCIE / SCHODKI");
-            if (id(lamp_selected) == "outdoor_wjazd") return std::string("WJAZD");
-            if (id(lamp_selected) == "outdoor_podworko") return std::string("PODWÓRKO");
-            return std::string("ERNI");
-      - lvgl.label.update:
-          id: lbl_lampa_status
-          text: !lambda |-
-            std::string raw;
-            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
-            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
-            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
-            else if (id(lamp_selected) == "wejscie_schodki" && id(state_wejscie_schodki_lampa_raw).has_state()) raw = id(state_wejscie_schodki_lampa_raw).state;
-            else if (id(lamp_selected) == "outdoor_wjazd" && id(state_outdoor_wjazd_raw).has_state()) raw = id(state_outdoor_wjazd_raw).state;
-            else if (id(lamp_selected) == "outdoor_podworko" && id(state_outdoor_podworko_raw).has_state()) raw = id(state_outdoor_podworko_raw).state;
-            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
-            if (raw == "on") return std::string("Lampa: WŁĄCZONA");
-            if (raw == "off") return std::string("Lampa: wyłączona");
-            return std::string("Lampa: niedostępna");
-          text_color: !lambda |-
-            std::string raw;
-            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
-            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
-            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
-            else if (id(lamp_selected) == "wejscie_schodki" && id(state_wejscie_schodki_lampa_raw).has_state()) raw = id(state_wejscie_schodki_lampa_raw).state;
-            else if (id(lamp_selected) == "outdoor_wjazd" && id(state_outdoor_wjazd_raw).has_state()) raw = id(state_outdoor_wjazd_raw).state;
-            else if (id(lamp_selected) == "outdoor_podworko" && id(state_outdoor_podworko_raw).has_state()) raw = id(state_outdoor_podworko_raw).state;
-            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
-            if (raw == "on") return lv_color_hex(0x00FF00);
-            if (raw == "off") return lv_color_hex(0xFFFFFF);
-            return lv_color_hex(0xFF3333);
-      - lvgl.label.update:
-          id: lbl_lampa_icon
-          text: !lambda |-
-            std::string raw;
-            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
-            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
-            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
-            else if (id(lamp_selected) == "wejscie_schodki" && id(state_wejscie_schodki_lampa_raw).has_state()) raw = id(state_wejscie_schodki_lampa_raw).state;
-            else if (id(lamp_selected) == "outdoor_wjazd" && id(state_outdoor_wjazd_raw).has_state()) raw = id(state_outdoor_wjazd_raw).state;
-            else if (id(lamp_selected) == "outdoor_podworko" && id(state_outdoor_podworko_raw).has_state()) raw = id(state_outdoor_podworko_raw).state;
-            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
-            if (raw == "on") return std::string("\U000F06E8");
-            if (raw == "off") return std::string("\U000F0336");
-            return std::string("\U000F0E4F");
-          text_color: !lambda |-
-            std::string raw;
-            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
-            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
-            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
-            else if (id(lamp_selected) == "wejscie_schodki" && id(state_wejscie_schodki_lampa_raw).has_state()) raw = id(state_wejscie_schodki_lampa_raw).state;
-            else if (id(lamp_selected) == "outdoor_wjazd" && id(state_outdoor_wjazd_raw).has_state()) raw = id(state_outdoor_wjazd_raw).state;
-            else if (id(lamp_selected) == "outdoor_podworko" && id(state_outdoor_podworko_raw).has_state()) raw = id(state_outdoor_podworko_raw).state;
-            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
-            if (raw == "on") return lv_color_hex(0x00FF00);
-            if (raw == "off") return lv_color_hex(0x888888);
-            return lv_color_hex(0xFF3333);
-      - lvgl.label.update:
-          id: lbl_lampa_toggle
-          text: !lambda |-
-            std::string raw;
-            if (id(lamp_selected) == "salon" && id(state_salon_lampka_raw).has_state()) raw = id(state_salon_lampka_raw).state;
-            else if (id(lamp_selected) == "studio" && id(state_sypialnia_lampa_raw).has_state()) raw = id(state_sypialnia_lampa_raw).state;
-            else if (id(lamp_selected) == "adresowka" && id(state_adresowka_lampa_raw).has_state()) raw = id(state_adresowka_lampa_raw).state;
-            else if (id(lamp_selected) == "wejscie_schodki" && id(state_wejscie_schodki_lampa_raw).has_state()) raw = id(state_wejscie_schodki_lampa_raw).state;
-            else if (id(lamp_selected) == "outdoor_wjazd" && id(state_outdoor_wjazd_raw).has_state()) raw = id(state_outdoor_wjazd_raw).state;
-            else if (id(lamp_selected) == "outdoor_podworko" && id(state_outdoor_podworko_raw).has_state()) raw = id(state_outdoor_podworko_raw).state;
-            else if (id(lamp_selected) == "erni" && id(state_erni_lampa_raw).has_state()) raw = id(state_erni_lampa_raw).state;
-            if (raw == "on") return std::string("WYŁĄCZ LAMPĘ");
-            if (raw == "off") return std::string("WŁĄCZ LAMPĘ");
-            return std::string("BRAK POŁĄCZENIA");
-      - lvgl.obj.update:
-          id: obj_lampa_adjustments
-          hidden: !lambda 'return id(lamp_selected) == "studio" || id(lamp_selected) == "outdoor_wjazd" || id(lamp_selected) == "outdoor_podworko";'
-      - lvgl.obj.update:
-          id: obj_lampa_colors
-          hidden: !lambda 'return id(lamp_selected) != "salon";'
-      - lvgl.obj.update:
-          id: obj_lampa_scenes
-          hidden: !lambda 'return id(lamp_selected) != "studio";'
-      - lvgl.obj.update:
-          id: obj_lampa_sos
-          hidden: !lambda 'return id(lamp_selected) != "adresowka";'
-      - lvgl.label.update:
-          id: lbl_adresowka_sos
-          text: !lambda |-
-            if (!id(state_adresowka_sos_raw).has_state()) return std::string("SOS: BRAK STANU");
-            if (id(state_adresowka_sos_raw).state == "on") return std::string("WYŁĄCZ SOS");
-            if (id(state_adresowka_sos_raw).state == "off") return std::string("WŁĄCZ SOS");
-            return std::string("SOS: BRAK STANU");
+      - lambda: |-
+          const uint16_t states = id(lamp_state_mask);
+          uint8_t state = 0;
+          const char *title = "ERNI";
+          if (id(lamp_selected) == "salon") { title = "SALON"; state = (states >> 0) & 3u; }
+          else if (id(lamp_selected) == "studio") { title = "SYPIALNIA"; state = (states >> 2) & 3u; }
+          else if (id(lamp_selected) == "adresowka") { title = "ADRESÓWKA"; state = (states >> 12) & 3u; }
+          else if (id(lamp_selected) == "wejscie_schodki") { title = "WEJŚCIE / SCHODKI"; state = (states >> 6) & 3u; }
+          else if (id(lamp_selected) == "outdoor_wjazd") { title = "WJAZD"; state = (states >> 8) & 3u; }
+          else if (id(lamp_selected) == "outdoor_podworko") { title = "PODWÓRKO"; state = (states >> 10) & 3u; }
+          else if (id(lamp_selected) == "erni") { title = "ERNI"; state = (states >> 4) & 3u; }
+
+          const char *status = state == 2 ? "Lampa: WŁĄCZONA" : state == 1 ? "Lampa: wyłączona" : "Lampa: niedostępna";
+          const char *icon = state == 2 ? "\\U000F06E8" : state == 1 ? "\\U000F0336" : "\\U000F0E4F";
+          const char *toggle = state == 2 ? "WYŁĄCZ LAMPĘ" : state == 1 ? "WŁĄCZ LAMPĘ" : "BRAK POŁĄCZENIA";
+          const lv_color_t status_color = state == 2 ? lv_color_hex(0x00FF00) : state == 1 ? lv_color_hex(0xFFFFFF) : lv_color_hex(0xFF3333);
+          const lv_color_t icon_color = state == 2 ? lv_color_hex(0x00FF00) : state == 1 ? lv_color_hex(0x888888) : lv_color_hex(0xFF3333);
+          lv_label_set_text_static(id(lbl_lampa_title), title);
+          lv_label_set_text_static(id(lbl_lampa_status), status);
+          lv_obj_set_style_text_color(id(lbl_lampa_status), status_color, 0);
+          lv_label_set_text_static(id(lbl_lampa_icon), icon);
+          lv_obj_set_style_text_color(id(lbl_lampa_icon), icon_color, 0);
+          lv_label_set_text_static(id(lbl_lampa_toggle), toggle);
+          lv_obj_set_style_text_color(id(lbl_lampa_toggle), status_color, 0);
+
+          const bool selected_studio = id(lamp_selected) == "studio";
+          const bool selected_outdoor = id(lamp_selected) == "outdoor_wjazd" || id(lamp_selected) == "outdoor_podworko";
+          const bool selected_salon = id(lamp_selected) == "salon";
+          const bool selected_adresowka = id(lamp_selected) == "adresowka";
+          if (selected_studio || selected_outdoor) lv_obj_add_flag(id(obj_lampa_adjustments), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_clear_flag(id(obj_lampa_adjustments), LV_OBJ_FLAG_HIDDEN);
+          if (!selected_salon) lv_obj_add_flag(id(obj_lampa_colors), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_clear_flag(id(obj_lampa_colors), LV_OBJ_FLAG_HIDDEN);
+          if (!selected_studio) lv_obj_add_flag(id(obj_lampa_scenes), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_clear_flag(id(obj_lampa_scenes), LV_OBJ_FLAG_HIDDEN);
+          if (!selected_adresowka) lv_obj_add_flag(id(obj_lampa_sos), LV_OBJ_FLAG_HIDDEN);
+          else lv_obj_clear_flag(id(obj_lampa_sos), LV_OBJ_FLAG_HIDDEN);
+
+          if (!id(state_adresowka_sos_raw).has_state()) lv_label_set_text_static(id(lbl_adresowka_sos), "SOS: BRAK STANU");
+          else if (id(state_adresowka_sos_raw).state == "on") lv_label_set_text_static(id(lbl_adresowka_sos), "WYŁĄCZ SOS");
+          else if (id(state_adresowka_sos_raw).state == "off") lv_label_set_text_static(id(lbl_adresowka_sos), "WŁĄCZ SOS");
+          else lv_label_set_text_static(id(lbl_adresowka_sos), "SOS: BRAK STANU");
       - if:
           condition:
             lambda: 'return id(lamp_selected) == "salon" && std::isfinite(id(salon_brightness_attr).state);'
