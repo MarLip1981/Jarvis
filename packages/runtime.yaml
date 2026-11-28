@@ -15,7 +15,7 @@ interval:
           bg_color: 0xFFAA00
           bg_opa: !lambda |-
             if (!id(brama_ha_status).has_state()) return LV_OPA_TRANSP;
-            const std::string s = id(brama_ha_status).state;
+            const std::string &s = id(brama_ha_status).state;
             const bool opening = s.find("Otwieranie") != std::string::npos || s.find("Furtka") != std::string::npos;
             const bool open = s == "Otwarta";
             const bool closing = s.find("Zamykanie") != std::string::npos;
@@ -27,7 +27,7 @@ interval:
           id: gate_beacon
           shadow_opa: !lambda |-
             if (!id(brama_ha_status).has_state()) return 0;
-            const std::string s = id(brama_ha_status).state;
+            const std::string &s = id(brama_ha_status).state;
             const bool opening = s.find("Otwieranie") != std::string::npos || s.find("Furtka") != std::string::npos;
             const bool open = s == "Otwarta";
             const bool closing = s.find("Zamykanie") != std::string::npos;
@@ -185,85 +185,64 @@ interval:
             call.set_brightness(0.5);
             call.perform();
           }
-      # --- Status drzwi (aktualizowany co sekunde z aktualnego stanu,
-      # niezaleznie od zlapania konkretnego zdarzenia zmiany).
-      # 3 stany: brak danych z HA (--), otwarte (z liczeniem czasu
-      # od sekund), zamkniete. ---
-      - if:
-          condition:
-            lambda: 'return !id(state_drzwi).has_state();'
-          then:
-            - lvgl.label.update:
-                id: lbl_pulpit_drzwi
-                text: "Drzwi:   #888888 --#"
-            - lvgl.label.update:
-                id: lbl_drzwi_icon
-                text: "\U000F081B"
-                text_color: 0x888888
-          else:
-            - if:
-                condition:
-                  lambda: 'return id(state_drzwi).state;'
-                then:
-                  - lvgl.label.update:
-                      id: lbl_pulpit_drzwi
-                      text: !lambda |-
-                        uint32_t sec = ((esphome::millis)() - id(door_open_since_ms)) / 1000;
-                        uint32_t h = sec / 3600;
-                        uint32_t m = (sec % 3600) / 60;
-                        uint32_t s = sec % 60;
-                        char buf[48];
-                        if (h > 0) {
-                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
-                        } else if (m > 0) {
-                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
-                        } else {
-                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %us#", (unsigned) s);
-                        }
-                        return std::string(buf);
-                  - lvgl.label.update:
-                      id: lbl_drzwi_icon
-                      text: "\U000F081C"
-                      text_color: 0xFF0000
-                else:
-                  - lvgl.label.update:
-                      id: lbl_pulpit_drzwi
-                      text: "Drzwi:   #00FF00 zamknięte#"
-                  - lvgl.label.update:
-                      id: lbl_drzwi_icon
-                      text: "\U000F081B"
-                      text_color: 0x888888
-      - lvgl.label.update:
-          id: lbl_clock
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            char buf[9];
-            if (t.is_valid()) {
-              snprintf(buf, sizeof(buf), "%02d:%02d:%02d", t.hour, t.minute, t.second);
+      # --- Statusy pulpitu: statyczne bufory tekstu LVGL.
+      # Treść, kolory, częstotliwość odświeżania i pozycje pozostają bez zmian.
+      # lv_label_set_text_static nie kopiuje tekstu do sterty LVGL, więc ogranicza
+      # cykliczne alokacje i fragmentację pamięci.
+      - lambda: |-
+          // Drzwi: identyczne trzy stany i ten sam licznik czasu otwarcia.
+          static char door_buf[64];
+          if (!id(state_drzwi).has_state()) {
+            snprintf(door_buf, sizeof(door_buf), "Drzwi:   #888888 --#");
+            lv_label_set_text_static(id(lbl_pulpit_drzwi), door_buf);
+            lv_label_set_text_static(id(lbl_drzwi_icon), "\U000F081B");
+            lv_obj_set_style_text_color(id(lbl_drzwi_icon), lv_color_hex(0x888888), 0);
+          } else if (id(state_drzwi).state) {
+            const uint32_t sec = ((esphome::millis)() - id(door_open_since_ms)) / 1000;
+            const uint32_t h = sec / 3600;
+            const uint32_t m = (sec % 3600) / 60;
+            const uint32_t s = sec % 60;
+            if (h > 0) {
+              snprintf(door_buf, sizeof(door_buf), "Drzwi:   #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
+            } else if (m > 0) {
+              snprintf(door_buf, sizeof(door_buf), "Drzwi:   #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
             } else {
-              snprintf(buf, sizeof(buf), "--:--:--");
+              snprintf(door_buf, sizeof(door_buf), "Drzwi:   #FF0000 OTWARTE %us#", (unsigned) s);
             }
-            return std::string(buf);
-      - lvgl.label.update:
-          id: lbl_pulpit_day
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            if (!t.is_valid()) return std::string("---");
+            lv_label_set_text_static(id(lbl_pulpit_drzwi), door_buf);
+            lv_label_set_text_static(id(lbl_drzwi_icon), "\U000F081C");
+            lv_obj_set_style_text_color(id(lbl_drzwi_icon), lv_color_hex(0xFF0000), 0);
+          } else {
+            snprintf(door_buf, sizeof(door_buf), "Drzwi:   #00FF00 zamknięte#");
+            lv_label_set_text_static(id(lbl_pulpit_drzwi), door_buf);
+            lv_label_set_text_static(id(lbl_drzwi_icon), "\U000F081B");
+            lv_obj_set_style_text_color(id(lbl_drzwi_icon), lv_color_hex(0x888888), 0);
+          }
+
+          // Zegar, dzień i data — te same wartości co przed optymalizacją.
+          static char clock_buf[9];
+          static char day_buf[32];
+          static char date_buf[40];
+          const auto t = id(sntp_time).now();
+          if (t.is_valid()) {
+            snprintf(clock_buf, sizeof(clock_buf), "%02d:%02d:%02d", t.hour, t.minute, t.second);
             static const char* dni[] = {"Niedziela","Poniedziałek","Wtorek","Środa",
                                          "Czwartek","Piątek","Sobota"};
-            return std::string(dni[t.day_of_week - 1]);
-      - lvgl.label.update:
-          id: lbl_pulpit_date
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            if (!t.is_valid()) return std::string("--.--.----");
             static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
                                               "czerwca","lipca","sierpnia","września",
                                               "października","listopada","grudnia"};
-            char buf[32];
-            snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
-            return std::string(buf);
-      - lambda: |-
+            snprintf(day_buf, sizeof(day_buf), "%s", dni[t.day_of_week - 1]);
+            snprintf(date_buf, sizeof(date_buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
+          } else {
+            snprintf(clock_buf, sizeof(clock_buf), "--:--:--");
+            snprintf(day_buf, sizeof(day_buf), "---");
+            snprintf(date_buf, sizeof(date_buf), "--.--.----");
+          }
+          lv_label_set_text_static(id(lbl_clock), clock_buf);
+          lv_label_set_text_static(id(lbl_pulpit_day), day_buf);
+          lv_label_set_text_static(id(lbl_pulpit_date), date_buf);
+
+          // Licznik i układ widocznych lamp — logika i kolejność bez zmian.
           const bool salon_on = id(state_salon_lampka_raw).has_state() && id(state_salon_lampka_raw).state == "on";
           const bool studio_on = id(state_sypialnia_lampa_raw).has_state() && id(state_sypialnia_lampa_raw).state == "on";
           const bool erni_on = id(state_erni_lampa_raw).has_state() && id(state_erni_lampa_raw).state == "on";
@@ -275,7 +254,6 @@ interval:
                                (wejscie_on ? 1 : 0) + (wjazd_on ? 1 : 0) +
                                (podworko_on ? 1 : 0) + (adresowka_on ? 1 : 0);
 
-          // Widoczne sa tylko wlaczone lampy; pozycje ukladaja sie bez pustych miejsc.
           int row = 0;
           if (salon_on) {
             lv_obj_set_pos(id(btn_lampy_salon), 10, 70 + row++ * 35);
@@ -306,70 +284,53 @@ interval:
             lv_obj_clear_flag(id(btn_lampy_adresowka), LV_OBJ_FLAG_HIDDEN);
           } else lv_obj_add_flag(id(btn_lampy_adresowka), LV_OBJ_FLAG_HIDDEN);
 
+          static char lamp_count_buf[40];
           if (on_count == 0) {
-            lv_label_set_text(id(lbl_pulpit_lamps), "#888888 0#");
+            snprintf(lamp_count_buf, sizeof(lamp_count_buf), "#888888 0#");
           } else {
-            char count_text[40];
             const char *form = on_count == 1 ? "włączona" :
                                (on_count >= 2 && on_count <= 4 ? "włączone" : "włączonych");
-            snprintf(count_text, sizeof(count_text), "#00FF00 %d %s#", on_count, form);
-            lv_label_set_text(id(lbl_pulpit_lamps), count_text);
+            snprintf(lamp_count_buf, sizeof(lamp_count_buf), "#00FF00 %d %s#", on_count, form);
           }
+          lv_label_set_text_static(id(lbl_pulpit_lamps), lamp_count_buf);
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
             lv_color_hex(on_count > 0 ? 0x00FF00 : 0x888888), 0);
-          lv_label_set_text(id(lbl_pulpit_lamps_icon),
+          lv_label_set_text_static(id(lbl_pulpit_lamps_icon),
             on_count > 0 ? "\U000F0335" : "\U000F0336");
           if (on_count > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
           else lv_obj_clear_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
-      # --- Ciagle odswiezanie przyciskow lamp z aktualnego stanu (nie
-      # tylko przy zlapaniu zdarzenia zmiany) - dzieki temu po starcie
-      # urzadzenia przycisk pokazuje prawdziwy stan od razu, bez
-      # koniecznosci najpierw go klikniecia ---
-      - lvgl.label.update:
-          id: lbl_salon_glowna_text
-          text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("Lampa: niedostępna");
-            return id(state_salon_lampka_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-          text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return id(state_salon_lampka_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
-      - lvgl.label.update:
-          id: lbl_salon_glowna_icon
-          text: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return std::string("\U000F0E4F");
-            return id(state_salon_lampka_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");
-          text_color: !lambda |-
-            if (!id(state_salon_lampka_raw).has_state() || (id(state_salon_lampka_raw).state != "on" && id(state_salon_lampka_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return id(state_salon_lampka_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
-      - lvgl.label.update:
-          id: lbl_sypialnia_lampa
-          text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("Lampa: niedostępna");
-            return id(state_sypialnia_lampa_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-          text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return id(state_sypialnia_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
-      - lvgl.label.update:
-          id: lbl_sypialnia_lampa_icon
-          text: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return std::string("\U000F0E4F");
-            return id(state_sypialnia_lampa_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");
-          text_color: !lambda |-
-            if (!id(state_sypialnia_lampa_raw).has_state() || (id(state_sypialnia_lampa_raw).state != "on" && id(state_sypialnia_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return id(state_sypialnia_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
-      - lvgl.label.update:
-          id: lbl_erni_lampa
-          text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("Lampa: niedostępna");
-            return id(state_erni_lampa_raw).state == "on" ? std::string("Lampa: WŁĄCZONA") : std::string("Lampa: wyłączona");
-          text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0xFFFFFF);
-      - lvgl.label.update:
-          id: lbl_erni_lampa_icon
-          text: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return std::string("\U000F0E4F");
-            return id(state_erni_lampa_raw).state == "on" ? std::string("\U000F06E8") : std::string("\U000F0336");
-          text_color: !lambda |-
-            if (!id(state_erni_lampa_raw).has_state() || (id(state_erni_lampa_raw).state != "on" && id(state_erni_lampa_raw).state != "off")) return lv_color_hex(0xFF3333);
-            return id(state_erni_lampa_raw).state == "on" ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
+
+          // Statusy lamp na ekranach pomieszczeń — zachowane teksty i kolory.
+          const bool salon_valid = id(state_salon_lampka_raw).has_state() &&
+            (id(state_salon_lampka_raw).state == "on" || id(state_salon_lampka_raw).state == "off");
+          const bool studio_valid = id(state_sypialnia_lampa_raw).has_state() &&
+            (id(state_sypialnia_lampa_raw).state == "on" || id(state_sypialnia_lampa_raw).state == "off");
+          const bool erni_valid = id(state_erni_lampa_raw).has_state() &&
+            (id(state_erni_lampa_raw).state == "on" || id(state_erni_lampa_raw).state == "off");
+
+          lv_label_set_text_static(id(lbl_salon_glowna_text),
+            !salon_valid ? "Lampa: niedostępna" : (salon_on ? "Lampa: WŁĄCZONA" : "Lampa: wyłączona"));
+          lv_obj_set_style_text_color(id(lbl_salon_glowna_text),
+            lv_color_hex(!salon_valid ? 0xFF3333 : (salon_on ? 0x00FF00 : 0xFFFFFF)), 0);
+          lv_label_set_text_static(id(lbl_salon_glowna_icon),
+            !salon_valid ? "\U000F0E4F" : (salon_on ? "\U000F06E8" : "\U000F0336"));
+          lv_obj_set_style_text_color(id(lbl_salon_glowna_icon),
+            lv_color_hex(!salon_valid ? 0xFF3333 : (salon_on ? 0x00FF00 : 0x888888)), 0);
+
+          lv_label_set_text_static(id(lbl_sypialnia_lampa),
+            !studio_valid ? "Lampa: niedostępna" : (studio_on ? "Lampa: WŁĄCZONA" : "Lampa: wyłączona"));
+          lv_obj_set_style_text_color(id(lbl_sypialnia_lampa),
+            lv_color_hex(!studio_valid ? 0xFF3333 : (studio_on ? 0x00FF00 : 0xFFFFFF)), 0);
+          lv_label_set_text_static(id(lbl_sypialnia_lampa_icon),
+            !studio_valid ? "\U000F0E4F" : (studio_on ? "\U000F06E8" : "\U000F0336"));
+          lv_obj_set_style_text_color(id(lbl_sypialnia_lampa_icon),
+            lv_color_hex(!studio_valid ? 0xFF3333 : (studio_on ? 0x00FF00 : 0x888888)), 0);
+
+          lv_label_set_text_static(id(lbl_erni_lampa),
+            !erni_valid ? "Lampa: niedostępna" : (erni_on ? "Lampa: WŁĄCZONA" : "Lampa: wyłączona"));
+          lv_obj_set_style_text_color(id(lbl_erni_lampa),
+            lv_color_hex(!erni_valid ? 0xFF3333 : (erni_on ? 0x00FF00 : 0xFFFFFF)), 0);
+          lv_label_set_text_static(id(lbl_erni_lampa_icon),
+            !erni_valid ? "\U000F0E4F" : (erni_on ? "\U000F06E8" : "\U000F0336"));
+          lv_obj_set_style_text_color(id(lbl_erni_lampa_icon),
+            lv_color_hex(!erni_valid ? 0xFF3333 : (erni_on ? 0x00FF00 : 0x888888)), 0);
