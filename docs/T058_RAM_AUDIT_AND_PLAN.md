@@ -29,6 +29,7 @@ Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modi
 - Consolidated four brightness refresh branches into one selection-aware lambda; brightness percent uses one fixed buffer and `lv_label_set_text_static`. Existing sensor selection, scaling, and slider update behavior are retained.
 - Centralized radio station/title/playback UI rendering into one script with fixed buffers; radio cover path and its 120x120 RGB565 buffer are unchanged.
 - Added compact boiler-state manager and static label rendering for heating/standby/unavailable.
+- Converted numeric sensor, brightness, radio volume, TV, CWU, scene description, gate position/event, gate lock and entrance-lighting status labels to persistent buffers or constant text, reducing repeated `std::string`/LVGL text allocations. Existing state/color/visibility logic was retained.
 - Reviewed and corrected the 2-bit light-state mapping so the bit offsets match all seven receivers and dashboard/detail-page consumers.
 - During diff review, caught that an overly broad radio callback replacement had removed the cover URL receiver; restored the complete original receiver before proceeding. Cover path/buffer code remains unchanged.
 - Removed the previous repeated temporary-string composition for dashboard radio text and selected-lamp UI. This aims to reduce allocation churn/fragmentation; receiver component objects and their stored HA text states remain.
