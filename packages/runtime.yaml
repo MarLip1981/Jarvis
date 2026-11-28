@@ -110,7 +110,7 @@ interval:
       # Po zakończeniu nie wykonujemy 50 niepotrzebnych aktualizacji/s.
       - if:
           condition:
-            lambda: 'return id(brama_position_started_ms) > 0 && ((esphome::millis)() - id(brama_position_started_ms)) < 1000;'
+            lambda: 'return id(brama_position_started_ms) > 0 && ((esphome::millis)() - id(brama_position_started_ms)) <= 1000;'
           then:
             - lambda: |-
                 const uint32_t elapsed = (esphome::millis)() - id(brama_position_started_ms);
