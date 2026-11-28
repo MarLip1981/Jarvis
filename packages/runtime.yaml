@@ -15,7 +15,7 @@ interval:
           bg_color: 0xFFAA00
           bg_opa: !lambda |-
             if (!id(brama_ha_status).has_state()) return LV_OPA_TRANSP;
-            const std::string s = id(brama_ha_status).state;
+            const std::string &s = id(brama_ha_status).state;
             const bool opening = s.find("Otwieranie") != std::string::npos || s.find("Furtka") != std::string::npos;
             const bool open = s == "Otwarta";
             const bool closing = s.find("Zamykanie") != std::string::npos;
@@ -27,7 +27,7 @@ interval:
           id: gate_beacon
           shadow_opa: !lambda |-
             if (!id(brama_ha_status).has_state()) return 0;
-            const std::string s = id(brama_ha_status).state;
+            const std::string &s = id(brama_ha_status).state;
             const bool opening = s.find("Otwieranie") != std::string::npos || s.find("Furtka") != std::string::npos;
             const bool open = s == "Otwarta";
             const bool closing = s.find("Zamykanie") != std::string::npos;
