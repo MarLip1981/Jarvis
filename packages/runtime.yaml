@@ -254,4 +254,5 @@ interval:
               snprintf(buf, sizeof(buf), "--:--:--");
             }
             return std::string(buf);
-      # Dzień i data aktualizowane osobnym, rzadszym zadaniem.      # Lampy pulpitu są teraz odświeżane zdarzeniowo przez update_dashboard_lamps.
+      # Dzień i data aktualizowane osobnym, rzadszym zadaniem.
+      # Lampy pulpitu są teraz odświeżane zdarzeniowo przez update_dashboard_lamps.
