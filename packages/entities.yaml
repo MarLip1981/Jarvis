@@ -601,7 +601,7 @@ text_sensor:
             value: !lambda 'return (x == "playing");'
         - lambda: |-
             lv_label_set_text_static(id(lbl_radio_playstop_icon),
-              x == "playing" ? "\\U000F0666" : "\\U000F040C");
+              x == "playing" ? "\U000F0666" : "\U000F040C");
             lv_obj_set_style_text_color(id(lbl_pulpit_radio_icon),
               lv_color_hex(x == "playing" ? 0x00FF00 : 0x888888), 0);
         - script.execute: update_radio_labels
