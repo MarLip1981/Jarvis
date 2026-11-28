@@ -199,7 +199,7 @@ sensor:
     pin: GPIO34
     id: ambient_light_raw
     name: "Czujnik światła (surowy)"
-    update_interval: 5s
+    update_interval: 10s
     attenuation: 12db
     filters:
       - lambda: |-
@@ -230,10 +230,13 @@ sensor:
     device_class: voltage
     state_class: measurement
     accuracy_decimals: 2
-    update_interval: 10s
+    update_interval: 15s
     attenuation: 12db
     filters:
       - multiply: 4.0303
+    on_value:
+      then:
+        - component.update: battery_percent
   # Procent jest orientacyjnym oszacowaniem dla ogniwa Li-Ion 1S.
   # Napiecie mocno zalezy od obciazenia i temperatury; nie zastapi BMS.
   - platform: template
@@ -243,7 +246,7 @@ sensor:
     device_class: battery
     state_class: measurement
     accuracy_decimals: 0
-    update_interval: 10s
+    update_interval: never
     lambda: |-
       const float v = id(battery_voltage).state;
       if (!std::isfinite(v) || v < 2.5f || v > 4.35f) return NAN;
@@ -309,7 +312,7 @@ sensor:
   - platform: wifi_signal
     id: wifi_db
     name: "Sygnał Wi-Fi"
-    update_interval: 15s
+    update_interval: 60s
     on_value:
       then:
         - lvgl.obj.update:
