@@ -162,10 +162,6 @@ interval:
                 id: page_pulpit
                 animation: NONE
                 time: 300ms
-  # Kalendarz nie wymaga odświeżania co sekundę; aktualizujemy go raz na minutę.
-  - interval: 60s
-    then:
-      - script.execute: update_calendar_labels
   - interval: 1s
     then:
       # --- Chowanie licznika pozostalych kliknie easter egga, jesli
@@ -195,64 +191,34 @@ interval:
             call.set_brightness(0.5);
             call.perform();
           }
-      # --- Status drzwi (aktualizowany co sekunde z aktualnego stanu,
-      # niezaleznie od zlapania konkretnego zdarzenia zmiany).
-      # 3 stany: brak danych z HA (--), otwarte (z liczeniem czasu
-      # od sekund), zamkniete. ---
+      # Licznik czasu otwarcia odswiezamy tylko, gdy drzwi sa otwarte.
       - if:
           condition:
-            lambda: 'return !id(state_drzwi).has_state();'
+            lambda: 'return id(state_drzwi).has_state() && id(state_drzwi).state;'
           then:
-            - lvgl.label.update:
-                id: lbl_pulpit_drzwi
-                text: "Drzwi:   #888888 --#"
-            - lvgl.label.update:
-                id: lbl_drzwi_icon
-                text: "\U000F081B"
-                text_color: 0x888888
-          else:
-            - if:
-                condition:
-                  lambda: 'return id(state_drzwi).state;'
-                then:
-                  - lvgl.label.update:
-                      id: lbl_pulpit_drzwi
-                      text: !lambda |-
-                        uint32_t sec = ((esphome::millis)() - id(door_open_since_ms)) / 1000;
-                        uint32_t h = sec / 3600;
-                        uint32_t m = (sec % 3600) / 60;
-                        uint32_t s = sec % 60;
-                        char buf[48];
-                        if (h > 0) {
-                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
-                        } else if (m > 0) {
-                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
-                        } else {
-                          snprintf(buf, sizeof(buf), "Drzwi:   #FF0000 OTWARTE %us#", (unsigned) s);
-                        }
-                        return std::string(buf);
-                  - lvgl.label.update:
-                      id: lbl_drzwi_icon
-                      text: "\U000F081C"
-                      text_color: 0xFF0000
-                else:
-                  - lvgl.label.update:
-                      id: lbl_pulpit_drzwi
-                      text: "Drzwi:   #00FF00 zamknięte#"
-                  - lvgl.label.update:
-                      id: lbl_drzwi_icon
-                      text: "\U000F081B"
-                      text_color: 0x888888
-      - lvgl.label.update:
-          id: lbl_clock
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            char buf[9];
-            if (t.is_valid()) {
-              snprintf(buf, sizeof(buf), "%02d:%02d:%02d", t.hour, t.minute, t.second);
-            } else {
-              snprintf(buf, sizeof(buf), "--:--:--");
-            }
-            return std::string(buf);
+            - lambda: |-
+                static char door_buf[64];
+                uint32_t sec = ((esphome::millis)() - id(door_open_since_ms)) / 1000;
+                uint32_t h = sec / 3600;
+                uint32_t m = (sec % 3600) / 60;
+                uint32_t s = sec % 60;
+                if (h > 0) {
+                  snprintf(door_buf, sizeof(door_buf), "Drzwi:   #FF0000 OTWARTE %uh %umin#", (unsigned) h, (unsigned) m);
+                } else if (m > 0) {
+                  snprintf(door_buf, sizeof(door_buf), "Drzwi:   #FF0000 OTWARTE %umin %us#", (unsigned) m, (unsigned) s);
+                } else {
+                  snprintf(door_buf, sizeof(door_buf), "Drzwi:   #FF0000 OTWARTE %us#", (unsigned) s);
+                }
+                lv_label_set_text_static(id(lbl_pulpit_drzwi), door_buf);
+      - lambda: |-
+          // Statyczny bufor zegara: brak dynamicznej alokacji tekstu co sekundę.
+          static char clock_buf[9];
+          auto t = id(sntp_time).now();
+          if (t.is_valid()) {
+            snprintf(clock_buf, sizeof(clock_buf), "%02d:%02d:%02d", t.hour, t.minute, t.second);
+          } else {
+            snprintf(clock_buf, sizeof(clock_buf), "--:--:--");
+          }
+          lv_label_set_text_static(id(lbl_clock), clock_buf);
       # Dzień i data aktualizowane osobnym, rzadszym zadaniem.
       # Lampy pulpitu są teraz odświeżane zdarzeniowo przez update_dashboard_lamps.
