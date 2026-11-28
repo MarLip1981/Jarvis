@@ -16,12 +16,10 @@ sensor:
               - lvgl.slider.update:
                   id: slider_radio_glosnosc
                   value: !lambda 'return (int) x;'
-              - lvgl.label.update:
-                  id: lbl_radio_glosnosc
-                  text: !lambda |-
-                    char buf[24];
-                    snprintf(buf, sizeof(buf), "Głośność %d", (int) x);
-                    return std::string(buf);
+              - lambda: |-
+                  static char volume_buf[24];
+                  snprintf(volume_buf, sizeof(volume_buf), "Głośność %d", (int) x);
+                  lv_label_set_text_static(id(lbl_radio_glosnosc), volume_buf);
             else:
               - lvgl.label.update:
                   id: lbl_radio_glosnosc
@@ -41,12 +39,10 @@ sensor:
               - lvgl.slider.update:
                   id: slider_lampa_brightness
                   value: !lambda 'return (int)(x / 255.0 * 100.0);'
-              - lvgl.label.update:
-                  id: lbl_lampa_brightness_val
-                  text: !lambda |-
-                    char buf[12];
-                    snprintf(buf, sizeof(buf), "%d%%", (int)(x / 255.0 * 100.0));
-                    return std::string(buf);
+              - lambda: |-
+                  static char brightness_buf[8];
+                  snprintf(brightness_buf, sizeof(brightness_buf), "%d%%", (int)(x / 255.0 * 100.0));
+                  lv_label_set_text_static(id(lbl_lampa_brightness_val), brightness_buf);
 
 
   - platform: homeassistant
@@ -63,12 +59,10 @@ sensor:
               - lvgl.slider.update:
                   id: slider_lampa_brightness
                   value: !lambda 'return (int)(x / 255.0 * 100.0);'
-              - lvgl.label.update:
-                  id: lbl_lampa_brightness_val
-                  text: !lambda |-
-                    char buf[12];
-                    snprintf(buf, sizeof(buf), "%d%%", (int)(x / 255.0 * 100.0));
-                    return std::string(buf);
+              - lambda: |-
+                  static char brightness_buf[8];
+                  snprintf(brightness_buf, sizeof(brightness_buf), "%d%%", (int)(x / 255.0 * 100.0));
+                  lv_label_set_text_static(id(lbl_lampa_brightness_val), brightness_buf);
 
 
   # TEST 046: odczyt jasności lampy Wejście / schodki z Home Assistant.
@@ -86,12 +80,10 @@ sensor:
               - lvgl.slider.update:
                   id: slider_lampa_brightness
                   value: !lambda 'return (int)(x / 255.0 * 100.0);'
-              - lvgl.label.update:
-                  id: lbl_lampa_brightness_val
-                  text: !lambda |-
-                    char buf[12];
-                    snprintf(buf, sizeof(buf), "%d%%", (int)(x / 255.0 * 100.0));
-                    return std::string(buf);
+              - lambda: |-
+                  static char brightness_buf[8];
+                  snprintf(brightness_buf, sizeof(brightness_buf), "%d%%", (int)(x / 255.0 * 100.0));
+                  lv_label_set_text_static(id(lbl_lampa_brightness_val), brightness_buf);
 
   - platform: homeassistant
     id: piec_current_temp
@@ -100,12 +92,10 @@ sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_piec_temp
-            text: !lambda |-
-              char buf[24];
-              snprintf(buf, sizeof(buf), "%.1f °C", x);
-              return std::string(buf);
+        - lambda: |-
+              static char temp_buf[24];
+              snprintf(temp_buf, sizeof(temp_buf), "%.1f °C", x);
+              lv_label_set_text_static(id(lbl_piec_temp), temp_buf);
 
   - platform: homeassistant
     id: piec_target_temp
@@ -117,12 +107,10 @@ sensor:
         - globals.set:
             id: cache_piec_target
             value: !lambda "return x;"
-        - lvgl.label.update:
-            id: lbl_piec_target
-            text: !lambda |-
-              char buf[24];
-              snprintf(buf, sizeof(buf), "%.1f °C", x);
-              return std::string(buf);
+        - lambda: |-
+              static char temp_buf[24];
+              snprintf(temp_buf, sizeof(temp_buf), "%.1f °C", x);
+              lv_label_set_text_static(id(lbl_piec_target), temp_buf);
 
   - platform: homeassistant
     id: cwu_tank_temp
@@ -130,12 +118,10 @@ sensor:
     on_value:
       then:
         - script.execute: ha_rx_flash
-        - lvgl.label.update:
-            id: lbl_cwu_temp
-            text: !lambda |-
-              char buf[24];
-              snprintf(buf, sizeof(buf), "%.1f °C", x);
-              return std::string(buf);
+        - lambda: |-
+              static char temp_buf[24];
+              snprintf(temp_buf, sizeof(temp_buf), "%.1f °C", x);
+              lv_label_set_text_static(id(lbl_cwu_temp), temp_buf);
 
   - platform: homeassistant
     id: pulpit_indoor_temp
@@ -184,12 +170,10 @@ sensor:
               - lvgl.slider.update:
                   id: slider_lampa_brightness
                   value: !lambda 'return (int)(x / 255.0 * 100.0);'
-              - lvgl.label.update:
-                  id: lbl_lampa_brightness_val
-                  text: !lambda |-
-                    char buf[12];
-                    snprintf(buf, sizeof(buf), "%d%%", (int)(x / 255.0 * 100.0));
-                    return std::string(buf);
+              - lambda: |-
+                  static char brightness_buf[8];
+                  snprintf(brightness_buf, sizeof(brightness_buf), "%d%%", (int)(x / 255.0 * 100.0));
+                  lv_label_set_text_static(id(lbl_lampa_brightness_val), brightness_buf);
 
 
   - platform: internal_temperature
@@ -284,12 +268,10 @@ sensor:
               - globals.set:
                   id: brama_position_started_ms
                   value: !lambda 'return (esphome::millis)();'
-              - lvgl.label.update:
-                  id: lbl_brama_position
-                  text: !lambda |-
-                    char buf[24];
-                    snprintf(buf, sizeof(buf), "Pozycja: %.0f%%", x);
-                    return std::string(buf);
+              - lambda: |-
+                  static char gate_position_buf[24];
+                  snprintf(gate_position_buf, sizeof(gate_position_buf), "Pozycja: %.0f%%", x);
+                  lv_label_set_text_static(id(lbl_brama_position), gate_position_buf);
               - if:
                   condition:
                     lambda: |-
