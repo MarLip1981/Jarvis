@@ -143,25 +143,26 @@ script:
 
   - id: update_calendar_labels
     then:
-      - lvgl.label.update:
-          id: lbl_pulpit_day
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            if (!t.is_valid()) return std::string("---");
+      # Dzien i data zmieniaja sie tylko po synchronizacji czasu lub o polnocy.
+      # Statyczne bufory unikaja dynamicznej alokacji LVGL dla tych etykiet.
+      - lambda: |-
+          static char day_buf[32];
+          static char date_buf[32];
+          auto t = id(sntp_time).now();
+          if (!t.is_valid()) {
+            snprintf(day_buf, sizeof(day_buf), "---");
+            snprintf(date_buf, sizeof(date_buf), "--.--.----");
+          } else {
             static const char* dni[] = {"Niedziela","Poniedziałek","Wtorek","Środa",
                                          "Czwartek","Piątek","Sobota"};
-            return std::string(dni[t.day_of_week - 1]);
-      - lvgl.label.update:
-          id: lbl_pulpit_date
-          text: !lambda |-
-            auto t = id(sntp_time).now();
-            if (!t.is_valid()) return std::string("--.--.----");
             static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
                                               "czerwca","lipca","sierpnia","września",
                                               "października","listopada","grudnia"};
-            char buf[32];
-            snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
-            return std::string(buf);
+            snprintf(day_buf, sizeof(day_buf), "%s", dni[t.day_of_week - 1]);
+            snprintf(date_buf, sizeof(date_buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
+          }
+          lv_label_set_text_static(id(lbl_pulpit_day), day_buf);
+          lv_label_set_text_static(id(lbl_pulpit_date), date_buf);
 
   # Przygotowuje wspolna strone lampy wedlug wybranego pomieszczenia.
   # Odświeża widok lamp na pulpicie wyłącznie po zmianie stanu HA.
