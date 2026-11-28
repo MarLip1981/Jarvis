@@ -180,7 +180,7 @@ lvgl:
             text_color: 0x888888
         - label:
             id: lbl_pulpit_drzwi
-            text: "Drzwi:   ..."
+            text: "Drzwi:   #888888 --#"
             x: 32
             y: 183
             text_font: font_ui_14
