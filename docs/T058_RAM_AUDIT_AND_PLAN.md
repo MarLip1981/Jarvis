@@ -26,6 +26,7 @@ Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modi
 - Restored Arduino framework in the test branch to match the stable framework for comparison. T058 still retains the split package structure and the tested local radio-cover feature. This is a controlled candidate; it is not yet a measured RAM win.
 - Added a packed 16-bit light-state manager: 2 bits per each of the 7 HA lights (unavailable / off / on). Receiver callbacks update only the packed state, then dashboard/selected lamp UI reads the manager rather than repeatedly comparing/copying HA strings.
 - Replaced selected-lamp status/icon/toggle rendering with one LVGL lambda using static strings, reducing repeated string-selection lambdas and dynamic string returns. Existing brightness-slider updates and SOS feature are preserved.
+- Consolidated four brightness refresh branches into one selection-aware lambda; brightness percent uses one fixed buffer and `lv_label_set_text_static`. Existing sensor selection, scaling, and slider update behavior are retained.
 - Centralized radio station/title/playback UI rendering into one script with fixed buffers; radio cover path and its 120x120 RGB565 buffer are unchanged.
 - Added compact boiler-state manager and static label rendering for heating/standby/unavailable.
 - Reviewed and corrected the 2-bit light-state mapping so the bit offsets match all seven receivers and dashboard/detail-page consumers.
