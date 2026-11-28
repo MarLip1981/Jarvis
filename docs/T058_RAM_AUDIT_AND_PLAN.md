@@ -3,7 +3,8 @@
 Base: T057i commit `d04799e00de0dfbc32b92341c46c96792f564ec9`.
 Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modified.
 
-## Current inventory (ESP-IDF test branch)
+## Current inventory (T058 candidate)
+- The candidate switches the test package back to the Arduino framework (matching stable main) to isolate the ESP-IDF runtime/framework cost. This is a measurement candidate, not an optimization claim. T058 preserves the modular packages and local radio-cover feature.
 - 46 Home Assistant platform receivers in `packages/entities.yaml`.
 - 39 globals in `packages/logic.yaml`.
 - 5 periodic interval sections in `packages/runtime.yaml`.
@@ -12,6 +13,7 @@ Stable `main` remains `ede43d08901dd2be7f8c18373cc2bb32b74a25ed` and is not modi
 - Cover pipeline is proven on-device: local HA URL, JPEG 120x120, static RGB565 buffer (28,800 bytes), online_image download/decode. Do not change the cover pipeline/buffer without separate evidence and explicit test.
 
 ## Findings
+0. The user's on-device T057/T056 results on ESP-IDF were: heap before cover 11,948 B, largest block 3,584 B; after successful cover heap 5,144 B, largest block 3,072 B; minimum heap 908 B. User reports memory is worse than stable main. T058 restores Arduino as a controlled comparison before further RAM work.
 1. The T056/T057 changes primarily reduce update frequency and some text allocation, not the footprint of ESPHome HA receiver components. Heap on the user's test was 11,948 B before cover, largest block 3,584 B; after successful cover 5,144 B, largest block 3,072 B; minimum heap 908 B. This is not a successful RAM optimization against stable main.
 2. There are seven HA light raw text receivers and separate brightness receivers for four lights; two HA switches also command lights. The state manager can unify the UI-facing state and avoid repeated conversions/text creation, but cannot remove the underlying HA receiver objects merely by introducing globals.
 3. Gate integration attributes are received through multiple ESPHome HA text_sensor components (gate_status, direction, entity IDs, lock/lighting states, button events). A single ESPHome receiver cannot subscribe to multiple arbitrary HA attributes. Consolidation into one receiver requires an upstream combined HA entity/attribute or a custom integration change, which is not assumed in this repo-only pass.
