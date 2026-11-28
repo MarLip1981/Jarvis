@@ -224,7 +224,7 @@ script:
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
             lv_color_hex(on_count > 0 ? 0x00FF00 : 0x888888), 0);
           lv_label_set_text_static(id(lbl_pulpit_lamps_icon),
-            on_count > 0 ? "\\U000F0335" : "\\U000F0336");
+            on_count > 0 ? "\U000F0335" : "\U000F0336");
           if (on_count > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
           else lv_obj_clear_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
 
@@ -240,7 +240,7 @@ script:
           lv_obj_set_style_text_color(id(lbl_salon_glowna_text),
             lv_color_hex(!salon_valid ? 0xFF3333 : (salon_on ? 0x00FF00 : 0xFFFFFF)), 0);
           lv_label_set_text_static(id(lbl_salon_glowna_icon),
-            !salon_valid ? "\\U000F0E4F" : (salon_on ? "\\U000F06E8" : "\\U000F0336"));
+            !salon_valid ? "\U000F0E4F" : (salon_on ? "\U000F06E8" : "\U000F0336"));
           lv_obj_set_style_text_color(id(lbl_salon_glowna_icon),
             lv_color_hex(!salon_valid ? 0xFF3333 : (salon_on ? 0x00FF00 : 0x888888)), 0);
 
@@ -249,7 +249,7 @@ script:
           lv_obj_set_style_text_color(id(lbl_sypialnia_lampa),
             lv_color_hex(!studio_valid ? 0xFF3333 : (studio_on ? 0x00FF00 : 0xFFFFFF)), 0);
           lv_label_set_text_static(id(lbl_sypialnia_lampa_icon),
-            !studio_valid ? "\\U000F0E4F" : (studio_on ? "\\U000F06E8" : "\\U000F0336"));
+            !studio_valid ? "\U000F0E4F" : (studio_on ? "\U000F06E8" : "\U000F0336"));
           lv_obj_set_style_text_color(id(lbl_sypialnia_lampa_icon),
             lv_color_hex(!studio_valid ? 0xFF3333 : (studio_on ? 0x00FF00 : 0x888888)), 0);
 
@@ -258,7 +258,7 @@ script:
           lv_obj_set_style_text_color(id(lbl_erni_lampa),
             lv_color_hex(!erni_valid ? 0xFF3333 : (erni_on ? 0x00FF00 : 0xFFFFFF)), 0);
           lv_label_set_text_static(id(lbl_erni_lampa_icon),
-            !erni_valid ? "\\U000F0E4F" : (erni_on ? "\\U000F06E8" : "\\U000F0336"));
+            !erni_valid ? "\U000F0E4F" : (erni_on ? "\U000F06E8" : "\U000F0336"));
           lv_obj_set_style_text_color(id(lbl_erni_lampa_icon),
             lv_color_hex(!erni_valid ? 0xFF3333 : (erni_on ? 0x00FF00 : 0x888888)), 0);
   - id: prepare_lamp_page
