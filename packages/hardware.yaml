@@ -17,6 +17,9 @@ esp32:
       minimum_chip_revision: "3.1"
       sram1_as_iram: true
 
+# Logger jest wymagany przez akcje logger.log oraz lambda logujace przez ESPHome.
+logger:
+
 
 # Nie filtrujemy komponentu light: filtr logów nie usuwa raportów stanów [S] z API.
 # Widok logów należy ograniczyć po stronie ESPHome CLI, np. --no-states.
