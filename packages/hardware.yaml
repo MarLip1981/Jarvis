@@ -1,6 +1,6 @@
-# JARVIS 2.0 — T052i (TEST 052, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
+# JARVIS 2.0 — T053i (TEST 053, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Test T052i: poprawka nagłówka zegara oraz włączenie SRAM1 jako IRAM (test kompilacji, bez instalacji).
+# Test T053i: wyciszenie powtarzalnych logów stanu komponentu light; SRAM1 jako IRAM (test kompilacji).
 
 esphome:
   includes:
@@ -19,6 +19,10 @@ esp32:
 
 
 logger:
+  logs:
+    # Statusowe wpisy [S][light] zalewają log przy częstych zmianach RGB LED.
+    # WARN wycisza INFO/DEBUG tego komponentu, nie zmienia działania lamp ani loggera globalnego.
+    light: WARN
 
 ota:
   platform: esphome
