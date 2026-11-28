@@ -481,7 +481,6 @@ text_sensor:
     id: state_adresowka_lampa_raw
     on_value:
       then:
-        - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -495,7 +494,6 @@ text_sensor:
     id: state_wejscie_schodki_lampa_raw
     on_value:
       then:
-        - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -510,7 +508,6 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_wjazd
     on_value:
       then:
-        - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -524,7 +521,6 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_podworko
     on_value:
       then:
-        - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - if:
             condition:
