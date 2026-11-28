@@ -171,7 +171,7 @@ interval:
             lambda: 'return id(state_drzwi).has_state() && !id(door_state_initialized);'
           then:
             - script.execute: sync_dashboard_door_state
-      # --- Chowanie liczera pozostalych kliknie easter egga, jesli
+      # --- Chowanie licznika pozostalych kliknie easter egga, jesli
       # minelo okno 3s bez kolejnego dotkniecia ikonki HA ---
       - if:
           condition:
