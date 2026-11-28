@@ -418,19 +418,28 @@ binary_sensor:
     on_state:
       then:
         - script.execute: ha_rx_flash
-
         - if:
             condition:
               lambda: 'return x;'
             then:
-              # Drzwi wlasnie sie otworzyly - zapamietujemy moment
               - globals.set:
                   id: door_open_since_ms
                   value: !lambda 'return (esphome::millis)();'
-        # Sam tekst na ekranie NIE jest ustawiany tutaj - w interval
-        # 1s nizej jest jedno miejsce, ktore co sekunde odswieza tekst
-        # na podstawie AKTUALNEGO stanu (dokladnie tak jak licznik lamp),
-        # zamiast polegac wylacznie na zlapaniu tego zdarzenia.
+              - lvgl.label.update:
+                  id: lbl_pulpit_drzwi
+                  text: "Drzwi:   #FF0000 OTWARTE 0s#"
+              - lvgl.label.update:
+                  id: lbl_drzwi_icon
+                  text: "\U000F081C"
+                  text_color: 0xFF0000
+            else:
+              - lvgl.label.update:
+                  id: lbl_pulpit_drzwi
+                  text: "Drzwi:   #00FF00 zamknięte#"
+              - lvgl.label.update:
+                  id: lbl_drzwi_icon
+                  text: "\U000F081B"
+                  text_color: 0x888888
 
 text_sensor:
   # Surowe stany encji lamp z HA. Tekst rozroznia takze unavailable/unknown,
