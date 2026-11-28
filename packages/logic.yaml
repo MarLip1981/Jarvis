@@ -117,6 +117,10 @@ globals:
     type: bool
     restore_value: false
     initial_value: "false"
+  - id: boiler_state
+    type: uint8_t
+    restore_value: false
+    initial_value: "0"
   - id: lamp_state_mask
     type: uint16_t
     restore_value: false
