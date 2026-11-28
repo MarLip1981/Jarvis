@@ -992,10 +992,6 @@ text_sensor:
             text: !lambda |-
               if (x == "unknown" || x.empty()) return std::string("Furtka: brak danych");
               return std::string("Furtka: ") + x;
-  - platform: homeassistant
-    id: brama_lamp_mode
-    entity_id: sensor.brama_przesuwna_bft_jarvis
-    attribute: lamp_mode
 
 
 button:
