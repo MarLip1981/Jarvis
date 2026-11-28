@@ -1,6 +1,6 @@
 # JARVIS 2.0 — T054i (TEST 054, ESP-IDF) — SPRZĘT I PODSTAWOWE KOMPONENTY
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
-# Test T054i: wyciszenie powtarzalnych logów stanu komponentu light; SRAM1 jako IRAM (test kompilacji).
+# Test T054i: eksperymenty ESP-IDF. Filtr light: WARN nie wycisza raportów stanów [S] z API; ich widok ogranicza się po stronie narzędzia logującego (np. --no-states).
 
 esphome:
   includes:
