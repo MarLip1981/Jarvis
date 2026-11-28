@@ -818,6 +818,8 @@ text_sensor:
             const bool moving = opening || closing || wicket;
             const lv_color_t status_color = opened || emergency ? lv_color_hex(0xFF3333) :
               moving ? lv_color_hex(0xFFAA00) : closed ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
+            const lv_color_t dashboard_color = x == "Otwarta" || emergency ? lv_color_hex(0xFF3333) :
+              moving ? lv_color_hex(0xFFAA00) : closed ? lv_color_hex(0x00FF00) : lv_color_hex(0x888888);
             static char gate_status_buf[160];
             snprintf(gate_status_buf, sizeof(gate_status_buf), "%s", x.c_str());
             lv_label_set_text_static(id(lbl_brama_status_value), gate_status_buf);
@@ -841,10 +843,10 @@ text_sensor:
             } else if (closed) snprintf(gate_dashboard_buf, sizeof(gate_dashboard_buf), "zamknięta");
             else snprintf(gate_dashboard_buf, sizeof(gate_dashboard_buf), "--");
             lv_label_set_text_static(id(lbl_pulpit_brama_status), gate_dashboard_buf);
-            lv_obj_set_style_text_color(id(lbl_pulpit_brama_status), status_color, 0);
+            lv_obj_set_style_text_color(id(lbl_pulpit_brama_status), dashboard_color, 0);
 
             const char *gate_icon = closed ? "\U000F0299" : "\U000F116A";
-            const lv_color_t icon_color = closed ? lv_color_hex(0x888888) : status_color;
+            const lv_color_t icon_color = closed ? lv_color_hex(0x888888) : x == "Otwarta" || emergency ? lv_color_hex(0xFF3333) : moving ? lv_color_hex(0xFFAA00) : lv_color_hex(0x888888);
             lv_label_set_text_static(id(lbl_pulpit_brama_icon), gate_icon);
             lv_obj_set_style_text_color(id(lbl_pulpit_brama_icon), icon_color, 0);
         - globals.set:
