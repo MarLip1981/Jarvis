@@ -232,7 +232,7 @@ font:
       - "\U000F10CB" # alien
 
 # ---------------------------------------------------------
-# SPI: dzielony przez ekran (S07796) i dotyk (XP02046)
+# SPI: dzielony przez ekran (ST7796) i dotyk (XPT2046)
 # ---------------------------------------------------------
 spi:
   clk_pin: GPIO14
@@ -281,7 +281,7 @@ light:
 
 display:
   - platform: mipi_spi
-    model: S07796
+    model: ST7796
     id: my_display
     # GPIO15 i GPIO2 są pinami startowymi, ale są na stałe użyte przez sterownik 0F0.
     # Zachowujemy oryginalne przypisanie; wyciszamy wyłącznie ostrzeżenia ESPHome.
