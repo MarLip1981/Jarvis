@@ -127,19 +127,18 @@ globals:
 script:
   - id: update_pulpit_climate_line
     then:
-      - lvgl.label.update:
-          id: lbl_pulpit_climate
-          text: !lambda |-
-            char buf[64];
-            char t_in[8], hum[8], t_out[8];
-            if (!std::isnan(id(cache_indoor_temp))) snprintf(t_in, sizeof(t_in), "%.1f", id(cache_indoor_temp));
-            else snprintf(t_in, sizeof(t_in), "--.-");
-            if (!std::isnan(id(cache_humidity))) snprintf(hum, sizeof(hum), "%.0f", id(cache_humidity));
-            else snprintf(hum, sizeof(hum), "--");
-            if (!std::isnan(id(cache_outdoor_temp))) snprintf(t_out, sizeof(t_out), "%.1f", id(cache_outdoor_temp));
-            else snprintf(t_out, sizeof(t_out), "--.-");
-            snprintf(buf, sizeof(buf), "%s°C  %s%%  Zewnątrz %s°C", t_in, hum, t_out);
-            return std::string(buf);
+      - lambda: |-
+          // Statyczny bufor: zmiany temperatury/wilgotnosci nie alokują tekstu w heap.
+          static char climate_buf[64];
+          char t_in[8], hum[8], t_out[8];
+          if (!std::isnan(id(cache_indoor_temp))) snprintf(t_in, sizeof(t_in), "%.1f", id(cache_indoor_temp));
+          else snprintf(t_in, sizeof(t_in), "--.-");
+          if (!std::isnan(id(cache_humidity))) snprintf(hum, sizeof(hum), "%.0f", id(cache_humidity));
+          else snprintf(hum, sizeof(hum), "--");
+          if (!std::isnan(id(cache_outdoor_temp))) snprintf(t_out, sizeof(t_out), "%.1f", id(cache_outdoor_temp));
+          else snprintf(t_out, sizeof(t_out), "--.-");
+          snprintf(climate_buf, sizeof(climate_buf), "%s°C  %s%%  Zewnątrz %s°C", t_in, hum, t_out);
+          lv_label_set_text_static(id(lbl_pulpit_climate), climate_buf);
 
   - id: update_calendar_labels
     then:
