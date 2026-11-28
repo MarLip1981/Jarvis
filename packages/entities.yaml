@@ -493,7 +493,7 @@ text_sensor:
             value: !lambda |-
               const uint16_t mask = id(lamp_state_mask);
               const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
-              return static_cast<uint16_t>((mask & ~(3u << 6)) | (state << 6));
+              return static_cast<uint16_t>((mask & ~(3u << 12)) | (state << 12));;
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -512,7 +512,7 @@ text_sensor:
             value: !lambda |-
               const uint16_t mask = id(lamp_state_mask);
               const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
-              return static_cast<uint16_t>((mask & ~(3u << 8)) | (state << 8));
+              return static_cast<uint16_t>((mask & ~(3u << 6)) | (state << 6));;
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -532,7 +532,7 @@ text_sensor:
             value: !lambda |-
               const uint16_t mask = id(lamp_state_mask);
               const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
-              return static_cast<uint16_t>((mask & ~(3u << 10)) | (state << 10));
+              return static_cast<uint16_t>((mask & ~(3u << 8)) | (state << 8));;
         - script.execute: update_dashboard_lamps
         - if:
             condition:
@@ -551,7 +551,7 @@ text_sensor:
             value: !lambda |-
               const uint16_t mask = id(lamp_state_mask);
               const uint16_t state = x == "on" ? 2u : x == "off" ? 1u : 0u;
-              return static_cast<uint16_t>((mask & ~(3u << 12)) | (state << 12));
+              return static_cast<uint16_t>((mask & ~(3u << 10)) | (state << 10));;
         - script.execute: update_dashboard_lamps
         - if:
             condition:
