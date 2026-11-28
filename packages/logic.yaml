@@ -155,9 +155,11 @@ script:
           const bool wjazd_on = id(state_outdoor_wjazd_raw).has_state() && id(state_outdoor_wjazd_raw).state == "on";
           const bool podworko_on = id(state_outdoor_podworko_raw).has_state() && id(state_outdoor_podworko_raw).state == "on";
           const bool adresowka_on = id(state_adresowka_lampa_raw).has_state() && id(state_adresowka_lampa_raw).state == "on";
-          const int on_count = (salon_on ? 1 : 0) + (studio_on ? 1 : 0) + (erni_on ? 1 : 0) +
-                               (wejscie_on ? 1 : 0) + (wjazd_on ? 1 : 0) +
-                               (podworko_on ? 1 : 0) + (adresowka_on ? 1 : 0);
+          // Licznik pulpitu zachowuje zakres z wersji bazowej: 3 lampy.
+          const int on_count = (salon_on ? 1 : 0) + (studio_on ? 1 : 0) + (erni_on ? 1 : 0);
+          // Lista aktywnych lamp nadal obejmuje wszystkie 7 pozycji.
+          const int active_lamps = on_count + (wejscie_on ? 1 : 0) + (wjazd_on ? 1 : 0) +
+                                   (podworko_on ? 1 : 0) + (adresowka_on ? 1 : 0);
 
           int row = 0;
           if (salon_on) {
@@ -189,20 +191,14 @@ script:
             lv_obj_clear_flag(id(btn_lampy_adresowka), LV_OBJ_FLAG_HIDDEN);
           } else lv_obj_add_flag(id(btn_lampy_adresowka), LV_OBJ_FLAG_HIDDEN);
 
-          if (on_count == 0) {
-            lv_label_set_text(id(lbl_pulpit_lamps), "#888888 0#");
-          } else {
-            char count_text[40];
-            const char *form = on_count == 1 ? "włączona" :
-                               (on_count >= 2 && on_count <= 4 ? "włączone" : "włączonych");
-            snprintf(count_text, sizeof(count_text), "#00FF00 %d %s#", on_count, form);
-            lv_label_set_text(id(lbl_pulpit_lamps), count_text);
-          }
+          char count_text[40];
+          snprintf(count_text, sizeof(count_text), "Ilosc wlaczonych lamp: %d", on_count);
+          lv_label_set_text(id(lbl_pulpit_lamps), count_text);
           lv_obj_set_style_text_color(id(lbl_pulpit_lamps_icon),
             lv_color_hex(on_count > 0 ? 0x00FF00 : 0x888888), 0);
           lv_label_set_text(id(lbl_pulpit_lamps_icon),
             on_count > 0 ? "\U000F0335" : "\U000F0336");
-          if (on_count > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
+          if (active_lamps > 0) lv_obj_add_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
           else lv_obj_clear_flag(id(lbl_lampy_empty), LV_OBJ_FLAG_HIDDEN);
       - lvgl.label.update:
           id: lbl_salon_glowna_text
