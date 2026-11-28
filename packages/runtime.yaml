@@ -164,7 +164,14 @@ interval:
                 time: 300ms
   - interval: 1s
     then:
-      # --- Chowanie licznika pozostalych kliknie easter egga, jesli
+      # Jednorazowe uzupelnienie stanu drzwi po otrzymaniu pierwszego stanu HA.
+      # Zdarzenie on_state pozostaje glownym mechanizmem aktualizacji.
+      - if:
+          condition:
+            lambda: 'return id(state_drzwi).has_state() && !id(door_state_initialized);'
+          then:
+            - script.execute: sync_dashboard_door_state
+      # --- Chowanie liczera pozostalych kliknie easter egga, jesli
       # minelo okno 3s bez kolejnego dotkniecia ikonki HA ---
       - if:
           condition:
