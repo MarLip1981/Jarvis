@@ -29,6 +29,10 @@ globals:
     type: uint32_t
     restore_value: false
     initial_value: "0"
+  - id: door_state_initialized
+    type: bool
+    restore_value: false
+    initial_value: "false"
   - id: brama_page_active
     type: bool
     restore_value: false
@@ -125,6 +129,38 @@ globals:
 # tej samej sekwencji za kazdym razem.
 # ---------------------------------------------------------
 script:
+  - id: sync_dashboard_door_state
+    then:
+      - if:
+          condition:
+            lambda: 'return id(state_drzwi).has_state();'
+          then:
+            - if:
+                condition:
+                  lambda: 'return id(state_drzwi).state;'
+                then:
+                  - globals.set:
+                      id: door_open_since_ms
+                      value: !lambda 'return (esphome::millis)();'
+                  - lvgl.label.update:
+                      id: lbl_pulpit_drzwi
+                      text: "Drzwi:   #FF0000 OTWARTE 0s#"
+                  - lvgl.label.update:
+                      id: lbl_drzwi_icon
+                      text: "\\U000F081C"
+                      text_color: 0xFF0000
+                else:
+                  - lvgl.label.update:
+                      id: lbl_pulpit_drzwi
+                      text: "Drzwi:   #00FF00 zamknięte#"
+                  - lvgl.label.update:
+                      id: lbl_drzwi_icon
+                      text: "\\U000F081B"
+                      text_color: 0x888888
+            - globals.set:
+                id: door_state_initialized
+                value: "true"
+
   - id: update_pulpit_climate_line
     then:
       - lambda: |-
