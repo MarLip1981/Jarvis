@@ -106,17 +106,23 @@ interval:
               ? lv_color_hex(0xFF3333) : lv_color_hex(0x8B0000);
   - interval: 20ms
     then:
-      - lambda: |-
-          const uint32_t elapsed = (esphome::millis)() - id(brama_position_started_ms);
-          float progress = (float)elapsed / 1000.0f;
-          if (progress > 1.0f) progress = 1.0f;
-          id(brama_position_visual) = id(brama_position_start) +
-            (id(brama_position_target) - id(brama_position_start)) * progress;
-      - lvgl.obj.update:
-          id: gate_leaf
-          x: !lambda |-
-            const int direction = (id(brama_ha_direction).has_state() && id(brama_ha_direction).state == "left") ? -1 : 1;
-            return 27 + direction * (int)(id(brama_position_visual) * 1.026f);
+      # Animacja pozycji działa tylko przez 1 s po zmianie celu z HA.
+      # Po zakończeniu nie wykonujemy 50 niepotrzebnych aktualizacji/s.
+      - if:
+          condition:
+            lambda: 'return id(brama_position_started_ms) > 0 && ((esphome::millis)() - id(brama_position_started_ms)) < 1000;'
+          then:
+            - lambda: |-
+                const uint32_t elapsed = (esphome::millis)() - id(brama_position_started_ms);
+                float progress = (float)elapsed / 1000.0f;
+                if (progress > 1.0f) progress = 1.0f;
+                id(brama_position_visual) = id(brama_position_start) +
+                  (id(brama_position_target) - id(brama_position_start)) * progress;
+            - lvgl.obj.update:
+                id: gate_leaf
+                x: !lambda |-
+                  const int direction = (id(brama_ha_direction).has_state() && id(brama_ha_direction).state == "left") ? -1 : 1;
+                  return 27 + direction * (int)(id(brama_position_visual) * 1.026f);
   # Automatyczny powrot dopiero po potwierdzonym zamknieciu i 2 s stabilnego stanu.
   - interval: 100ms
     then:
