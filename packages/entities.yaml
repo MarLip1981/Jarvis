@@ -827,7 +827,8 @@ text_sensor:
             lv_label_set_text_static(id(lbl_brama_main_button), main_button);
             lv_obj_set_width(id(btn_brama_karta_main), opened ? 216 : 104);
             const bool lighting = id(brama_lighting_enabled).has_state() && id(brama_lighting_enabled).state == "true";
-            lv_obj_set_hidden(id(btn_brama_karta_pedestrian), opened || (!id(brama_pedestrian_enabled).state && !lighting));
+            if (opened || (!id(brama_pedestrian_enabled).state && !lighting)) lv_obj_add_flag(id(btn_brama_karta_pedestrian), LV_OBJ_FLAG_HIDDEN);
+            else lv_obj_clear_flag(id(btn_brama_karta_pedestrian), LV_OBJ_FLAG_HIDDEN);
 
             static char gate_dashboard_buf[40];
             if (x == "Otwarta") snprintf(gate_dashboard_buf, sizeof(gate_dashboard_buf), "otwarta");
@@ -842,7 +843,7 @@ text_sensor:
             lv_label_set_text_static(id(lbl_pulpit_brama_status), gate_dashboard_buf);
             lv_obj_set_style_text_color(id(lbl_pulpit_brama_status), status_color, 0);
 
-            const char *gate_icon = closed ? "\\U000F0299" : "\\U000F116A";
+            const char *gate_icon = closed ? "\U000F0299" : "\U000F116A";
             const lv_color_t icon_color = closed ? lv_color_hex(0x888888) : status_color;
             lv_label_set_text_static(id(lbl_pulpit_brama_icon), gate_icon);
             lv_obj_set_style_text_color(id(lbl_pulpit_brama_icon), icon_color, 0);
