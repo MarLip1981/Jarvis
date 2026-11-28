@@ -141,6 +141,28 @@ script:
             snprintf(buf, sizeof(buf), "%s°C  %s%%  Zewnątrz %s°C", t_in, hum, t_out);
             return std::string(buf);
 
+  - id: update_calendar_labels
+    then:
+      - lvgl.label.update:
+          id: lbl_pulpit_day
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            if (!t.is_valid()) return std::string("---");
+            static const char* dni[] = {"Niedziela","Poniedziałek","Wtorek","Środa",
+                                         "Czwartek","Piątek","Sobota"};
+            return std::string(dni[t.day_of_week - 1]);
+      - lvgl.label.update:
+          id: lbl_pulpit_date
+          text: !lambda |-
+            auto t = id(sntp_time).now();
+            if (!t.is_valid()) return std::string("--.--.----");
+            static const char* miesiace[] = {"stycznia","lutego","marca","kwietnia","maja",
+                                              "czerwca","lipca","sierpnia","września",
+                                              "października","listopada","grudnia"};
+            char buf[32];
+            snprintf(buf, sizeof(buf), "%d %s %d", t.day_of_month, miesiace[t.month - 1], t.year);
+            return std::string(buf);
+
   # Przygotowuje wspolna strone lampy wedlug wybranego pomieszczenia.
   # Odświeża widok lamp na pulpicie wyłącznie po zmianie stanu HA.
   # Wcześniej ten sam blok wykonywał się co sekundę, niezależnie od zmian.
