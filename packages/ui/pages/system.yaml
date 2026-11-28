@@ -1,4 +1,4 @@
-# JARVIS 2.0 — STRONY SYSTEMOWE: BOOT, TEST, DIAGNOSTYKA, IRON MAN, IDENTYFIKACJA
+# JAR2IS 2.0 — STRONY SYSTEMOWE: BOOT, TEST, DIAGNOSTYKA, IRON MAN, IDENTYFIKACJA
 # Moduł wydzielony mechanicznie z room-switcher-cyd (3).yaml.
 # Na tym etapie zachowujemy istniejącą logikę i identyfikatory.
 
@@ -16,13 +16,13 @@ lvgl:
             y: -20
             src: img_ironman
         - label:
-            text: "J.A.R.V.I.S"
+            text: "J.A.R.2.I.S"
             align: BOTTOM_MID
             y: -48
             text_font: font_ui_24
             text_color: 0xFFFFFF
         - label:
-            text: "V2.0 T056i IDF"
+            text: "22.0 T056i IDF"
             align: BOTTOM_MID
             y: -16
             text_font: font_ui_14
@@ -206,7 +206,7 @@ lvgl:
             x: 15
             y: 45
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -216,7 +216,7 @@ lvgl:
             x: -15
             y: 45
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -233,7 +233,7 @@ lvgl:
             x: 15
             y: 67
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -243,7 +243,7 @@ lvgl:
             x: -15
             y: 67
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -260,7 +260,7 @@ lvgl:
             x: 15
             y: 89
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -270,7 +270,7 @@ lvgl:
             x: -15
             y: 89
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -287,7 +287,7 @@ lvgl:
             x: 15
             y: 111
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -297,7 +297,7 @@ lvgl:
             x: -15
             y: 111
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -314,7 +314,7 @@ lvgl:
             x: 15
             y: 133
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -324,7 +324,7 @@ lvgl:
             x: -15
             y: 133
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -341,7 +341,7 @@ lvgl:
             x: 15
             y: 155
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -351,7 +351,7 @@ lvgl:
             x: -15
             y: 155
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -368,7 +368,7 @@ lvgl:
             x: 15
             y: 177
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -378,7 +378,7 @@ lvgl:
             x: -15
             y: 177
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -395,7 +395,7 @@ lvgl:
             x: 15
             y: 199
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -405,7 +405,7 @@ lvgl:
             x: -15
             y: 199
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -422,7 +422,7 @@ lvgl:
             x: 15
             y: 221
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -432,7 +432,7 @@ lvgl:
             x: -15
             y: 221
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -449,7 +449,7 @@ lvgl:
             x: 15
             y: 243
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -459,7 +459,7 @@ lvgl:
             x: -15
             y: 243
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -476,7 +476,7 @@ lvgl:
             x: 15
             y: 265
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0xCCCCCC
         - label:
@@ -486,7 +486,7 @@ lvgl:
             x: -15
             y: 265
             bg_color: 0x000000
-            bg_opa: COVER
+            bg_opa: CO2ER
             text_font: font_ui_14
             text_color: 0x666666
 
@@ -533,7 +533,7 @@ lvgl:
             text_font: icon_font_title
             text_color: 0x000000
         - label:
-            text: "JARVIS"
+            text: "JAR2IS"
             align: CENTER
             y: 5
             text_font: font_ui_24
