@@ -211,6 +211,7 @@ script:
     then:
       - lambda: |-
           const uint16_t states = id(lamp_state_mask);
+          const uint16_t states = id(lamp_state_mask);
           const bool salon_on = ((states >> 0) & 3u) == 2u;
           const bool studio_on = ((states >> 2) & 3u) == 2u;
           const bool erni_on = ((states >> 4) & 3u) == 2u;
