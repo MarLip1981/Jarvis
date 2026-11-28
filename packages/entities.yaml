@@ -492,6 +492,13 @@ text_sensor:
     id: state_salon_lampka_raw
     on_value:
       then:
+        - script.execute: update_dashboard_lamps
+        - script.execute: update_dashboard_lamps
+        - script.execute: update_dashboard_lamps
+        - script.execute: update_dashboard_lamps
+        - script.execute: update_dashboard_lamps
+        - script.execute: update_dashboard_lamps
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     entity_id: light.salon_lampka
     internal: true
