@@ -439,12 +439,7 @@ text_sensor:
     id: state_salon_lampka_raw
     on_value:
       then:
-        - script.execute: update_dashboard_lamps
-        - script.execute: update_dashboard_lamps
-        - script.execute: update_dashboard_lamps
-        - script.execute: update_dashboard_lamps
-        - script.execute: update_dashboard_lamps
-        - script.execute: update_dashboard_lamps
+        - script.execute: ha_rx_flash
         - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     entity_id: light.salon_lampka
@@ -454,6 +449,8 @@ text_sensor:
     id: state_sypialnia_lampa_raw
     on_value:
       then:
+        - script.execute: ha_rx_flash
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     entity_id: light.studio
     internal: true
@@ -462,6 +459,8 @@ text_sensor:
     id: state_erni_lampa_raw
     on_value:
       then:
+        - script.execute: ha_rx_flash
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     entity_id: light.mlody_lampka_nocna
     internal: true
@@ -470,6 +469,8 @@ text_sensor:
     id: state_adresowka_lampa_raw
     on_value:
       then:
+        - script.execute: ha_rx_flash
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     entity_id: light.adresowka
     internal: true
@@ -478,6 +479,8 @@ text_sensor:
     id: state_wejscie_schodki_lampa_raw
     on_value:
       then:
+        - script.execute: ha_rx_flash
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     entity_id: light.wejscie_schodki
     internal: true
@@ -487,6 +490,8 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_wjazd
     on_value:
       then:
+        - script.execute: ha_rx_flash
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     internal: true
 
@@ -495,6 +500,8 @@ text_sensor:
     entity_id: light.oswietlenie_zewnetrzne_podworko
     on_value:
       then:
+        - script.execute: ha_rx_flash
+        - script.execute: update_dashboard_lamps
         - script.execute: prepare_lamp_page
     internal: true
 
